@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -31,6 +32,9 @@ public class Main {
                             break;
                         case "4":
                             break;
+                        default:
+                            System.out.println("Такой команды нет");
+                            break;
                     }
                     break;
                 case "2":
@@ -51,6 +55,9 @@ public class Main {
                             taskManager.clearSubTaskList();
                             break;
                         case "4":
+                            break;
+                        default:
+                            System.out.println("Такой команды нет");
                             break;
                     }
                     break;
@@ -79,6 +86,9 @@ public class Main {
                             break;
                         case "4":
                             break;
+                        default:
+                            System.out.println("Такой команды нет");
+                            break;
                     }
                     break;
                 case "4":
@@ -101,9 +111,26 @@ public class Main {
                             System.out.println("Введите описание эпика:");
                             description = scanner.nextLine();
                             taskManager.createEpic(title, description);
+                            System.out.println("Наполните Эпик задачами, введите название подзадачи:");
+                            String nextSubTaskName = scanner.nextLine();
+                            System.out.println("Введите описание подзадачи:");
+                            String nextSubTaskDescription = scanner.nextLine();
+                            ArrayList<Integer> subTaskList = new ArrayList<>();
+                            while (!nextSubTaskName.equals("")) {
+                                taskManager.createSubTask(nextSubTaskName, nextSubTaskDescription);
+                                subTaskList.add(taskManager.getLastId());
+                                System.out.println("Введите название подзадачи:");
+                                nextSubTaskName = scanner.nextLine();
+                                System.out.println("Введите описание подзадачи:");
+                                nextSubTaskDescription = scanner.nextLine();
+                            }
+                            taskManager.fillEpicWithSubTask(subTaskList);
                             break;
                         case "3":
                             return;
+                        default:
+                            System.out.println("Такой команды нет");
+                            break;
                     }
                     break;
                 case "5":
@@ -124,6 +151,9 @@ public class Main {
                             taskManager.updateSubTask(cmd);
                             break;
                         case "3":
+                            break;
+                        default:
+                            System.out.println("Такой команды нет");
                             break;
                     }
                     break;
@@ -155,15 +185,21 @@ public class Main {
                             break;
                         case "4":
                             break;
+                        default:
+                            System.out.println("Такой команды нет");
+                            break;
                     }
                     break;
                 case "7":
                     System.out.println("Выберите ID");
                     taskManager.printEpicTaskList();
                     cmd = scanner.nextLine();
-                    taskManager.getListByEpicID(cmd);
+                    taskManager.getSubTasksListByEpicId(cmd);
                 case "8":
                     return;
+                default:
+                    System.out.println("Такой команды нет");
+                    break;
             }
 
 

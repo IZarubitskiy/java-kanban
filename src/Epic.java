@@ -15,4 +15,13 @@ public class Epic extends Task {
     public void setIdSubtasklist(ArrayList<Integer> idSubtasklist) {
         this.idSubtasklist = idSubtasklist;
     }
+
+
+    @Override
+    public String toString() {
+        return "Epic" +
+                super.toString() +
+                ", idSubtasklist=" + idSubtasklist +
+                '}';
+    }
 }

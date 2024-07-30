@@ -13,7 +13,7 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "title='" + title + '\'' +
-                "description='" + description + '\'' +
+                ",description='" + description + '\'' +
                 ", statusSingleTask=" + statusTask +
                 '}';
     }

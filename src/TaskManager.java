@@ -4,10 +4,18 @@ import java.util.Scanner;
 
 public class TaskManager {
     private static int id = 0;
+    private static int lastEpicId = 0;
     Scanner scanner = new Scanner(System.in);
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
+
+    public static int getLastId() {
+        return id;
+    }
+    public static int getLastEpicId() {
+        return lastEpicId;
+    }
 
     public HashMap<Integer, Task> printSingleTaskList() {
         System.out.println(singleTaskDesc);
@@ -104,25 +112,20 @@ public class TaskManager {
         ArrayList<Integer> newSubTaskList = new ArrayList<>();
         Epic newEpic = new Epic(title, description, TaskStatus.NEW, newSubTaskList);
         id += 1;
-        int epicID = id;
+        lastEpicId = id;
         epicTaskDesc.put(id, newEpic);
-
-        System.out.println("Наполните Эпик задачами, введите название подзадачи:");
-        String nextSubTaskName = scanner.nextLine();
-        System.out.println("Введите описание подзадачи:");
-        String nextSubTaskDescription = scanner.nextLine();
-        while (!nextSubTaskName.equals("")) {
-            SubTask newSubTask = new SubTask(nextSubTaskName, nextSubTaskDescription, TaskStatus.NEW, epicID);
-            id += 1;
-            newSubTaskList.add(id);
-            subTaskDesc.put(id, newSubTask);
-
-            System.out.println("Введите название следующей подзадачи:");
-            nextSubTaskName = scanner.nextLine();
-            System.out.println("Введите описание следующей подзадачи:");
-            nextSubTaskDescription = scanner.nextLine();
-        }
         return newEpic;
+    }
+        public SubTask createSubTask (String title, String description){
+        SubTask newSubTask = new SubTask( title, description, TaskStatus.NEW, lastEpicId);
+        id += 1;
+        subTaskDesc.put(id, newSubTask);
+        return  newSubTask;
+    }
+
+    public Epic fillEpicWithSubTask (ArrayList<Integer> subTaskList){
+        epicTaskDesc.get(lastEpicId).setIdSubtasklist(subTaskList);
+        return  epicTaskDesc.get(lastEpicId);
     }
 
     public Task updateSingleTask(String id) {
@@ -241,7 +244,7 @@ public class TaskManager {
         return subTaskDesc;
     }
 
-    public ArrayList<Integer> getListByEpicID(String id) {
+    public ArrayList<Integer> getSubTasksListByEpicId(String id) {
         int epicId = Integer.parseInt(id);
         ArrayList<Integer> subTasksByEpicId = new ArrayList<>();
         if (epicTaskDesc.containsKey(epicId)) {
