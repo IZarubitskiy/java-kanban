@@ -17,33 +17,42 @@ public class TaskManager {
         return lastEpicId;
     }
 
-    public HashMap<Integer, Task> printSingleTaskList() {
-        System.out.println(singleTaskDesc);
-        return singleTaskDesc;
+    public ArrayList<Task> getAllSingleTasks() {
+        ArrayList<Task> allSingleTasks = new ArrayList<>();
+        for (Integer i : singleTaskDesc.keySet()) {
+            allSingleTasks.add(singleTaskDesc.get(i));
+        }
+        return allSingleTasks;
     }
 
-    public HashMap<Integer, Epic> printEpicTaskList() {
-        System.out.println(epicTaskDesc);
-        return epicTaskDesc;
+    public ArrayList<Epic> getAllEpicTasks() {
+        ArrayList<Epic> allEpicTasks = new ArrayList<>();
+        for (Integer i : epicTaskDesc.keySet()) {
+            allEpicTasks.add(epicTaskDesc.get(i));
+        }
+        return allEpicTasks;
     }
 
-    public HashMap<Integer, SubTask> printSubTaskList() {
-        System.out.println(subTaskDesc);
-        return subTaskDesc;
+    public ArrayList<SubTask> getAllSubTasks() {
+        ArrayList<SubTask> allSubTasks = new ArrayList<>();
+        for (Integer i : subTaskDesc.keySet()) {
+            allSubTasks.add(subTaskDesc.get(i));
+        }
+        return allSubTasks;
     }
 
-    public HashMap<Integer, Task> clearSingleTaskList() {
+    public HashMap<Integer, Task> deleteAllSingleTasks() {
         singleTaskDesc.clear();
         return singleTaskDesc;
     }
 
-    public HashMap<Integer, Epic> clearEpicTaskList() {
+    public HashMap<Integer, Epic> deleteAllEpicTasks() {
         epicTaskDesc.clear();
         subTaskDesc.clear();
         return epicTaskDesc;
     }
 
-    public HashMap<Integer, SubTask> clearSubTaskList() {
+    public HashMap<Integer, SubTask> deleteAllSubTasks() {
         subTaskDesc.clear();
         for (Integer i : epicTaskDesc.keySet()) {
             epicTaskDesc.get(i).setStatusTask(TaskStatus.NEW);
@@ -51,7 +60,7 @@ public class TaskManager {
         return subTaskDesc;
     }
 
-    public Task searchSingleTaskById(String id) {
+    public Task getSingleTaskById(String id) {
         Task foundTask = new Task("empty", "empty", TaskStatus.NEW);
         int searchId = Integer.parseInt(id);
         for (Integer i : singleTaskDesc.keySet()) {
@@ -67,7 +76,7 @@ public class TaskManager {
         return foundTask;
     }
 
-    public Epic searchEpicById(String id) {
+    public Epic getEpicById(String id) {
         ArrayList<Integer> emptyListID = new ArrayList<>();
         Epic foundEpic = new Epic("empty", "empty", TaskStatus.NEW, emptyListID);
         int searchId = Integer.parseInt(id);
@@ -84,7 +93,7 @@ public class TaskManager {
         return foundEpic;
     }
 
-    public SubTask searchSubTaskById(String id) {
+    public SubTask getSubTaskById(String id) {
         int emptyEpicID = 0;
         SubTask foundSubTask = new SubTask("empty", "empty", TaskStatus.NEW, emptyEpicID);
         int searchId = Integer.parseInt(id);
@@ -101,29 +110,25 @@ public class TaskManager {
         return foundSubTask;
     }
 
-    public Task createSingleTask(String title, String description) {
-        Task newTask = new Task(title, description, TaskStatus.NEW);
+    public Task createSingleTask(Task newSingleTask) {
         id += 1;
-        singleTaskDesc.put(id, newTask);
-        return newTask;
+        singleTaskDesc.put(id, newSingleTask);
+        return newSingleTask;
     }
 
-    public Epic createEpic(String title, String description) {
-        ArrayList<Integer> newSubTaskList = new ArrayList<>();
-        Epic newEpic = new Epic(title, description, TaskStatus.NEW, newSubTaskList);
+    public Epic createEpic(Epic newEpic) {
         id += 1;
         lastEpicId = id;
         epicTaskDesc.put(id, newEpic);
         return newEpic;
     }
-        public SubTask createSubTask (String title, String description){
-        SubTask newSubTask = new SubTask( title, description, TaskStatus.NEW, lastEpicId);
+        public SubTask createSubTask (SubTask newSubTask){
         id += 1;
         subTaskDesc.put(id, newSubTask);
         return  newSubTask;
     }
 
-    public Epic fillEpicWithSubTask (ArrayList<Integer> subTaskList){
+    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList){
         epicTaskDesc.get(lastEpicId).setIdSubtasklist(subTaskList);
         return  epicTaskDesc.get(lastEpicId);
     }

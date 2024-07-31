@@ -22,13 +22,13 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            taskManager.printSingleTaskList();
+                            taskManager.getAllSingleTasks();
                             break;
                         case "2":
-                            taskManager.printEpicTaskList();
+                            taskManager.getAllEpicTasks();
                             break;
                         case "3":
-                            taskManager.printSubTaskList();
+                            taskManager.getAllSubTasks();
                             break;
                         case "4":
                             break;
@@ -46,13 +46,13 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            taskManager.clearSingleTaskList();
+                            taskManager.deleteAllSingleTasks();
                             break;
                         case "2":
-                            taskManager.clearEpicTaskList();
+                            taskManager.deleteAllEpicTasks();
                             break;
                         case "3":
-                            taskManager.clearSubTaskList();
+                            taskManager.deleteAllSubTasks();
                             break;
                         case "4":
                             break;
@@ -72,17 +72,17 @@ public class Main {
                         case "1":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.searchSingleTaskById(cmd);
+                            taskManager.getSingleTaskById(cmd);
                             break;
                         case "2":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.searchEpicById(cmd);
+                            taskManager.getEpicById(cmd);
                             break;
                         case "3":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.searchSubTaskById(cmd);
+                            taskManager.getSubTaskById(cmd);
                             break;
                         case "4":
                             break;
@@ -103,28 +103,36 @@ public class Main {
                             title = scanner.nextLine();
                             System.out.println("Введите описание задачи:");
                             description = scanner.nextLine();
-                            taskManager.createSingleTask(title, description);
+                            Task newSingleTask = new Task(title, description, TaskStatus.NEW);
+                            taskManager.createSingleTask(newSingleTask);
+
                             break;
                         case "2":
                             System.out.println("Введите название эпика:");
                             title = scanner.nextLine();
                             System.out.println("Введите описание эпика:");
                             description = scanner.nextLine();
-                            taskManager.createEpic(title, description);
+                            ArrayList<Integer> newSubTaskList = new ArrayList<>();
+                            Epic newEpic = new Epic(title, description, TaskStatus.NEW, newSubTaskList);
+                            taskManager.createEpic(newEpic);
+
                             System.out.println("Наполните Эпик задачами, введите название подзадачи:");
                             String nextSubTaskName = scanner.nextLine();
                             System.out.println("Введите описание подзадачи:");
                             String nextSubTaskDescription = scanner.nextLine();
-                            ArrayList<Integer> subTaskList = new ArrayList<>();
                             while (!nextSubTaskName.equals("")) {
-                                taskManager.createSubTask(nextSubTaskName, nextSubTaskDescription);
-                                subTaskList.add(taskManager.getLastId());
+                                SubTask nextSubTask = new SubTask(nextSubTaskName,
+                                        nextSubTaskDescription,
+                                        TaskStatus.NEW,
+                                        taskManager.getLastEpicId());
+                                taskManager.createSubTask(nextSubTask);
+                                newSubTaskList.add(taskManager.getLastId());
                                 System.out.println("Введите название подзадачи:");
                                 nextSubTaskName = scanner.nextLine();
                                 System.out.println("Введите описание подзадачи:");
                                 nextSubTaskDescription = scanner.nextLine();
                             }
-                            taskManager.fillEpicWithSubTask(subTaskList);
+                            taskManager.setLastEpicWithSubTask(newSubTaskList);
                             break;
                         case "3":
                             return;
@@ -166,20 +174,20 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            taskManager.printSingleTaskList();
+                            taskManager.getAllSingleTasks();
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
                             taskManager.deleteSingleTask(cmd);
                             break;
                         case "2":
                             System.out.println("Выберите ID");
-                            taskManager.printSubTaskList();
+                            taskManager.getAllSubTasks();
                             cmd = scanner.nextLine();
                             taskManager.deleteSubTask(cmd);
                             break;
                         case "3":
                             System.out.println("Выберите ID");
-                            taskManager.printEpicTaskList();
+                            taskManager.getAllEpicTasks();
                             cmd = scanner.nextLine();
                             taskManager.deleteEpic(cmd);
                             break;
@@ -192,7 +200,7 @@ public class Main {
                     break;
                 case "7":
                     System.out.println("Выберите ID");
-                    taskManager.printEpicTaskList();
+                    taskManager.getAllEpicTasks();
                     cmd = scanner.nextLine();
                     taskManager.getSubTasksListByEpicId(cmd);
                 case "8":
