@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
         Scanner scanner = new Scanner(System.in);
         String cmd;
         String title;
@@ -22,13 +22,13 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            taskManager.getAllSingleTasks();
+                            inMemoryTaskManager.getTasks();
                             break;
                         case "2":
-                            taskManager.getAllEpicTasks();
+                            inMemoryTaskManager.getEpics();
                             break;
                         case "3":
-                            taskManager.getAllSubTasks();
+                            inMemoryTaskManager.getEpicSubtasks();
                             break;
                         case "4":
                             break;
@@ -46,13 +46,13 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            taskManager.deleteAllSingleTasks();
+                            inMemoryTaskManager.deleteTasks();
                             break;
                         case "2":
-                            taskManager.deleteAllEpicTasks();
+                            inMemoryTaskManager.deleteEpics();
                             break;
                         case "3":
-                            taskManager.deleteAllSubTasks();
+                            inMemoryTaskManager.deleteEpicSubtasks();
                             break;
                         case "4":
                             break;
@@ -72,17 +72,17 @@ public class Main {
                         case "1":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.getSingleTaskById(cmd);
+                            inMemoryTaskManager.getTaskById(cmd);
                             break;
                         case "2":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.getEpicById(cmd);
+                            inMemoryTaskManager.getEpicById(cmd);
                             break;
                         case "3":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.getSubTaskById(cmd);
+                            inMemoryTaskManager.getSubTaskById(cmd);
                             break;
                         case "4":
                             break;
@@ -104,7 +104,7 @@ public class Main {
                             System.out.println("Введите описание задачи:");
                             description = scanner.nextLine();
                             Task newSingleTask = new Task(title, description, TaskStatus.NEW);
-                            taskManager.createSingleTask(newSingleTask);
+                            inMemoryTaskManager.createTask(newSingleTask);
 
                             break;
                         case "2":
@@ -114,7 +114,7 @@ public class Main {
                             description = scanner.nextLine();
                             ArrayList<Integer> newSubTaskList = new ArrayList<>();
                             Epic newEpic = new Epic(title, description, TaskStatus.NEW, newSubTaskList);
-                            taskManager.createEpic(newEpic);
+                            inMemoryTaskManager.createEpic(newEpic);
 
                             System.out.println("Наполните Эпик задачами, введите название подзадачи:");
                             String nextSubTaskName = scanner.nextLine();
@@ -124,15 +124,15 @@ public class Main {
                                 SubTask nextSubTask = new SubTask(nextSubTaskName,
                                         nextSubTaskDescription,
                                         TaskStatus.NEW,
-                                        taskManager.getLastEpicId());
-                                taskManager.createSubTask(nextSubTask);
-                                newSubTaskList.add(taskManager.getLastId());
+                                        inMemoryTaskManager.getLastEpicId());
+                                inMemoryTaskManager.createSubTask(nextSubTask);
+                                newSubTaskList.add(inMemoryTaskManager.getLastId());
                                 System.out.println("Введите название подзадачи:");
                                 nextSubTaskName = scanner.nextLine();
                                 System.out.println("Введите описание подзадачи:");
                                 nextSubTaskDescription = scanner.nextLine();
                             }
-                            taskManager.setLastEpicWithSubTask(newSubTaskList);
+                            inMemoryTaskManager.setLastEpicWithSubTask(newSubTaskList);
                             break;
                         case "3":
                             return;
@@ -151,12 +151,12 @@ public class Main {
                         case "1":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.updateSingleTask(cmd);
+                            inMemoryTaskManager.updateTask(cmd);
                             break;
                         case "2":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.updateSubTask(cmd);
+                            inMemoryTaskManager.updateSubTask(cmd);
                             break;
                         case "3":
                             break;
@@ -174,22 +174,22 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            taskManager.getAllSingleTasks();
+                            inMemoryTaskManager.getTasks();
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            taskManager.deleteSingleTask(cmd);
+                            inMemoryTaskManager.deleteTaskById(cmd);
                             break;
                         case "2":
                             System.out.println("Выберите ID");
-                            taskManager.getAllSubTasks();
+                            inMemoryTaskManager.getEpicSubtasks();
                             cmd = scanner.nextLine();
-                            taskManager.deleteSubTask(cmd);
+                            inMemoryTaskManager.deleteSubTaskById(cmd);
                             break;
                         case "3":
                             System.out.println("Выберите ID");
-                            taskManager.getAllEpicTasks();
+                            inMemoryTaskManager.getEpics();
                             cmd = scanner.nextLine();
-                            taskManager.deleteEpic(cmd);
+                            inMemoryTaskManager.deleteEpicById(cmd);
                             break;
                         case "4":
                             break;
@@ -200,17 +200,19 @@ public class Main {
                     break;
                 case "7":
                     System.out.println("Выберите ID");
-                    taskManager.getAllEpicTasks();
+                    inMemoryTaskManager.getEpics();
                     cmd = scanner.nextLine();
-                    taskManager.getSubTasksListByEpicId(cmd);
+                    inMemoryTaskManager.getSubTasksListByEpicId(cmd);
+                    break;
                 case "8":
+                    inMemoryTaskManager.getHistory();
+                    break;
+                case "9":
                     return;
                 default:
                     System.out.println("Такой команды нет");
                     break;
             }
-
-
         }
     }
     public static void menu() {
@@ -222,7 +224,8 @@ public class Main {
         System.out.println("5. Обновление");
         System.out.println("6. Удаление");
         System.out.println("7. Печать Эпика");
-        System.out.println("8. Выход");
+        System.out.println("8. История");
+        System.out.println("9. Выход");
     }
 }
 
