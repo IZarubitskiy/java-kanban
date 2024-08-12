@@ -21,11 +21,11 @@ public interface TaskManager {
 
     SubTask getSubTaskById(String id);
 
-    Task createTask(Task newSingleTask);
+    Task addTask(Task newSingleTask);
 
-    Epic createEpic(Epic newEpic);
+    Epic addEpic(Epic newEpic);
 
-    SubTask createSubTask(SubTask newSubTask);
+    SubTask addSubTask(SubTask newSubTask);
 
     Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
 

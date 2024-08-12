@@ -104,7 +104,7 @@ public class Main {
                             System.out.println("Введите описание задачи:");
                             description = scanner.nextLine();
                             Task newSingleTask = new Task(title, description, TaskStatus.NEW);
-                            inMemoryTaskManager.createTask(newSingleTask);
+                            inMemoryTaskManager.addTask(newSingleTask);
 
                             break;
                         case "2":
@@ -114,18 +114,18 @@ public class Main {
                             description = scanner.nextLine();
                             ArrayList<Integer> newSubTaskList = new ArrayList<>();
                             Epic newEpic = new Epic(title, description, TaskStatus.NEW, newSubTaskList);
-                            inMemoryTaskManager.createEpic(newEpic);
+                            inMemoryTaskManager.addEpic(newEpic);
 
                             System.out.println("Наполните Эпик задачами, введите название подзадачи:");
                             String nextSubTaskName = scanner.nextLine();
                             System.out.println("Введите описание подзадачи:");
                             String nextSubTaskDescription = scanner.nextLine();
-                            while (!nextSubTaskName.equals("")) {
+                            while (!nextSubTaskName.isEmpty()) {
                                 SubTask nextSubTask = new SubTask(nextSubTaskName,
                                         nextSubTaskDescription,
                                         TaskStatus.NEW,
                                         inMemoryTaskManager.getLastEpicId());
-                                inMemoryTaskManager.createSubTask(nextSubTask);
+                                inMemoryTaskManager.addSubTask(nextSubTask);
                                 newSubTaskList.add(inMemoryTaskManager.getLastId());
                                 System.out.println("Введите название подзадачи:");
                                 nextSubTaskName = scanner.nextLine();

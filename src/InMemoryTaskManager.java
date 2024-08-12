@@ -150,21 +150,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(Task newSingleTask) {
+    public Task addTask(Task newSingleTask) {
         id += 1;
         singleTaskDesc.put(id, newSingleTask);
         return newSingleTask;
     }
 
     @Override
-    public Epic createEpic(Epic newEpic) {
+    public Epic addEpic(Epic newEpic) {
         id += 1;
         lastEpicId = id;
         epicTaskDesc.put(id, newEpic);
         return newEpic;
     }
         @Override
-        public SubTask createSubTask(SubTask newSubTask){
+        public SubTask addSubTask(SubTask newSubTask){
         id += 1;
         subTaskDesc.put(id, newSubTask);
         return  newSubTask;
