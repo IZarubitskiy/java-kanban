@@ -13,15 +13,6 @@ public class InMemoryHistoryManager implements HistoryManager{
         return history;
     }
 
-    @Override
-    public List<Task> removeTask(Task taskToRemove) {
-        for (Task task : history) {
-            if (task.equals(taskToRemove)) {
-                history.remove(task);
-            }
-        }
-        return history;
-    }
 
     @Override
     public List<Task> getHistory() {

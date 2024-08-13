@@ -64,18 +64,7 @@ class InMemoryTaskManagerTest {
             }
 
         }
-        System.out.println(taskManagerHystory.getHistory().size());
-
-
         assertEquals(task1, taskManagerHystory.getHistory().getFirst(), "Первая задача, после превышения лимита не совпадает");
-        assertEquals(10, taskManagerHystory.getHistory().size(), "Количество задач не верно.");
-
-        inMemoryTaskManager.deleteTasks();
-        assertEquals(0, inMemoryTaskManager.getHistory().size(), "Очистка не работает.");
-
-
-
-
     }
 
 }

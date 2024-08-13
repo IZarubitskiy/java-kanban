@@ -50,6 +50,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer i : singleTaskDesc.keySet()) {
             allSingleTasks.add(singleTaskDesc.get(i));
         }
+        System.out.println(singleTaskDesc);
         return allSingleTasks;
     }
 
@@ -73,21 +74,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public HashMap<Integer, Task> deleteTasks() {
-        for (Task task : singleTaskDesc.values()) {
-         inMemoryHistoryManager.removeTask(task);
-        }
         singleTaskDesc.clear();
+        System.out.println(singleTaskDesc);
         return singleTaskDesc;
     }
 
     @Override
     public HashMap<Integer, Epic> deleteEpics() {
-        for (Task task : epicTaskDesc.values()) {
-            inMemoryHistoryManager.removeTask(task);
-        }
-        for (Task task : subTaskDesc.values()) {
-            inMemoryHistoryManager.removeTask(task);
-        }
         epicTaskDesc.clear();
         subTaskDesc.clear();
         return epicTaskDesc;
@@ -95,9 +88,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public HashMap<Integer, SubTask> deleteEpicSubtasks() {
-        for (Task task : subTaskDesc.values()) {
-            inMemoryHistoryManager.removeTask(task);
-        }
         subTaskDesc.clear();
         for (Integer i : epicTaskDesc.keySet()) {
             epicTaskDesc.get(i).setStatusTask(TaskStatus.NEW);
@@ -238,8 +228,6 @@ public class InMemoryTaskManager implements TaskManager {
     public HashMap<Integer, SubTask> deleteTaskById(String id) {
         int deletedId = Integer.parseInt(id);
         if (singleTaskDesc.containsKey(deletedId)) {
-            Task taskToRemove = singleTaskDesc.get(deletedId);
-            inMemoryHistoryManager.removeTask(taskToRemove);
             singleTaskDesc.remove(deletedId);
         } else {
             System.out.println("Задача не найдена");
@@ -255,12 +243,8 @@ public class InMemoryTaskManager implements TaskManager {
             for (Integer subTask : epicTaskDesc.get(deletedId).getSubTasks()) {
                 for (Integer i : subTaskDesc.keySet()) {
                     if (subTask == i) {
-                        SubTask taskToRemove = subTaskDesc.get(deletedId);
-                        inMemoryHistoryManager.removeTask(taskToRemove);
                         subTaskDesc.remove(i);
                     }
-                    Epic taskToRemove = epicTaskDesc.get(deletedId);
-                    inMemoryHistoryManager.removeTask(taskToRemove);
                     epicTaskDesc.remove(deletedId);
                 }
             }
@@ -299,8 +283,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println(gotIndex);
             updatedListSubTasks.remove(gotIndex);
             epicTaskDesc.get(identifiedID).setIdSubtasklist(updatedListSubTasks);
-            SubTask taskToRemove = subTaskDesc.get(deletedId);
-            inMemoryHistoryManager.removeTask(taskToRemove);
             subTaskDesc.remove(deletedId);
         }
         return subTaskDesc;
@@ -323,6 +305,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory(){
+        System.out.println(inMemoryHistoryManager.getHistory());
         return inMemoryHistoryManager.getHistory();
     }
 }
