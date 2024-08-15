@@ -202,21 +202,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<Integer> getSubTasksListByEpicId(String id) {
         int epicId = Integer.parseInt(id);
-        ArrayList<Integer> subTasksByEpicId = new ArrayList<>();
-        if (epicTaskDesc.containsKey(epicId)) {
-            subTasksByEpicId = epicTaskDesc.get(epicId).getSubTasks();
-            for (Integer subTask : epicTaskDesc.get(epicId).getSubTasks()) {
-                System.out.println(subTaskDesc.get(subTask));
-            }
-        } else {
-            System.out.println("Задача не найдена");
-        }
-        return subTasksByEpicId;
+        return epicTaskDesc.get(epicId).getSubTasks();
     }
 
     @Override
     public List<Task> getHistory(){
-        System.out.println(inMemoryHistoryManager.getHistory());
         return inMemoryHistoryManager.getHistory();
     }
 

@@ -236,7 +236,12 @@ public class Main {
                     System.out.println("Выберите ID");
                     inMemoryTaskManager.getEpics();
                     cmd = scanner.nextLine();
-                    inMemoryTaskManager.getSubTasksListByEpicId(cmd);
+                    if (inMemoryTaskManager.getEpicById(cmd).equals(null)) {
+                        System.out.println("Эпик не найден.");
+                        break;
+                    } else {
+                        inMemoryTaskManager.getSubTasksListByEpicId(cmd);
+                    }
                     break;
                 case "8":
                     inMemoryTaskManager.getHistory();
