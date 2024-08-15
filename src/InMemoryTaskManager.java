@@ -89,7 +89,6 @@ public class InMemoryTaskManager implements TaskManager {
 
    @Override  // remake
     public Epic getEpicById(String id) {
-        ArrayList<Integer> emptyListID = new ArrayList<>();
         Epic foundEpic = null;
         int searchId = Integer.parseInt(id);
         for (Integer i : epicTaskDesc.keySet()) {
