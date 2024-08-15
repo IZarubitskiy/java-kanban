@@ -28,7 +28,7 @@ public class Main {
                             inMemoryTaskManager.getEpics();
                             break;
                         case "3":
-                            inMemoryTaskManager.getEpicSubtasks();
+                            inMemoryTaskManager.getSubtasks();
                             break;
                         case "4":
                             break;
@@ -52,7 +52,7 @@ public class Main {
                             inMemoryTaskManager.deleteEpics();
                             break;
                         case "3":
-                            inMemoryTaskManager.deleteEpicSubtasks();
+                            inMemoryTaskManager.deleteSubTasks();
                             break;
                         case "4":
                             break;
@@ -103,7 +103,7 @@ public class Main {
                             title = scanner.nextLine();
                             System.out.println("Введите описание задачи:");
                             description = scanner.nextLine();
-                            Task newSingleTask = new Task(title, description, TaskStatus.NEW);
+                            Task newSingleTask = new Task(title, description, inMemoryTaskManager.genId(), TaskStatus.NEW);
                             inMemoryTaskManager.addTask(newSingleTask);
 
                             break;
@@ -113,7 +113,7 @@ public class Main {
                             System.out.println("Введите описание эпика:");
                             description = scanner.nextLine();
                             ArrayList<Integer> newSubTaskList = new ArrayList<>();
-                            Epic newEpic = new Epic(title, description, TaskStatus.NEW, newSubTaskList);
+                            Epic newEpic = new Epic(title, description, inMemoryTaskManager.genId(), TaskStatus.NEW,  newSubTaskList);
                             inMemoryTaskManager.addEpic(newEpic);
 
                             System.out.println("Наполните Эпик задачами, введите название подзадачи:");
@@ -123,10 +123,11 @@ public class Main {
                             while (!nextSubTaskName.isEmpty()) {
                                 SubTask nextSubTask = new SubTask(nextSubTaskName,
                                         nextSubTaskDescription,
+                                        inMemoryTaskManager.genId(),
                                         TaskStatus.NEW,
                                         inMemoryTaskManager.getLastEpicId());
                                 inMemoryTaskManager.addSubTask(nextSubTask);
-                                newSubTaskList.add(inMemoryTaskManager.getLastId());
+                                newSubTaskList.add(inMemoryTaskManager.getLastEpicId());
                                 System.out.println("Введите название подзадачи:");
                                 nextSubTaskName = scanner.nextLine();
                                 System.out.println("Введите описание подзадачи:");
@@ -151,12 +152,30 @@ public class Main {
                         case "1":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            inMemoryTaskManager.updateTask(cmd);
+                            if (inMemoryTaskManager.getTaskById(cmd).equals(null)) {
+                                System.out.println("Задача не найдена.");
+                                break;
+                            } else {
+                                System.out.println("Выберите статус задачи:");
+                                System.out.println("1. Взята в работу");
+                                System.out.println("2. Выполнена");
+                                int newStatus = scanner.nextInt();
+                                inMemoryTaskManager.updateTask(cmd, newStatus);
+                            }
                             break;
                         case "2":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            inMemoryTaskManager.updateSubTask(cmd);
+                            if (inMemoryTaskManager.getSubTaskById(cmd).equals(null)){
+                                System.out.println("Подзадача не найдена.");
+                                break;
+                            } else {
+                                System.out.println("Выберите статус подзадачи:");
+                                System.out.println("1. Взята в работу");
+                                System.out.println("2. Выполнена");
+                                int newStatus = scanner.nextInt();
+                                inMemoryTaskManager.updateSubTask(cmd, newStatus);
+                            }
                             break;
                         case "3":
                             break;
@@ -177,19 +196,34 @@ public class Main {
                             inMemoryTaskManager.getTasks();
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            inMemoryTaskManager.deleteTaskById(cmd);
+                            if (inMemoryTaskManager.getTaskById(cmd).equals(null)) {
+                                System.out.println("Задача не найдена.");
+                                break;
+                            } else {
+                                inMemoryTaskManager.deleteTaskById(cmd);
+                            }
                             break;
                         case "2":
                             System.out.println("Выберите ID");
-                            inMemoryTaskManager.getEpicSubtasks();
+                            inMemoryTaskManager.getSubtasks();
                             cmd = scanner.nextLine();
-                            inMemoryTaskManager.deleteSubTaskById(cmd);
+                            if (inMemoryTaskManager.getSubTaskById(cmd).equals(null)) {
+                                System.out.println("Подзадача не найдена.");
+                                break;
+                            } else {
+                                inMemoryTaskManager.deleteSubTaskById(cmd);
+                            }
                             break;
                         case "3":
                             System.out.println("Выберите ID");
                             inMemoryTaskManager.getEpics();
                             cmd = scanner.nextLine();
-                            inMemoryTaskManager.deleteEpicById(cmd);
+                            if (inMemoryTaskManager.getEpicById(cmd).equals(null)) {
+                                System.out.println("Эпик не найден.");
+                                break;
+                            } else {
+                                inMemoryTaskManager.deleteEpicById(cmd);
+                            }
                             break;
                         case "4":
                             break;

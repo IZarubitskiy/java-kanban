@@ -1,23 +1,15 @@
 public class Task {
     private String title;
     private String description;
+    private Integer id;
     private TaskStatus statusTask;
 
-    public Task(String title, String description, TaskStatus statusTask) {
+    public Task(String title, String description, Integer id, TaskStatus statusTask) {
         this.title = title;
         this.description = description;
+        this.id = id;
         this.statusTask = statusTask;
     }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ",description='" + description + '\'' +
-                ", statusSingleTask=" + statusTask +
-                '}';
-    }
-
 
     public String getTitle() {
         return title;
@@ -35,11 +27,25 @@ public class Task {
         this.description = description;
     }
 
+    public Integer getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
+
     public TaskStatus getStatusTask() {
         return statusTask;
     }
 
     public void setStatusTask(TaskStatus statusTask) {
         this.statusTask = statusTask;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ",description='" + description + '\'' +
+                ",id='" + id + '\'' +
+                ", statusSingleTask=" + statusTask +
+                '}';
     }
 }

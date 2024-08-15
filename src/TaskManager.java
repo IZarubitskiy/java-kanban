@@ -7,13 +7,13 @@ public interface TaskManager {
 
     ArrayList<Epic> getEpics();
 
-    ArrayList<SubTask> getEpicSubtasks();
+    ArrayList<SubTask> getSubtasks();
 
     HashMap<Integer, Task> deleteTasks();
 
     HashMap<Integer, Epic> deleteEpics();
 
-    HashMap<Integer, SubTask> deleteEpicSubtasks();
+    HashMap<Integer, SubTask> deleteSubTasks();
 
     Task getTaskById(String id);
 
@@ -29,9 +29,9 @@ public interface TaskManager {
 
     Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
 
-    Task updateTask(String id);
+    Task updateTask(String id, Integer status);
 
-    SubTask updateSubTask(String id);
+    SubTask updateSubTask(String id, Integer status);
 
     HashMap<Integer, SubTask> deleteTaskById(String id);
 
@@ -42,5 +42,7 @@ public interface TaskManager {
     ArrayList<Integer> getSubTasksListByEpicId(String id);
 
     List<Task> getHistory();
-    Integer getId (Task task);
+
+    Integer genId();
+
 }
