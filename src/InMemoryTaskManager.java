@@ -75,42 +75,27 @@ public class InMemoryTaskManager implements TaskManager {
 
    @Override // remake
     public Task getTaskById(String id) {
-        Task foundTask = null;
-        int searchId = Integer.parseInt(id);
-        for (Integer i : singleTaskDesc.keySet()) {
-            if (i == searchId) {
-                foundTask = singleTaskDesc.get(i);
-                inMemoryHistoryManager.add(foundTask);
-                break;
-            }
+        Task foundTask = singleTaskDesc.get(Integer.parseInt(id));
+        if (foundTask != null) {
+            inMemoryHistoryManager.add(foundTask);
         }
         return foundTask;
     }
 
    @Override  // remake
     public Epic getEpicById(String id) {
-        Epic foundEpic = null;
-        int searchId = Integer.parseInt(id);
-        for (Integer i : epicTaskDesc.keySet()) {
-            if (i == searchId) {
-                foundEpic = epicTaskDesc.get(i);
-                inMemoryHistoryManager.add(foundEpic);
-                break;
-            }
+        Epic foundEpic = epicTaskDesc.get(Integer.parseInt(id));
+        if (foundEpic != null) {
+            inMemoryHistoryManager.add(foundEpic);
         }
         return foundEpic;
     }
 
    @Override // remake
     public SubTask getSubTaskById(String id) {
-        SubTask foundSubTask = null;
-        int searchId = Integer.parseInt(id);
-        for (Integer i : subTaskDesc.keySet()) {
-            if (i == searchId) {
-                foundSubTask = subTaskDesc.get(i);
-                inMemoryHistoryManager.add(foundSubTask);
-                break;
-            }
+        SubTask foundSubTask = subTaskDesc.get(Integer.parseInt(id));
+        if (foundSubTask != null) {
+            inMemoryHistoryManager.add(foundSubTask);
         }
         return foundSubTask;
     }

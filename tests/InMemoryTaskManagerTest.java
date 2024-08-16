@@ -1,7 +1,5 @@
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
@@ -42,8 +40,6 @@ class InMemoryTaskManagerTest {
         Task task10 = new Task("Test addNewTas 10k", "Test addNewTask 10 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
         Task task11 = new Task("Test addNewTas 10k", "Test addNewTask 10 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
 
-
-        System.out.println(task1.getId());
         assertEquals(0, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
 
         inMemoryTaskManager.addTask(task1);
