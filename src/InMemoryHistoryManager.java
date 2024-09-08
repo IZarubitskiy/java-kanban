@@ -1,22 +1,18 @@
 import java.util.*;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
     private List<Task> history = new ArrayList<>();
     private Map<Integer, Node> historyLinked = new HashMap<>();
 
-    public class manualLinkedList<T> {
+    public class ManualLinkedList<T> {
         private Node head;
         private int size = 0;
 
         public Node linkLast(Task task) {
             Node oldHead = head;
-            System.out.println(head);
-            System.out.println(oldHead);
             Node newNode = new Node(task);
             head = newNode;
-            System.out.println(head);
-            System.out.println(oldHead);
-            if (oldHead != null){
+            if (oldHead != null) {
                 head.next = oldHead;
             }
             size++;
@@ -25,9 +21,8 @@ public class InMemoryHistoryManager implements HistoryManager{
 
         public List<Task> getTasks() {
             List<Task> taskListHystory = new ArrayList<>();
-            Node t = this.head;       //получаем ссылку на первый элемент
-            while (t != null)           //пока элемент существуе
-            {
+            Node t = this.head;
+            while (t != null) {
                 taskListHystory.add(t.data);
                 t = t.next;
             }
@@ -35,7 +30,6 @@ public class InMemoryHistoryManager implements HistoryManager{
         }
 
         public void removeNode(Node node) {
-
             if (head == null) {
                 return;
             }
@@ -55,12 +49,13 @@ public class InMemoryHistoryManager implements HistoryManager{
                 t = t.next;
             }
         }
+
         public int size() {
             return this.size;
         }
     }
 
-    manualLinkedList<Task> newManualLinkedList = new manualLinkedList<>();
+    ManualLinkedList<Task> newManualLinkedList = new ManualLinkedList<>();
 
     @Override
     public void add(Task task) {
@@ -71,7 +66,7 @@ public class InMemoryHistoryManager implements HistoryManager{
     }
 
     @Override
-    public void remove(int id){
+    public void remove(int id) {
         if (historyLinked.containsKey(id)) {
             newManualLinkedList.removeNode(historyLinked.get(id));
         }
