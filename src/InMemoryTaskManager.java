@@ -19,8 +19,8 @@ public class InMemoryTaskManager implements TaskManager {
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
 
     @Override
-    public Integer genId(){
-        id +=1;
+    public Integer genId() {
+        id += 1;
         return id;
     }
 
@@ -112,14 +112,15 @@ public class InMemoryTaskManager implements TaskManager {
         epicTaskDesc.put(newEpic.getId(), newEpic);
         return newEpic;
     }
+
         @Override
-        public SubTask addSubTask(SubTask newSubTask){
+        public SubTask addSubTask(SubTask newSubTask) {
         subTaskDesc.put(newSubTask.getId(), newSubTask);
         return  newSubTask;
     }
 
     @Override
-    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList){
+    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList) {
         epicTaskDesc.get(lastEpicId).setIdSubtasklist(subTaskList);
         return  epicTaskDesc.get(lastEpicId);
     }
@@ -194,12 +195,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory(){
+    public List<Task> getHistory() {
         System.out.println(inMemoryHistoryManager.getHistory());
         return inMemoryHistoryManager.getHistory();
     }
 
-    private void updateEpicStatus(Integer epicId){
+    private void updateEpicStatus(Integer epicId) {
         int epicSize = epicTaskDesc.get(epicId).getSubTasks().size();
         int counterNew = 0;
         int counterDone = 0;
