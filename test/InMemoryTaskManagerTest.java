@@ -69,5 +69,5 @@ class InMemoryTaskManagerTest {
         assertEquals(task2, inMemoryTaskManager.getHistory().getFirst(), "Первая задача, после превышения лимита не совпадает");
 
     */
-    }
+
 }
