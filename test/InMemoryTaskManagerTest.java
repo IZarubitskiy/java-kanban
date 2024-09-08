@@ -25,9 +25,9 @@ class InMemoryTaskManagerTest {
         assertEquals(1, tasks.size(), "Неверное количество задач.");
         assertEquals(task, tasks.getFirst(), "Задачи не совпадают.");
     }
-
+/*
     @Test
-   /* void history() {
+    void history() {
         Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
         Task task2 = new Task("Test addNewTask 2", "Test addNewTask 2 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
         Task task3 = new Task("Test addNewTask 3", "Test addNewTask 3 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
