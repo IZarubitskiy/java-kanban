@@ -166,7 +166,7 @@ public class Main {
                         case "2":
                             System.out.println("Выберите ID");
                             cmd = scanner.nextLine();
-                            if (inMemoryTaskManager.getSubTaskById(cmd).equals(null)){
+                            if (inMemoryTaskManager.getSubTaskById(cmd).equals(null)) {
                                 System.out.println("Подзадача не найдена.");
                                 break;
                             } else {
@@ -254,6 +254,7 @@ public class Main {
             }
         }
     }
+
     public static void menu() {
         System.out.println("Действия:");
         System.out.println("1. Печать");
