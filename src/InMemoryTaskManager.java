@@ -11,7 +11,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private static int lastEpicId = 0;
-    Scanner scanner = new Scanner(System.in);
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
