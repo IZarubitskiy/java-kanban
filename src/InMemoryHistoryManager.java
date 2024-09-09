@@ -1,81 +1,97 @@
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
+    private Node head;
+    private Node tail;
+    private int size = 0;
     private List<Task> history = new ArrayList<>();
     private Map<Integer, Node> historyLinked = new HashMap<>();
 
-    public class ManualLinkedList<T> {
-        private Node head;
-        private int size = 0;
+    class Node {
+        public Task task;
+        public Node next;
+        public Node prev;
 
-        public Node linkLast(Task task) {
-            Node oldHead = head;
-            Node newNode = new Node(task);
-            head = newNode;
-            if (oldHead != null) {
-                head.next = oldHead;
-            }
-            size++;
-            return newNode;
+        public Node(Node prev, Task task, Node next) {
+            this.task = task;
+            this.next = next;
+            this.prev = prev;
         }
+    }
+    public Node linkLast(Task task) {
+        final Node oldHead = head;
+        final Node newNode = new Node(null, task, oldHead);
+        head = newNode;
+        if (oldHead == null)
+            tail = newNode;
+        else
+            oldHead.prev = newNode;
+        size++;
+        return newNode;
+    }
 
-        public List<Task> getTasks() {
-            List<Task> taskListHystory = new ArrayList<>();
-            Node t = this.head;
-            while (t != null) {
-                taskListHystory.add(t.data);
-                t = t.next;
-            }
-            return taskListHystory;
+    public List<Task> getTasks() {
+        List<Task> taskListHystory = new ArrayList<>();
+        Node t = this.head;
+        while (t != null) {
+            taskListHystory.add(t.task);
+            t = t.next;
         }
+        return taskListHystory;
+    }
 
-        public void removeNode(Node node) {
-            if (head == null) {
-                return;
-            }
-            if (head.data == node.data) {
-                head = head.next;
-                size--;
-                return;
-            }
-            Node t = head;
-            while (t.next != null) {
-                if (t.next.data == node.data) {
-
-                    t.next = t.next.next;
-                    size--;
-                    return;
+    public void removeNode(Node node) {
+        if(head == null)
+            return;
+        if (head == tail) {
+            head = null;
+            tail = null;
+            size = 0;
+            return;
+        }
+        if (head == node) {
+            head = head.next;
+            size --;
+            return;
+        }
+        Node t = head;
+        while (t.next != null) {
+            if (t.next == node) {
+                if(tail == t.next)
+                {
+                    tail = t;
                 }
-                t = t.next;
+                t.next = t.next.next;
+                size --;
+                return;
             }
-        }
-
-        public int size() {
-            return this.size;
+            t = t.next;
         }
     }
 
-    ManualLinkedList<Task> newManualLinkedList = new ManualLinkedList<>();
+    public int size() {
+        return this.size;
+    }
+
 
     @Override
     public void add(Task task) {
         if (historyLinked.containsKey(task.getId())) {
-            newManualLinkedList.removeNode(historyLinked.get(task.getId()));
+            removeNode(historyLinked.get(task.getId()));
         }
-        historyLinked.put(task.getId(), newManualLinkedList.linkLast(task));
+        historyLinked.put(task.getId(), linkLast(task));
     }
 
     @Override
     public void remove(int id) {
         if (historyLinked.containsKey(id)) {
-            newManualLinkedList.removeNode(historyLinked.get(id));
+            removeNode(historyLinked.get(id));
         }
-
     }
 
     @Override
     public List<Task> getHistory() {
-        history = newManualLinkedList.getTasks();
+        history = getTasks();
         return history;
     }
 }
