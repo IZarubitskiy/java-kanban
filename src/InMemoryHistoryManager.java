@@ -58,7 +58,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node t = head;
         while (t.next != null) {
             if (t.next == node) {
-                if(tail == t.next) {
+                if (tail == t.next) {
                     tail = t;
                 }
                 t.next = t.next.next;
