@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int id = 0;
@@ -11,7 +10,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private static int lastEpicId = 0;
-    Scanner scanner = new Scanner(System.in);
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
@@ -19,8 +17,8 @@ public class InMemoryTaskManager implements TaskManager {
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
 
     @Override
-    public Integer genId(){
-        id +=1;
+    public Integer genId() {
+        id += 1;
         return id;
     }
 
@@ -112,14 +110,15 @@ public class InMemoryTaskManager implements TaskManager {
         epicTaskDesc.put(newEpic.getId(), newEpic);
         return newEpic;
     }
+
         @Override
-        public SubTask addSubTask(SubTask newSubTask){
+        public SubTask addSubTask(SubTask newSubTask) {
         subTaskDesc.put(newSubTask.getId(), newSubTask);
         return  newSubTask;
     }
 
     @Override
-    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList){
+    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList) {
         epicTaskDesc.get(lastEpicId).setIdSubtasklist(subTaskList);
         return  epicTaskDesc.get(lastEpicId);
     }
@@ -149,19 +148,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, SubTask> deleteTaskById(String id) {
+    public HashMap<Integer, Task> deleteTaskById(String id) {
         int deletedId = Integer.parseInt(id);
         singleTaskDesc.remove(deletedId);
-        return subTaskDesc;
+        inMemoryHistoryManager.remove(deletedId);
+        return singleTaskDesc;
     }
 
     @Override
     public HashMap<Integer, Epic> deleteEpicById(String id) {
         int deletedId = Integer.parseInt(id);
         epicTaskDesc.remove(deletedId);
+        inMemoryHistoryManager.remove(deletedId);
         for (Integer i : subTaskDesc.keySet()) {
             if (subTaskDesc.get(i).getEpicId() == deletedId) {
                 subTaskDesc.remove(i);
+                inMemoryHistoryManager.remove(i);
             }
         }
         return epicTaskDesc;
@@ -172,6 +174,7 @@ public class InMemoryTaskManager implements TaskManager {
         int deletedId = Integer.parseInt(id);
         int epicId = subTaskDesc.get(deletedId).getEpicId();
         subTaskDesc.remove(deletedId);
+        inMemoryHistoryManager.remove(deletedId);
         ArrayList<Integer> updatedListSubTasks = new ArrayList<>();
         for (Integer i : subTaskDesc.keySet()) {
             if (subTaskDesc.get(i).getEpicId() == epicId) {
@@ -190,11 +193,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory(){
+    public List<Task> getHistory() {
+        System.out.println(inMemoryHistoryManager.getHistory());
         return inMemoryHistoryManager.getHistory();
     }
 
-    private void updateEpicStatus(Integer epicId){
+    private void updateEpicStatus(Integer epicId) {
         int epicSize = epicTaskDesc.get(epicId).getSubTasks().size();
         int counterNew = 0;
         int counterDone = 0;

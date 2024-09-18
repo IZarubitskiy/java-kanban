@@ -33,7 +33,7 @@ public interface TaskManager {
 
     SubTask updateSubTask(String id, Integer status);
 
-    HashMap<Integer, SubTask> deleteTaskById(String id);
+    HashMap<Integer, Task> deleteTaskById(String id);
 
     HashMap<Integer, Epic> deleteEpicById(String id);
 
