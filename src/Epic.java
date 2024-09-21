@@ -16,6 +16,17 @@ public class Epic extends Task {
         this.idSubtasklist = idSubtasklist;
     }
 
+
+    @Override
+    public int getEpicId() {
+        return 0;
+    }
+
+    @Override
+    public String getType() {
+        return TaskTypes.EPIC.name();
+    }
+
     @Override
     public String toString() {
         return "Epic" +
