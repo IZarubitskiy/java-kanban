@@ -47,7 +47,9 @@ public class Task {
         return 0;
     }
 
-    public String getType() {return TaskTypes.TASK.name();}
+    public String getType() {
+        return TaskTypes.TASK.name();
+    }
 
     @Override
     public String toString() {
