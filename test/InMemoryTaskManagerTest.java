@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class InMemoryTaskManagerTest {
 
@@ -56,16 +57,16 @@ class InMemoryTaskManagerTest {
             if (i == 3) {
                 assertEquals(2, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
             }
-            if (i == 5) {
+            if (i == 4) {
                 assertEquals(task4, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
             }
 
         }
         inMemoryTaskManager.getTaskById("9");
-        assertEquals(task8, inMemoryTaskManager.getHistory().getFirst(), "Не обновляет последнюю добавленную задачу");
-        Task task11 = new Task("Test addNewTas 10", "Test addNewTask 10 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
+        assertEquals(task9, inMemoryTaskManager.getHistory().getFirst(), "Не обновляет последнюю добавленную задачу");
+        Task task11 = new Task("Test addNewTas 11", "Test addNewTask 11 description", inMemoryTaskManager.genId(), TaskStatus.NEW);
         inMemoryTaskManager.addTask(task11);
         inMemoryTaskManager.getTaskById("12");
-        assertEquals(11, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
+        assertEquals(9, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
     }
 }

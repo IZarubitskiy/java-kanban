@@ -45,4 +45,6 @@ public interface TaskManager {
 
     Integer genId();
 
+    Integer getLastEpicId();
+
 }
