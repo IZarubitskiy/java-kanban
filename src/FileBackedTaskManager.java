@@ -137,7 +137,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                 fileWriter.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
+            } catch (NullPointerException exp) { // ловим исключение NullPointerException
+            System.out.println("Ошибка: передан неинициализированный объект!");
+        }
         }
 
     }

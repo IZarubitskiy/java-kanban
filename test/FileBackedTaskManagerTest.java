@@ -40,8 +40,5 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.addTask(task10);
 
         fileBackedTaskManager.reader();
-
-
-
     }
 }
