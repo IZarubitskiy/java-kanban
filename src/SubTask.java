@@ -6,6 +6,7 @@ public class SubTask extends Task {
         super(title, description, id, statusTask);
         this.epicId = epicId;
     }
+
     @Override
     public int getEpicId() {
         return epicId;
