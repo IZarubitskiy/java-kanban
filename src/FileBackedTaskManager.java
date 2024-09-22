@@ -119,9 +119,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                 Files.createFile(Paths.get(String.valueOf(dbTaskManagerDirectoryPath), "dbTaskManager.csv"));
         Path dbTaskManagerPath = Paths.get(HOME, "java-kanban", "dbTaskManager", "dbTaskManager.csv");
         fileWriter = new FileWriter(dbTaskManagerPath.toFile(), true);
-        fileWriter.write("id,type,name,status,description,epic" + "\n" );
+        fileWriter.write("id,type,name,status,description,epic" + "\n");
 
-        if (!getTasks().isEmpty()){
+        if (!getTasks().isEmpty()) {
             for (Task task : getTasks()) {
                 fileWriter.write(toString(task));
             }
@@ -133,7 +133,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
             }
         }
 
-        if (!getSubtasks().isEmpty()){
+        if (!getSubtasks().isEmpty()) {
             for (Task subTask : getSubtasks()) {
                 fileWriter.write(toString(subTask));
             }
@@ -151,7 +151,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     }
 
-    void reader () {
+    void reader() {
 
         Reader fileReader = null;
         try {
@@ -185,13 +185,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
     private Task fromString(String value) {
         String[] split = value.split(",");
         Task taskFromString;
-        switch (TaskTypes.valueOf(split[1])){
+        switch (TaskTypes.valueOf(split[1])) {
             case TASK:
                 return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]));
 
             case EPIC:
                 return taskFromString = new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        new ArrayList<Integer>() );
+                        new ArrayList<Integer>());
 
             case SUBTASK:
                 return taskFromString = new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
