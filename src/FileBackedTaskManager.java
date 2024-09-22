@@ -6,15 +6,6 @@ import java.io.IOException;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 
