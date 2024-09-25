@@ -8,17 +8,31 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.io.FileReader;
 import java.io.Reader;
+import java.io.File;
 
 public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private static final String HOME = System.getProperty("user.home");
+    File dir = new File("C:\\Users\\Igor\\java-kanban\\dbTaskManager");
 
+    File dbTaskManager = new File(dir, "dbTaskManager.csv");
     private int id = 0;
     private int lastEpicId = 0;
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+
+    public FileBackedTaskManager(File dbTaskManager, int id, int lastEpicId, HashMap<Integer, Task> singleTaskDesc, HashMap<Integer, Epic> epicTaskDesc, HashMap<Integer, SubTask> subTaskDesc, InMemoryHistoryManager inMemoryHistoryManager) {
+        this.dbTaskManager = dbTaskManager;
+        this.id = id;
+        this.lastEpicId = lastEpicId;
+        this.singleTaskDesc = singleTaskDesc;
+        this.epicTaskDesc = epicTaskDesc;
+        this.subTaskDesc = subTaskDesc;
+        this.inMemoryHistoryManager = inMemoryHistoryManager;
+    }
+
 
     @Override
     public Integer getLastEpicId() {
@@ -53,18 +67,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     @Override
     public Task addTask(Task newSingleTask) {
+        super.addTask(newSingleTask);
         save();
         return super.addTask(newSingleTask);
-
     }
 
     @Override
     public Epic addEpic(Epic newEpic) {
+        super.addEpic(newEpic);
+        save();
         return super.addEpic(newEpic);
     }
 
     @Override
     public SubTask addSubTask(SubTask newSubTask) {
+        super.addSubTask(newSubTask);
+        save();
         return super.addSubTask(newSubTask);
     }
 
