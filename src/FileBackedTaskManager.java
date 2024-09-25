@@ -13,9 +13,9 @@ import java.io.File;
 public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private static final String HOME = System.getProperty("user.home");
-    File dir = new File("C:\\Users\\Igor\\java-kanban\\dbTaskManager");
 
-    File dbTaskManager = new File(dir, "dbTaskManager.csv");
+    File dir = new File("C:\\Users\\Igor\\java-kanban\\dbTaskManager");
+    File dbTaskManager = new File("dbTaskManager.csv");
     private int id = 0;
     private int lastEpicId = 0;
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
@@ -23,7 +23,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
 
-    public FileBackedTaskManager(File dbTaskManager, int id, int lastEpicId, HashMap<Integer, Task> singleTaskDesc, HashMap<Integer, Epic> epicTaskDesc, HashMap<Integer, SubTask> subTaskDesc, InMemoryHistoryManager inMemoryHistoryManager) {
+    public FileBackedTaskManager(File dir, File dbTaskManager, int id, int lastEpicId, HashMap<Integer, Task> singleTaskDesc, HashMap<Integer, Epic> epicTaskDesc, HashMap<Integer, SubTask> subTaskDesc, InMemoryHistoryManager inMemoryHistoryManager) {
+        this.dir = dir;
         this.dbTaskManager = dbTaskManager;
         this.id = id;
         this.lastEpicId = lastEpicId;
@@ -32,6 +33,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         this.subTaskDesc = subTaskDesc;
         this.inMemoryHistoryManager = inMemoryHistoryManager;
     }
+
 
 
     @Override
@@ -67,23 +69,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     @Override
     public Task addTask(Task newSingleTask) {
-        super.addTask(newSingleTask);
+        Task task = super.addTask(newSingleTask);
         save();
-        return super.addTask(newSingleTask);
+        return task;
     }
 
     @Override
     public Epic addEpic(Epic newEpic) {
-        super.addEpic(newEpic);
+        Epic epic = super.addEpic(newEpic);
         save();
-        return super.addEpic(newEpic);
+        return epic;
     }
 
     @Override
     public SubTask addSubTask(SubTask newSubTask) {
-        super.addSubTask(newSubTask);
+        SubTask subtask = super.addSubTask(newSubTask);
         save();
-        return super.addSubTask(newSubTask);
+        return subtask;
     }
 
     @Override

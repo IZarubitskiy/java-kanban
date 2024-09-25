@@ -3,17 +3,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
 
+    File testDir = new File("C:\\Users\\Igor\\java-kanban\\dbTaskManager");
     private int id = 0;
     private int lastEpicId = 0;
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+
+
 
     File test;
 
@@ -25,7 +29,7 @@ class FileBackedTaskManagerTest {
         }
     }
 
-    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test, id, lastEpicId, singleTaskDesc, epicTaskDesc, subTaskDesc, inMemoryHistoryManager );
+    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(testDir, test, id, lastEpicId, singleTaskDesc, epicTaskDesc, subTaskDesc, inMemoryHistoryManager );
 
     @Test
     void save() {
