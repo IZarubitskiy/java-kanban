@@ -25,7 +25,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
     private HashMap<Integer, SubTask> subTaskDesc;
     InMemoryHistoryManager inMemoryHistoryManager;
 
-    public FileBackedTaskManager( File dbTaskManager, int id, int lastEpicId, HashMap<Integer, Task> singleTaskDesc, HashMap<Integer, Epic> epicTaskDesc, HashMap<Integer, SubTask> subTaskDesc, InMemoryHistoryManager inMemoryHistoryManager) {
+    public FileBackedTaskManager(File dbTaskManager, int id, int lastEpicId, HashMap<Integer, Task> singleTaskDesc, HashMap<Integer, Epic> epicTaskDesc, HashMap<Integer, SubTask> subTaskDesc, InMemoryHistoryManager inMemoryHistoryManager) {
         this.dbTaskManager = dbTaskManager;
         this.id = id;
         this.lastEpicId = lastEpicId;
@@ -230,7 +230,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
             if (Integer.parseInt(split[0]) >= lastIdFromFile) {
                 lastIdFromFile = Integer.parseInt(split[0]);
             }
-            if (split[1].equals("EPIC") && Integer.parseInt(split[0]) >= lastEpicIdFromFile){
+            if (split[1].equals("EPIC") && Integer.parseInt(split[0]) >= lastEpicIdFromFile) {
                 lastEpicIdFromFile = Integer.parseInt(split[0]);
             }
             if (split[1].equals("TASK")) {
@@ -257,7 +257,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         }
 
         FileBackedTaskManager fileBackedTaskManagerFromFile = new FileBackedTaskManager(file, lastIdFromFile, lastEpicIdFromFile,
-                sglTasksFromFile, epicTasksFromFile, subTasksFromFile, inMemoryHistoryManagerFromFile );
+                sglTasksFromFile, epicTasksFromFile, subTasksFromFile, inMemoryHistoryManagerFromFile);
         return fileBackedTaskManagerFromFile;
     }
 
