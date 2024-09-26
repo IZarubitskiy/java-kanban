@@ -16,10 +16,9 @@ public class Epic extends Task {
         this.idSubtasklist = idSubtasklist;
     }
 
-
     @Override
-    public int getEpicId() {
-        return 0;
+    public Integer getId() {
+        return super.getId();
     }
 
     @Override

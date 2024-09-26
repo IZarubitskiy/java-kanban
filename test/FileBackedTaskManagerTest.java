@@ -9,7 +9,6 @@ import java.nio.file.Files;
 
 class FileBackedTaskManagerTest {
 
-    File testDir = new File("C:\\Users\\Igor\\java-kanban\\dbTaskManager");
     private int id = 0;
     private int lastEpicId = 0;
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
@@ -29,7 +28,7 @@ class FileBackedTaskManagerTest {
         }
     }
 
-    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(testDir, test, id, lastEpicId, singleTaskDesc, epicTaskDesc, subTaskDesc, inMemoryHistoryManager );
+    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test, id, lastEpicId, singleTaskDesc, epicTaskDesc, subTaskDesc, inMemoryHistoryManager );
 
     @Test
     void save() {
