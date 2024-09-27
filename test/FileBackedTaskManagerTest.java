@@ -21,8 +21,13 @@ class FileBackedTaskManagerTest {
 
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test);
 
+
     @Test
     void save() {
+        System.out.println("Пустая строка перед файлом");
+        fileBackedTaskManager.reader();
+        System.out.println("Пустая строка после файла");
+
         Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", fileBackedTaskManager.genId(), TaskStatus.NEW);
         Task task2 = new Task("Test addNewTask 2", "Test addNewTask 2 description", fileBackedTaskManager.genId(), TaskStatus.IN_PROGRESS);
         Task task3 = new Task("Test addNewTask 3", "Test addNewTask 3 description", fileBackedTaskManager.genId(), TaskStatus.DONE);
