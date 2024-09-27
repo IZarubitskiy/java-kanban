@@ -16,10 +16,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void setId(int value) {
+        this.id = value;
+    }
+
+    @Override
+    public void setLastEpicId(int value) {
+        this.lastEpicId = value;
+    }
+
+    @Override
     public Integer genId() {
         id += 1;
         return id;
     }
+
 
     @Override
     public ArrayList<Task> getTasks() {

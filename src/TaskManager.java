@@ -3,6 +3,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface TaskManager {
+    void setId(int value);
+
+    void setLastEpicId(int value);
+
     ArrayList<Task> getTasks();
 
     ArrayList<Epic> getEpics();

@@ -16,7 +16,74 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private static final String HOME = System.getProperty("user.home");
 
-    File dir = new File("C:\\Users\\Igor\\java-kanban\\dbTaskManager");
+    static FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager fileBackedTaskManagerFromFile = new FileBackedTaskManager(file);
+
+        FileReader reader;
+        BufferedReader br;
+        List<String> tasksList = new ArrayList<>();
+        Reader fileReader = null;
+        try {
+            reader = new FileReader(file);
+            br = new BufferedReader(reader);
+            while (br.ready()) {
+                String line = br.readLine();
+                tasksList.add(line);
+            }
+            reader.close();
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileReader.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (NullPointerException exp) { // ловим исключение NullPointerException
+                System.out.println("Ошибка: передан неинициализированный объект!");
+            }
+        }
+        int lastIdFromFile = 0;
+        int lastEpicIdFromFile = 0;
+
+        for (String str : tasksList) {
+            String[] split = str.split(",");
+            if (Integer.parseInt(split[0]) >= lastIdFromFile) {
+                lastIdFromFile = Integer.parseInt(split[0]);
+            }
+            if (split[1].equals("EPIC") && Integer.parseInt(split[0]) >= lastEpicIdFromFile) {
+                lastEpicIdFromFile = Integer.parseInt(split[0]);
+            }
+            if (split[1].equals("TASK")) {
+                fileBackedTaskManagerFromFile.singleTaskDesc.put(Integer.parseInt(split[0]), new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3])));
+            }
+
+            if (split[1].equals("SUBTASK")) {
+                fileBackedTaskManagerFromFile.subTaskDesc.put(Integer.parseInt(split[0]), new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                        Integer.parseInt(split[5])));
+            }
+        }
+
+        fileBackedTaskManagerFromFile.setId(lastIdFromFile);
+        fileBackedTaskManagerFromFile.setLastEpicId(lastEpicIdFromFile);
+        for (String str : tasksList) {
+            String[] split = str.split(",");
+            if (split[1].equals("EPIC")) {
+                ArrayList<Integer> idSubtasklistFromFile = new ArrayList<>();
+                for (Integer i : fileBackedTaskManagerFromFile.subTaskDesc.keySet()) {
+                    if (fileBackedTaskManagerFromFile.subTaskDesc.get(i).getEpicId() == Integer.parseInt(split[0])) {
+                        idSubtasklistFromFile.add(fileBackedTaskManagerFromFile.subTaskDesc.get(i).getId());
+                    }
+                }
+                fileBackedTaskManagerFromFile.epicTaskDesc.put(Integer.parseInt(split[0]), new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                        idSubtasklistFromFile));
+            }
+        }
+
+        return fileBackedTaskManagerFromFile;
+    }
+
     File dbTaskManager = new File("dbTaskManager.csv");
     private int id = 0;
     private int lastEpicId = 0;
@@ -25,15 +92,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
     private HashMap<Integer, SubTask> subTaskDesc;
     InMemoryHistoryManager inMemoryHistoryManager;
 
-    public FileBackedTaskManager(File dbTaskManager, int id, int lastEpicId, HashMap<Integer, Task> singleTaskDesc, HashMap<Integer, Epic> epicTaskDesc, HashMap<Integer, SubTask> subTaskDesc, InMemoryHistoryManager inMemoryHistoryManager) {
-        this.dbTaskManager = dbTaskManager;
-        this.id = id;
-        this.lastEpicId = lastEpicId;
-        this.singleTaskDesc = singleTaskDesc;
-        this.epicTaskDesc = epicTaskDesc;
-        this.subTaskDesc = subTaskDesc;
-        this.inMemoryHistoryManager = inMemoryHistoryManager;
-    }
+    public FileBackedTaskManager(File dbTaskManager) {
+        this. dbTaskManager = dbTaskManager;
+        }
 
     @Override
     public Integer getLastEpicId() {
@@ -190,76 +251,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         }
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
 
-        FileReader reader;
-        BufferedReader br;
-        List<String> tasksList = new ArrayList<>();
-        Reader fileReader = null;
-        try {
-            Path dbTaskManagerDirectoryPath = Paths.get(HOME, "java-kanban", "dbTaskManager", "dbTaskManager.csv");
-            reader = new FileReader(file);
-            br = new BufferedReader(reader);
-            while (br.ready()) {
-                String line = br.readLine();
-                tasksList.add(line);
-            }
-            reader.close();
-            br.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fileReader.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (NullPointerException exp) { // ловим исключение NullPointerException
-                System.out.println("Ошибка: передан неинициализированный объект!");
-            }
-        }
-        int lastIdFromFile = 0;
-        int lastEpicIdFromFile = 0;
-        HashMap<Integer, Task> sglTasksFromFile = new HashMap<>();
-        HashMap<Integer, Epic> epicTasksFromFile = new HashMap<>();
-        HashMap<Integer, SubTask> subTasksFromFile = new HashMap<>();
-        InMemoryHistoryManager inMemoryHistoryManagerFromFile = new InMemoryHistoryManager();
-
-        for (String str : tasksList) {
-            String[] split = str.split(",");
-            if (Integer.parseInt(split[0]) >= lastIdFromFile) {
-                lastIdFromFile = Integer.parseInt(split[0]);
-            }
-            if (split[1].equals("EPIC") && Integer.parseInt(split[0]) >= lastEpicIdFromFile) {
-                lastEpicIdFromFile = Integer.parseInt(split[0]);
-            }
-            if (split[1].equals("TASK")) {
-                sglTasksFromFile.put(Integer.parseInt(split[0]), new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3])));
-            }
-
-            if (split[1].equals("SUBTASK")) {
-                subTasksFromFile.put(Integer.parseInt(split[0]), new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        Integer.parseInt(split[5])));
-            }
-        }
-        for (String str : tasksList) {
-            String[] split = str.split(",");
-            if (split[1].equals("EPIC")) {
-                ArrayList<Integer> idSubtasklistFromFile = new ArrayList<>();
-                for (Integer i : subTasksFromFile.keySet()) {
-                    if (subTasksFromFile.get(i).getEpicId() == Integer.parseInt(split[0])) {
-                        idSubtasklistFromFile.add(subTasksFromFile.get(i).getId());
-                    }
-                }
-                epicTasksFromFile.put(Integer.parseInt(split[0]), new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        idSubtasklistFromFile));
-            }
-        }
-
-        FileBackedTaskManager fileBackedTaskManagerFromFile = new FileBackedTaskManager(file, lastIdFromFile, lastEpicIdFromFile,
-                sglTasksFromFile, epicTasksFromFile, subTasksFromFile, inMemoryHistoryManagerFromFile);
-        return fileBackedTaskManagerFromFile;
-    }
 
     private String toString(Task task) {
     String strTask = task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","

@@ -9,15 +9,6 @@ import java.nio.file.Files;
 
 class FileBackedTaskManagerTest {
 
-    private int id = 0;
-    private int lastEpicId = 0;
-    private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
-    private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
-    private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
-    InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
-
-
-
     File test;
 
     {
@@ -28,7 +19,7 @@ class FileBackedTaskManagerTest {
         }
     }
 
-    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test, id, lastEpicId, singleTaskDesc, epicTaskDesc, subTaskDesc, inMemoryHistoryManager );
+    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test);
 
     @Test
     void save() {
