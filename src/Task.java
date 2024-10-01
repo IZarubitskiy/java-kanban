@@ -43,6 +43,14 @@ public class Task {
         this.statusTask = statusTask;
     }
 
+    public int getEpicId() {
+        return 0;
+    }
+
+    public String getType() {
+        return TaskTypes.TASK.name();
+    }
+
     @Override
     public String toString() {
         return "Task{" +

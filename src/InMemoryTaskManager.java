@@ -3,24 +3,34 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private static int id = 0;
-
-    public static int getLastEpicId() {
-        return lastEpicId;
-    }
-
-    private static int lastEpicId = 0;
+    private int id = 0;
+    private int lastEpicId = 0;
     private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
-
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+
+    @Override
+    public Integer getLastEpicId() {
+        return lastEpicId;
+    }
+
+    @Override
+    public void setId(int value) {
+        this.id = value;
+    }
+
+    @Override
+    public void setLastEpicId(int value) {
+        this.lastEpicId = value;
+    }
 
     @Override
     public Integer genId() {
         id += 1;
         return id;
     }
+
 
     @Override
     public ArrayList<Task> getTasks() {

@@ -3,6 +3,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface TaskManager {
+    void setId(int value);
+
+    void setLastEpicId(int value);
+
     ArrayList<Task> getTasks();
 
     ArrayList<Epic> getEpics();
@@ -44,5 +48,7 @@ public interface TaskManager {
     List<Task> getHistory();
 
     Integer genId();
+
+    Integer getLastEpicId();
 
 }
