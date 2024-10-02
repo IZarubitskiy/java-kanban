@@ -11,15 +11,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager  {
 
-    private static final String HOME = System.getProperty("user.home");
-
-    File dbTaskManager = new File("dbTaskManager.csv");
-    private int id = 0;
-    private int lastEpicId = 0;
-    private HashMap<Integer, Task> singleTaskDesc;
-    private HashMap<Integer, Epic> epicTaskDesc;
-    private HashMap<Integer, SubTask> subTaskDesc;
-    InMemoryHistoryManager inMemoryHistoryManager;
+    File dbTaskManager;
 
     public FileBackedTaskManager(File dbTaskManager) {
         this. dbTaskManager = dbTaskManager;
@@ -28,31 +20,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
     static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager fileBackedTaskManagerFromFile = new FileBackedTaskManager(file);
 
-        FileReader reader;
-        BufferedReader br;
         List<String> tasksList = new ArrayList<>();
-        Reader fileReader = null;
         try {
-            reader = new FileReader(file);
-            br = new BufferedReader(reader);
-            while (br.ready()) {
-                String line = br.readLine();
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = reader.readLine();
+            while (line != null) {
                 tasksList.add(line);
+                line = reader.readLine();
             }
             reader.close();
-            br.close();
-
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                fileReader.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (NullPointerException exp) { // ловим исключение NullPointerException
-                System.out.println("Ошибка: передан неинициализированный объект!");
-            }
         }
+
+        tasksList.remove(0);
+
         int lastIdFromFile = 0;
         int lastEpicIdFromFile = 0;
 
@@ -65,11 +47,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                 lastEpicIdFromFile = Integer.parseInt(split[0]);
             }
             if (split[1].equals("TASK")) {
-                fileBackedTaskManagerFromFile.singleTaskDesc.put(Integer.parseInt(split[0]), new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3])));
+                fileBackedTaskManagerFromFile.addTask( new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3])));
             }
 
             if (split[1].equals("SUBTASK")) {
-                fileBackedTaskManagerFromFile.subTaskDesc.put(Integer.parseInt(split[0]), new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                fileBackedTaskManagerFromFile.addSubTask( new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
                         Integer.parseInt(split[5])));
             }
         }
@@ -80,12 +62,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
             String[] split = str.split(",");
             if (split[1].equals("EPIC")) {
                 ArrayList<Integer> idSubtasklistFromFile = new ArrayList<>();
-                for (Integer i : fileBackedTaskManagerFromFile.subTaskDesc.keySet()) {
-                    if (fileBackedTaskManagerFromFile.subTaskDesc.get(i).getEpicId() == Integer.parseInt(split[0])) {
-                        idSubtasklistFromFile.add(fileBackedTaskManagerFromFile.subTaskDesc.get(i).getId());
+                for (SubTask subTask: fileBackedTaskManagerFromFile.getSubtasks()) {
+                    if (subTask.getEpicId() == Integer.parseInt(split[0])) {
+                        idSubtasklistFromFile.add(subTask.getId());
                     }
                 }
-                fileBackedTaskManagerFromFile.epicTaskDesc.put(Integer.parseInt(split[0]), new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                fileBackedTaskManagerFromFile.addEpic(new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
                         idSubtasklistFromFile));
             }
         }

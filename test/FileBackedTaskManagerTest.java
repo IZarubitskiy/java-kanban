@@ -2,9 +2,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.nio.file.Path;
-import java.nio.file.Files;
 
 
 class FileBackedTaskManagerTest {
@@ -34,9 +31,10 @@ class FileBackedTaskManagerTest {
         Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", fileBackedTaskManager.genId(), TaskStatus.NEW, new ArrayList<Integer>());
         Epic epic2 = new Epic("Test addNewEpic 2", "Test addNewEpic 2 description", fileBackedTaskManager.genId(), TaskStatus.IN_PROGRESS, new ArrayList<Integer>());
         Epic epic3 = new Epic("Test addNewEpic 3", "Test addNewEpic 3 description", fileBackedTaskManager.genId(), TaskStatus.DONE, new ArrayList<Integer>());
-        SubTask subTask1 = new SubTask("Test addNewEpic 1", "Test addNewEpic 1 description", fileBackedTaskManager.genId(), TaskStatus.NEW, 1);
-        SubTask subTask2 = new SubTask("Test addNewEpic 2", "Test addNewEpic 1 description", fileBackedTaskManager.genId(), TaskStatus.IN_PROGRESS, 2);
-        SubTask subTask3 = new SubTask("Test addNewEpic 3", "Test addNewEpic 3 description", fileBackedTaskManager.genId(), TaskStatus.NEW, 3);
+        SubTask subTask1 = new SubTask("Test addNewEpic 1", "Test addNewEpic 1 description", fileBackedTaskManager.genId(), TaskStatus.NEW, 4);
+        SubTask subTask2 = new SubTask("Test addNewEpic 2", "Test addNewEpic 1 description", fileBackedTaskManager.genId(), TaskStatus.IN_PROGRESS, 5);
+        SubTask subTask3 = new SubTask("Test addNewEpic 3", "Test addNewEpic 3 description", fileBackedTaskManager.genId(), TaskStatus.NEW, 6);
+        SubTask subTask4 = new SubTask("Test addNewEpic 4", "Test addNewEpic 4 description", fileBackedTaskManager.genId(), TaskStatus.IN_PROGRESS, 5);
 
         fileBackedTaskManager.addTask(task1);
         fileBackedTaskManager.addTask(task2);
@@ -45,9 +43,13 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.addEpic(epic2);
         fileBackedTaskManager.addEpic(epic3);
         fileBackedTaskManager.addSubTask(subTask1);
-        fileBackedTaskManager.addSubTask(subTask3);
         fileBackedTaskManager.addSubTask(subTask2);
+        fileBackedTaskManager.addSubTask(subTask3);
+        fileBackedTaskManager.addSubTask(subTask4);
 
+      FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(test);
+       System.out.println(fileBackedTaskManager2.getEpics());
         fileBackedTaskManager.reader();
+
     }
 }
