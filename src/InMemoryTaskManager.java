@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int id = 0;
@@ -9,6 +9,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+    private Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(task -> task.getStartTime().isBefore(task.getStartTime())));
 
     @Override
     public Integer getLastEpicId() {
@@ -111,12 +112,27 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task addTask(Task newSingleTask) {
         singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
+        prioritizedTasks.add(newSingleTask);
         return newSingleTask;
     }
 
     @Override
     public Epic addEpic(Epic newEpic) {
-        lastEpicId = id;
+        LocalDateTime firstSubTask = LocalDateTime.now();
+        LocalDateTime lastSubTask = LocalDateTime.now();
+        Duration epicDuration = Duration.between(firstSubTask,firstSubTask);
+        for (Integer subTaskId : newEpic.getSubTasks()) {
+            epicDuration = epicDuration.plus(subTaskDesc.get(subTaskId).getDuration());
+            if (firstSubTask.isAfter(subTaskDesc.get(subTaskId).getStartTime())) {
+                firstSubTask = subTaskDesc.get(subTaskId).getStartTime();
+            }
+            if (lastSubTask.isBefore(subTaskDesc.get(subTaskId).getEndTime())) {
+                lastSubTask = subTaskDesc.get(subTaskId).getEndTime();
+            }
+            newEpic.setStartTime(firstSubTask);
+            newEpic.setDuration(epicDuration);
+            newEpic.setEndTime(lastSubTask);
+        }
         epicTaskDesc.put(newEpic.getId(), newEpic);
         return newEpic;
     }
@@ -124,6 +140,7 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public SubTask addSubTask(SubTask newSubTask) {
         subTaskDesc.put(newSubTask.getId(), newSubTask);
+        prioritizedTasks.add(newSubTask);
         return  newSubTask;
     }
 
@@ -227,4 +244,9 @@ public class InMemoryTaskManager implements TaskManager {
             epicTaskDesc.get(epicId).setStatusTask(TaskStatus.IN_PROGRESS);
         }
     }
+
+    @Override
+    public Set<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+        }
 }

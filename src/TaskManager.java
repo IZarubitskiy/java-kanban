@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public interface TaskManager {
     void setId(int value);
@@ -50,5 +48,7 @@ public interface TaskManager {
     Integer genId();
 
     Integer getLastEpicId();
+
+    Set<Task> getPrioritizedTasks ();
 
 }

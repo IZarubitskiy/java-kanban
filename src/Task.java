@@ -1,14 +1,21 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     private String title;
     private String description;
     private Integer id;
     private TaskStatus statusTask;
+    private LocalDateTime startTime;
+    private Duration duration;
 
-    public Task(String title, String description, Integer id, TaskStatus statusTask) {
+    public Task(String title, String description, Integer id, TaskStatus statusTask,LocalDateTime startTime, Duration duration) {
         this.title = title;
         this.description = description;
         this.id = id;
         this.statusTask = statusTask;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public String getTitle() {
@@ -51,6 +58,8 @@ public class Task {
         return TaskTypes.TASK.name();
     }
 
+    public LocalDateTime getEndTime() {return startTime.plusMinutes(duration.toMinutes());};
+
     @Override
     public String toString() {
         return "Task{" +
@@ -59,5 +68,21 @@ public class Task {
                 ",id='" + id + '\'' +
                 ", statusSingleTask=" + statusTask +
                 '}';
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
     }
 }
