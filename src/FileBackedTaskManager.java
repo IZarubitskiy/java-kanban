@@ -8,6 +8,10 @@ import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class FileBackedTaskManager extends InMemoryTaskManager  {
 
@@ -144,7 +148,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private String toString(Task task) {
         String strTask = task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
-                + task.getDescription() + "," + task.getEpicId() + "\n";
+                + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() +"," + task.getDescription() + ","
+                + task.getEndTime() + "\n";
         return strTask;
     }
 
@@ -153,14 +158,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         Task taskFromString;
         switch (TaskTypes.valueOf(split[1])) {
             case TASK:
-                return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]));
+                return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                        LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(Integer.parseInt(split[8])));
 
             case EPIC:
                 return taskFromString = new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        new ArrayList<Integer>());
+                        LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(Integer.parseInt(split[8])),
+                        new ArrayList<Integer>(), LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
 
             case SUBTASK:
                 return taskFromString = new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                        LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(Integer.parseInt(split[8])),
                         Integer.parseInt(split[5]));
         }
         return null;

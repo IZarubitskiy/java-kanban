@@ -9,7 +9,16 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
-    private Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(task -> task.getStartTime().isBefore(task.getStartTime())));
+    private Set<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
+        @Override
+        public int compare(Task t1, Task t2) {
+            if (t1.getStartTime().isBefore(t2.getStartTime())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    });
 
     @Override
     public Integer getLastEpicId() {
