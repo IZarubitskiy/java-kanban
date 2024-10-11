@@ -34,6 +34,16 @@ class FileBackedTaskManagerTest {
                 TaskStatus.IN_PROGRESS, LocalDateTime.parse("02.02.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(25));
         Task task3 = new Task("Test addNewTask 3", "Test addNewTask 3 description", fileBackedTaskManager.genId(),
                 TaskStatus.DONE, LocalDateTime.parse("03.02.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(15));
+        Task task4 = new Task("Test addNewTask 4", "Test addNewTask 4 description", fileBackedTaskManager.genId(),
+                TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 18:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60));
+
+
+        fileBackedTaskManager.addTask(task3);
+        fileBackedTaskManager.addTask(task4);
+        fileBackedTaskManager.addTask(task2);
+        fileBackedTaskManager.addTask(task1);
+
+
         System.out.println(fileBackedTaskManager.getPrioritizedTasks());
 /*
         Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", fileBackedTaskManager.genId(), TaskStatus.NEW, new ArrayList<Integer>());

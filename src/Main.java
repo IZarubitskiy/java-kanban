@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {
@@ -103,8 +105,7 @@ public class Main {
                             title = scanner.nextLine();
                             System.out.println("Введите описание задачи:");
                             description = scanner.nextLine();
-                            Task newSingleTask = new Task(title, description, inMemoryTaskManager.genId(), TaskStatus.NEW);
-                            inMemoryTaskManager.addTask(newSingleTask);
+                            inMemoryTaskManager.addTask(new Task(title, description, inMemoryTaskManager.genId(), TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(0)));
 
                             break;
                         case "2":
@@ -113,19 +114,16 @@ public class Main {
                             System.out.println("Введите описание эпика:");
                             description = scanner.nextLine();
                             ArrayList<Integer> newSubTaskList = new ArrayList<>();
-                            Epic newEpic = new Epic(title, description, inMemoryTaskManager.genId(), TaskStatus.NEW,  newSubTaskList);
-                            inMemoryTaskManager.addEpic(newEpic);
+                            inMemoryTaskManager.addEpic(new Epic(title, description, inMemoryTaskManager.genId(), TaskStatus.NEW,
+                                    LocalDateTime.now(), Duration.ofMinutes(0), newSubTaskList, LocalDateTime.now()));
 
                             System.out.println("Наполните Эпик задачами, введите название подзадачи:");
                             String nextSubTaskName = scanner.nextLine();
                             System.out.println("Введите описание подзадачи:");
                             String nextSubTaskDescription = scanner.nextLine();
                             while (!nextSubTaskName.isEmpty()) {
-                                SubTask nextSubTask = new SubTask(nextSubTaskName,
-                                        nextSubTaskDescription,
-                                        inMemoryTaskManager.genId(),
-                                        TaskStatus.NEW,
-                                        inMemoryTaskManager.getLastEpicId());
+                                SubTask nextSubTask = new SubTask(nextSubTaskName, nextSubTaskDescription, inMemoryTaskManager.genId(),
+                                        TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(0),inMemoryTaskManager.getLastEpicId());
                                 inMemoryTaskManager.addSubTask(nextSubTask);
                                 newSubTaskList.add(inMemoryTaskManager.getLastEpicId());
                                 System.out.println("Введите название подзадачи:");

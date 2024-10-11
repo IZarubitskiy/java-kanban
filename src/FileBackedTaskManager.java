@@ -51,12 +51,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                 lastEpicIdFromFile = Integer.parseInt(split[0]);
             }
             if (split[1].equals("TASK")) {
-                fileBackedTaskManagerFromFile.addTask( new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3])));
+                fileBackedTaskManagerFromFile.addTask(fileBackedTaskManagerFromFile.fromString(str));
             }
 
             if (split[1].equals("SUBTASK")) {
-                fileBackedTaskManagerFromFile.addSubTask( new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        Integer.parseInt(split[5])));
+                fileBackedTaskManagerFromFile.addSubTask((SubTask) fileBackedTaskManagerFromFile.fromString(str));
             }
         }
 
@@ -71,8 +70,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                         idSubtasklistFromFile.add(subTask.getId());
                     }
                 }
-                fileBackedTaskManagerFromFile.addEpic(new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        idSubtasklistFromFile));
+                Epic epic = (Epic)fileBackedTaskManagerFromFile.fromString(str);
+                epic.setIdSubtasklist(idSubtasklistFromFile);
+                fileBackedTaskManagerFromFile.addEpic(epic);
             }
         }
 

@@ -13,9 +13,9 @@ public class InMemoryTaskManager implements TaskManager {
         @Override
         public int compare(Task t1, Task t2) {
             if (t1.getStartTime().isBefore(t2.getStartTime())) {
-                return 1;
+                return -1;
             } else {
-                return 0;
+                return 1;
             }
         }
     });

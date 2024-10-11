@@ -1,5 +1,7 @@
+import java.text.Format;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Task {
     private String title;
@@ -62,11 +64,14 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "\n" +
+                "Task{" +
                 "title='" + title + '\'' +
                 ",description='" + description + '\'' +
                 ",id='" + id + '\'' +
                 ", statusSingleTask=" + statusTask +
+                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
+                ", duration=" + duration +
                 '}';
     }
 
