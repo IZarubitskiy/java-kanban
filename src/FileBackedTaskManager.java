@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.List;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager  {
@@ -148,7 +147,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private String toString(Task task) {
         String strTask = task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
-                + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() +"," + task.getDuration() + ","
+                + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() + "," + task.getDuration() + ","
                 + task.getEndTime() + "\n";
         return strTask;
     }
