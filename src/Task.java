@@ -1,4 +1,3 @@
-import java.text.Format;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,7 +59,7 @@ public class Task {
         return TaskTypes.TASK.name();
     }
 
-    public LocalDateTime getEndTime() {return startTime.plusMinutes(duration.toMinutes());};
+    public LocalDateTime getEndTime() { return startTime.plusMinutes(duration.toMinutes()); };
 
     @Override
     public String toString() {
