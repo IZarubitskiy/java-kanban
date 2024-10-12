@@ -49,6 +49,5 @@ public interface TaskManager {
 
     Integer getLastEpicId();
 
-    Set<Task> getPrioritizedTasks ();
-
+    Set<Task> getPrioritizedTasks();
 }
