@@ -59,7 +59,9 @@ public class Task {
         return TaskTypes.TASK.name();
     }
 
-    public LocalDateTime getEndTime() { return startTime.plusMinutes(duration.toMinutes()); };
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
+    }
 
     @Override
     public String toString() {
