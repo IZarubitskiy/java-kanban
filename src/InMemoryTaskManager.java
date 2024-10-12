@@ -41,7 +41,6 @@ public class InMemoryTaskManager implements TaskManager {
         return id;
     }
 
-
     @Override
     public ArrayList<Task> getTasks() {
         ArrayList<Task> allTasks = new ArrayList<>();
@@ -120,6 +119,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task addTask(Task newSingleTask) {
+        if (checkTaskDates(newSingleTask)){
+
+        }
         singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
         prioritizedTasks.add(newSingleTask);
         return newSingleTask;
@@ -258,4 +260,23 @@ public class InMemoryTaskManager implements TaskManager {
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;
         }
+
+    public boolean checkTaskDates(Task task){
+    boolean check = true;
+        for (Integer i : singleTaskDesc.keySet()) {
+            if (singleTaskDesc.get(i).getStartTime().isAfter(task.getStartTime()) && singleTaskDesc.get(i).getStartTime().isBefore(task.getEndTime()) ||
+                    singleTaskDesc.get(i).getEndTime().isAfter(task.getStartTime()) && singleTaskDesc.get(i).getStartTime().isBefore(task.getEndTime())){
+                check = false;
+            }
+        }
+        for (Integer i : subTaskDesc.keySet()) {
+            if (subTaskDesc.get(i).getStartTime().isAfter(task.getStartTime()) && subTaskDesc.get(i).getStartTime().isBefore(task.getEndTime()) ||
+                    subTaskDesc.get(i).getEndTime().isAfter(task.getStartTime()) && subTaskDesc.get(i).getStartTime().isBefore(task.getEndTime())){
+                check = false;
+            }
+
+        }
+    return check;
+    }
+
 }
