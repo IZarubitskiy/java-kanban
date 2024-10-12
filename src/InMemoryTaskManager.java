@@ -120,10 +120,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task addTask(Task newSingleTask) {
         if (checkTaskDates(newSingleTask)){
-
+            prioritizedTasks.add(newSingleTask);
+            singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
+        } else {
+            System.out.println("такое время уже существует");
+            id -=1;
         }
-        singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
-        prioritizedTasks.add(newSingleTask);
+
+
         return newSingleTask;
     }
 
@@ -150,9 +154,14 @@ public class InMemoryTaskManager implements TaskManager {
 
         @Override
         public SubTask addSubTask(SubTask newSubTask) {
-        subTaskDesc.put(newSubTask.getId(), newSubTask);
-        prioritizedTasks.add(newSubTask);
-        return  newSubTask;
+            if (checkTaskDates(newSubTask)){
+                prioritizedTasks.add(newSubTask);
+                singleTaskDesc.put(newSubTask.getId(), newSubTask);
+            } else {
+                System.out.println("такое время уже существует");
+                id -=1;
+            }
+            return  newSubTask;
     }
 
     @Override
@@ -264,14 +273,18 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean checkTaskDates(Task task){
     boolean check = true;
         for (Integer i : singleTaskDesc.keySet()) {
-            if (singleTaskDesc.get(i).getStartTime().isAfter(task.getStartTime()) && singleTaskDesc.get(i).getStartTime().isBefore(task.getEndTime()) ||
-                    singleTaskDesc.get(i).getEndTime().isAfter(task.getStartTime()) && singleTaskDesc.get(i).getStartTime().isBefore(task.getEndTime())){
+            if (task.getStartTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getStartTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
+                    task.getEndTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isBefore(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isAfter(singleTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isEqual(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isEqual(singleTaskDesc.get(i).getEndTime())) {
                 check = false;
             }
         }
         for (Integer i : subTaskDesc.keySet()) {
-            if (subTaskDesc.get(i).getStartTime().isAfter(task.getStartTime()) && subTaskDesc.get(i).getStartTime().isBefore(task.getEndTime()) ||
-                    subTaskDesc.get(i).getEndTime().isAfter(task.getStartTime()) && subTaskDesc.get(i).getStartTime().isBefore(task.getEndTime())){
+            if (task.getStartTime().isAfter(subTaskDesc.get(i).getStartTime()) && task.getStartTime().isBefore(subTaskDesc.get(i).getEndTime()) ||
+                    task.getEndTime().isAfter(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isBefore(subTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isBefore(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isAfter(subTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isEqual(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isEqual(subTaskDesc.get(i).getEndTime())) {
                 check = false;
             }
 

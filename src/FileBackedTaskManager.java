@@ -148,7 +148,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private String toString(Task task) {
         String strTask = task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
-                + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() +"," + task.getDescription() + ","
+                + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() +"," + task.getDuration() + ","
                 + task.getEndTime() + "\n";
         return strTask;
     }
@@ -159,16 +159,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         switch (TaskTypes.valueOf(split[1])) {
             case TASK:
                 return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(Integer.parseInt(split[8])));
+                        LocalDateTime.parse(split[6]), Duration.parse(split[7]));
 
             case EPIC:
                 return taskFromString = new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(Integer.parseInt(split[8])),
-                        new ArrayList<Integer>(), LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
+                        LocalDateTime.parse(split[6]), Duration.parse(split[7]),
+                        new ArrayList<Integer>(), LocalDateTime.parse(split[8]));
 
             case SUBTASK:
                 return taskFromString = new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        LocalDateTime.parse(split[7], DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(Integer.parseInt(split[8])),
+                        LocalDateTime.parse(split[6]), Duration.parse(split[7]),
                         Integer.parseInt(split[5]));
         }
         return null;
