@@ -119,15 +119,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task addTask(Task newSingleTask) {
-        if (checkTaskDates(newSingleTask)){
+        if (checkTaskDates(newSingleTask)) {
             prioritizedTasks.add(newSingleTask);
             singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
         } else {
             System.out.println("такое время уже существует");
-            id -=1;
+            id -= 1;
         }
-
-
         return newSingleTask;
     }
 
@@ -154,12 +152,12 @@ public class InMemoryTaskManager implements TaskManager {
 
         @Override
         public SubTask addSubTask(SubTask newSubTask) {
-            if (checkTaskDates(newSubTask)){
+            if (checkTaskDates(newSubTask)) {
                 prioritizedTasks.add(newSubTask);
                 singleTaskDesc.put(newSubTask.getId(), newSubTask);
             } else {
                 System.out.println("такое время уже существует");
-                id -=1;
+                id -= 1;
             }
             return  newSubTask;
     }
@@ -270,7 +268,7 @@ public class InMemoryTaskManager implements TaskManager {
         return prioritizedTasks;
         }
 
-    public boolean checkTaskDates(Task task){
+    public boolean checkTaskDates(Task task) {
     boolean check = true;
         for (Integer i : singleTaskDesc.keySet()) {
             if (task.getStartTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getStartTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
