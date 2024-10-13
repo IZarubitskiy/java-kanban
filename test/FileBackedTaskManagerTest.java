@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest{
 
     File test;
 
@@ -21,12 +21,8 @@ class FileBackedTaskManagerTest {
 
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test);
 
-
     @Test
     void save() {
-        //System.out.println("Пустая строка перед файлом");
-        fileBackedTaskManager.reader();
-        //System.out.println("Пустая строка после файла");
 
         Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", fileBackedTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
@@ -40,25 +36,6 @@ class FileBackedTaskManagerTest {
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 13:50", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60));
         Task task6 = new Task("Test addNewTask 6", "Test addNewTask 6 description", fileBackedTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:20", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(10));
-
-        System.out.println("задача 1");
-        fileBackedTaskManager.addTask(task1);
-        System.out.println("задача 2");
-        fileBackedTaskManager.addTask(task2);
-        System.out.println("задача 3");
-        fileBackedTaskManager.addTask(task3);
-        System.out.println("задача 4");
-        fileBackedTaskManager.addTask(task4);
-        System.out.println("задача 5");
-        fileBackedTaskManager.addTask(task5);
-        System.out.println("задача 6");
-        fileBackedTaskManager.addTask(task6);
-
-
-
-
-        System.out.println(fileBackedTaskManager.getPrioritizedTasks());
-
         Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", fileBackedTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")),
                 Duration.ofMinutes(60),  new ArrayList<Integer>(), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
@@ -68,7 +45,6 @@ class FileBackedTaskManagerTest {
         Epic epic3 = new Epic("Test addNewEpic 3", "Test addNewEpic 3 description", fileBackedTaskManager.genId(),
                 TaskStatus.DONE, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")),
                 Duration.ofMinutes(60),  new ArrayList<Integer>(), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
-
         SubTask subTask1 = new SubTask("Test addNewSubTask 1", "Test addNewSubTask 1 description", fileBackedTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2024, 14:20", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(10) ,4);
         SubTask subTask2 = new SubTask("Test addNewSubTask 2", "Test addNewSubTask 1 description", fileBackedTaskManager.genId(),
@@ -81,6 +57,9 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.addTask(task1);
         fileBackedTaskManager.addTask(task2);
         fileBackedTaskManager.addTask(task3);
+        fileBackedTaskManager.addTask(task4);
+        fileBackedTaskManager.addTask(task5);
+        fileBackedTaskManager.addTask(task6);
         fileBackedTaskManager.addEpic(epic1);
         fileBackedTaskManager.addEpic(epic2);
         fileBackedTaskManager.addEpic(epic3);
@@ -88,12 +67,11 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.addSubTask(subTask2);
         fileBackedTaskManager.addSubTask(subTask3);
         fileBackedTaskManager.addSubTask(subTask4);
-
-      FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(test);
-       System.out.println(fileBackedTaskManager2.getEpics());
         fileBackedTaskManager.reader();
 
-        System.out.println(fileBackedTaskManager.getPrioritizedTasks());
+        FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(test);
+        System.out.println(fileBackedTaskManager2.getEpics());
 
+        System.out.println(fileBackedTaskManager.getPrioritizedTasks());
     }
 }

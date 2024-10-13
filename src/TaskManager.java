@@ -29,7 +29,7 @@ public interface TaskManager {
 
     SubTask addSubTask(SubTask newSubTask);
 
-    Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
+    void setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
 
     Task updateTask(String id, Integer status);
 

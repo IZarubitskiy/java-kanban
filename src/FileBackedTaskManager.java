@@ -70,7 +70,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                     }
                 }
                 Epic epic = (Epic)fileBackedTaskManagerFromFile.fromString(str);
-                epic.setIdSubtasklist(idSubtasklistFromFile);
+                epic.setSubTaskListId(idSubtasklistFromFile);
                 fileBackedTaskManagerFromFile.addEpic(epic);
             }
         }

@@ -3,25 +3,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    ArrayList<Integer> idSubtasklist;
+    ArrayList<Integer> subTaskListId    ;
     LocalDateTime endTime;
 
     public Epic(String title, String description, Integer id, TaskStatus statusTask, LocalDateTime startTime, Duration duration, ArrayList<Integer> idSubtasklist, LocalDateTime endTime) {
         super(title, description, id, statusTask, startTime, duration);
-        this.idSubtasklist = idSubtasklist;
+        this.subTaskListId = idSubtasklist;
         this.endTime = endTime;
     }
 
-
     public ArrayList<Integer> getSubTasks() {
-        return idSubtasklist;
+        return subTaskListId;
     }
 
-    public void setIdSubtasklist(ArrayList<Integer> idSubtasklist) {
-        this.idSubtasklist = idSubtasklist;
+    public void setSubTaskListId(ArrayList<Integer> newSubTaskListId) {
+        this.subTaskListId = newSubTaskListId;
     }
-
-
 
     @Override
     public Integer getId() {
@@ -37,7 +34,7 @@ public class Epic extends Task {
     public String toString() {
         return "Epic" +
                 super.toString() +
-                ", idSubtasklist=" + idSubtasklist +
+                ", idSubtasklist=" + subTaskListId +
                 '}';
     }
 

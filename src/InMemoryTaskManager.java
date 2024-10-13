@@ -123,7 +123,7 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.add(newSingleTask);
             singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
         } else {
-            System.out.println("такое время уже существует");
+            System.out.println("Такое время уже существует");
             id -= 1;
         }
         return newSingleTask;
@@ -163,9 +163,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList) {
-        epicTaskDesc.get(lastEpicId).setIdSubtasklist(subTaskList);
-        return  epicTaskDesc.get(lastEpicId);
+    public void setLastEpicWithSubTask(ArrayList<Integer> subTaskList) {
+        epicTaskDesc.get(lastEpicId).setSubTaskListId(subTaskList);
     }
 
     @Override
@@ -226,7 +225,7 @@ public class InMemoryTaskManager implements TaskManager {
                 updatedListSubTasks.add(subTaskDesc.get(i).getId());
             }
         }
-        epicTaskDesc.get(epicId).setIdSubtasklist(updatedListSubTasks);
+        epicTaskDesc.get(epicId).setSubTaskListId(updatedListSubTasks);
         updateEpicStatus(epicId);
         return subTaskDesc;
     }
