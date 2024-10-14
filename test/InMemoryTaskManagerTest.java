@@ -49,6 +49,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         inMemoryTaskManager.addTask(task8);
         inMemoryTaskManager.addTask(task9);
         inMemoryTaskManager.addTask(task10);
+
         for (int i = 1; i < 13; i++) {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
