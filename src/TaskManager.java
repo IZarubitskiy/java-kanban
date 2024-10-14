@@ -43,7 +43,7 @@ public interface TaskManager {
 
     ArrayList<Integer> getSubTasksListByEpicId(String id);
 
-    Integer getHistoryTM();
+    List<Task> getHistoryTM();
 
     Integer genId();
 

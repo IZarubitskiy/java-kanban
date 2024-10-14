@@ -242,9 +242,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Integer getHistoryTM() {
-
-        return inMemoryHistoryManager.getHistory().size();
+    public List<Task> getHistoryTM() {
+        return inMemoryHistoryManager.getHistory();
     }
 
     public void updateEpicStatus(Integer epicId) {

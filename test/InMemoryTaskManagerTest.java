@@ -9,10 +9,11 @@ import java.util.List;
 
 class InMemoryTaskManagerTest extends TaskManagerTest {
 
-    InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
     @Test
     void historyTests() {
+
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
         Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", inMemoryTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
@@ -53,35 +54,38 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
             inMemoryTaskManager.getTaskById(id);
         }
 
-       assertEquals(10, inMemoryTaskManager.getHistoryTM(), "Количество задач не верно.");
-            //assertEquals(task10, inMemoryTaskManager.getHistoryTM().getFirst(), "Последняя добавленная задача не совпадает");
+        assertEquals(10, inMemoryTaskManager.getHistoryTM().size(), "Количество задач не верно.");
+        assertEquals(task10, inMemoryTaskManager.getHistoryTM().getFirst(), "Последняя добавленная задача не совпадает");
 
         inMemoryTaskManager.getTaskById("9");
-       // assertEquals(task9, inMemoryTaskManager.getHistory().getFirst(), "Не обновляет последнюю добавленную задачу");
+        assertEquals(task9, inMemoryTaskManager.getHistoryTM().getFirst(), "Не обновляет последнюю добавленную задачу");
         inMemoryTaskManager.addTask(task11);
         inMemoryTaskManager.getTaskById("12");
-        //assertEquals(10, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
+        assertEquals(10, inMemoryTaskManager.getHistoryTM().size(), "Количество задач не верно.");
 
         inMemoryTaskManager.deleteTaskById("5");
-       // assertEquals(9, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
+        assertEquals(9, inMemoryTaskManager.getHistoryTM().size(), "Количество задач не верно.");
 
         assertNull(inMemoryTaskManager.getTaskById("5"), "Задача не удалена");
     }
 
     @Test
     void addNewTask() {
-        Task task = new Task("Test addNewTask 0", "Test addNewTask 0 description", inMemoryTaskManager.genId(),
+
+        InMemoryTaskManager inMemoryTaskManager3 = new InMemoryTaskManager();
+
+        Task task = new Task("Test addNewTask 0", "Test addNewTask 0 description", inMemoryTaskManager3.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
 
-        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager3.addTask(task);
         final int taskId = task.getId();
 
-        final Task savedTask = inMemoryTaskManager.getTaskById(Integer.toString(taskId));
+        final Task savedTask = inMemoryTaskManager3.getTaskById(Integer.toString(taskId));
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
 
-        final ArrayList<Task> tasks = inMemoryTaskManager.getTasks();
+        final ArrayList<Task> tasks = inMemoryTaskManager3.getTasks();
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач.");
