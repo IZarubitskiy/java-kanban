@@ -242,7 +242,7 @@ public class Main {
                     }
                     break;
                 case "8":
-                    inMemoryTaskManager.getHistory();
+                    inMemoryTaskManager.getHistoryTM();
                     break;
                 case "9":
                     return;
