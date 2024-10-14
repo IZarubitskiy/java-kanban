@@ -105,7 +105,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         SubTask subTask3 = new SubTask("Test addNewsubTask 3", "Test addNewTask 3 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("03.08.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(15),
                 1);
-        System.out.println(inMemoryTaskManager2.getId());
         inMemoryTaskManager2.addSubTask(subTask1);
         inMemoryTaskManager2.addSubTask(subTask2);
         inMemoryTaskManager2.addSubTask(subTask3);

@@ -31,7 +31,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return newNode;
     }
 
-    public List<Task> getTasks() {
+    public List<Task> getHistory() {
         List<Task> taskListHystory = new ArrayList<>();
         Node t = this.head;
         while (t != null) {
@@ -87,11 +87,5 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (historyLinked.containsKey(id)) {
             removeNode(historyLinked.get(id));
         }
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        history = getTasks();
-        return history;
     }
 }
