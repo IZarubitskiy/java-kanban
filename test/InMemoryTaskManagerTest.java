@@ -92,6 +92,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
     @Test
     void updateEpicStatus(){
 
+
         Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", inMemoryTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")),
                 Duration.ofMinutes(60),  new ArrayList<Integer>(List.of(13,14,15)), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
@@ -110,6 +111,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         inMemoryTaskManager.addSubTask(subTask2);
         inMemoryTaskManager.addSubTask(subTask3);
         inMemoryTaskManager.addEpic(epic1);
+        System.out.println(epic1.getSubTasks());
 
         inMemoryTaskManager.updateEpicStatus(inMemoryTaskManager.getLastEpicId());
         assertEquals(TaskStatus.NEW, epic1.getStatusTask(), "Статус обновлен не верно");
