@@ -40,6 +40,9 @@ public class InMemoryTaskManager implements TaskManager {
         id += 1;
         return id;
     }
+    public Integer getId() {
+        return id;
+    }
 
     @Override
     public ArrayList<Task> getTasks() {

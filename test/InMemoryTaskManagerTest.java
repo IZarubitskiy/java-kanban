@@ -91,50 +91,48 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
     }
     @Test
     void updateEpicStatus(){
-
-
-        Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", inMemoryTaskManager.genId(),
+        InMemoryTaskManager inMemoryTaskManager2 = new InMemoryTaskManager();
+        Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")),
-                Duration.ofMinutes(60),  new ArrayList<Integer>(List.of(13,14,15)), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
+                Duration.ofMinutes(60),  new ArrayList<Integer>(List.of(2,3,4)), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
 
-        SubTask subTask1 = new SubTask("Test addNewsubTask 1", "Test addNewTask 1 description", inMemoryTaskManager.genId(),
+        SubTask subTask1 = new SubTask("Test addNewsubTask 1", "Test addNewTask 1 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.06.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20),
-                12);
-        SubTask subTask2 = new SubTask("Test addNewsubTask2", "Test addNewTask 2 description", inMemoryTaskManager.genId(),
+                1);
+
+        SubTask subTask2 = new SubTask("Test addNewsubTask2", "Test addNewTask 2 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("02.07.2021, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(25),
-                12);
-        SubTask subTask3 = new SubTask("Test addNewsubTask 3", "Test addNewTask 3 description", inMemoryTaskManager.genId(),
+                1);
+        SubTask subTask3 = new SubTask("Test addNewsubTask 3", "Test addNewTask 3 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("03.08.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(15),
-                12);
+                1);
+        inMemoryTaskManager2.addSubTask(subTask1);
+        inMemoryTaskManager2.addSubTask(subTask2);
+        inMemoryTaskManager2.addSubTask(subTask3);
+        inMemoryTaskManager2.addEpic(epic1);
 
-        inMemoryTaskManager.addSubTask(subTask1);
-        inMemoryTaskManager.addSubTask(subTask2);
-        inMemoryTaskManager.addSubTask(subTask3);
-        inMemoryTaskManager.addEpic(epic1);
-        System.out.println(epic1.getSubTasks());
-
-        inMemoryTaskManager.updateEpicStatus(inMemoryTaskManager.getLastEpicId());
+        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.NEW, epic1.getStatusTask(), "Статус обновлен не верно");
 
-        inMemoryTaskManager.updateSubTask(subTask1.getId().toString(), 1);
-        inMemoryTaskManager.updateEpicStatus(inMemoryTaskManager.getLastEpicId());
+        inMemoryTaskManager2.updateSubTask(subTask1.getId().toString(), 1);
+        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
 
-        inMemoryTaskManager.updateSubTask(subTask1.getId().toString(), 2);
-        inMemoryTaskManager.updateSubTask(subTask2.getId().toString(), 1);
-        inMemoryTaskManager.updateEpicStatus(inMemoryTaskManager.getLastEpicId());
+        inMemoryTaskManager2.updateSubTask(subTask1.getId().toString(), 2);
+        inMemoryTaskManager2.updateSubTask(subTask2.getId().toString(), 1);
+        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
 
-        inMemoryTaskManager.updateSubTask(subTask1.getId().toString(), 2);
-        inMemoryTaskManager.updateSubTask(subTask2.getId().toString(), 2);
-        inMemoryTaskManager.updateSubTask(subTask3.getId().toString(), 2);
-        inMemoryTaskManager.updateEpicStatus(inMemoryTaskManager.getLastEpicId());
+        inMemoryTaskManager2.updateSubTask(subTask1.getId().toString(), 2);
+        inMemoryTaskManager2.updateSubTask(subTask2.getId().toString(), 2);
+        inMemoryTaskManager2.updateSubTask(subTask3.getId().toString(), 2);
+        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.DONE, epic1.getStatusTask(), "Статус обновлен не верно");
 
         assertNotNull(subTask1.getEpicId(), "У подзадачи нет Эпика");
-        assertEquals(12, subTask1.getEpicId(), "Номер эпика указан неверно");
+        assertEquals(1, subTask1.getEpicId(), "Номер эпика указан неверно");
         assertNotNull(epic1.getSubTasks(), "У эпика нет подзадач");
-        assertEquals(new ArrayList<>(List.of(13,14,15)), epic1.getSubTasks(), "Задачи у эпика не совпадают");
+        assertEquals(new ArrayList<>(List.of(2,3,4)), epic1.getSubTasks(), "Задачи у эпика не совпадают");
     }
 
 }
