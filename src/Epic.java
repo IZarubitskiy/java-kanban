@@ -3,7 +3,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    ArrayList<Integer> subTaskListId    ;
+    ArrayList<Integer> subTaskListId;
     LocalDateTime endTime;
 
     public Epic(String title, String description, Integer id, TaskStatus statusTask, LocalDateTime startTime, Duration duration, ArrayList<Integer> idSubtasklist, LocalDateTime endTime) {
