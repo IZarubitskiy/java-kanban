@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
@@ -6,10 +7,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class FileBackedTaskManagerTest{
+class FileBackedTaskManagerTest extends InMemoryTaskManagerTest{
 
     File test;
+
+
 
     {
         try {
@@ -18,6 +23,8 @@ class FileBackedTaskManagerTest{
             throw new RuntimeException(e);
         }
     }
+
+
 
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test);
 
@@ -67,8 +74,9 @@ class FileBackedTaskManagerTest{
         fileBackedTaskManager.addSubTask(subTask2);
         fileBackedTaskManager.addSubTask(subTask3);
         fileBackedTaskManager.addSubTask(subTask4);
-        fileBackedTaskManager.reader();
 
+        fileBackedTaskManager.reader();
+        Assertions.assertDoesNotThrow(() -> {fileBackedTaskManager.reader();} );
         FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(test);
         System.out.println(fileBackedTaskManager2.getEpics());
 
