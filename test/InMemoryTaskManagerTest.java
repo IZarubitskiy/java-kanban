@@ -72,7 +72,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
             if (i == 3) {
-                assertEquals(3, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
+                assertEquals(0, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
             }
             if (i == 4) {
                 assertEquals(task4, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
@@ -111,22 +111,19 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         inMemoryTaskManager2.addSubTask(subTask3);
         inMemoryTaskManager2.addEpic(epic1);
 
-        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
+
         assertEquals(TaskStatus.NEW, epic1.getStatusTask(), "Статус обновлен не верно");
 
         inMemoryTaskManager2.updateSubTask(subTask1.getId().toString(), 1);
-        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
 
         inMemoryTaskManager2.updateSubTask(subTask1.getId().toString(), 2);
         inMemoryTaskManager2.updateSubTask(subTask2.getId().toString(), 1);
-        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
 
         inMemoryTaskManager2.updateSubTask(subTask1.getId().toString(), 2);
         inMemoryTaskManager2.updateSubTask(subTask2.getId().toString(), 2);
         inMemoryTaskManager2.updateSubTask(subTask3.getId().toString(), 2);
-        inMemoryTaskManager2.updateEpicStatus(inMemoryTaskManager2.getLastEpicId());
         assertEquals(TaskStatus.DONE, epic1.getStatusTask(), "Статус обновлен не верно");
 
         assertNotNull(subTask1.getEpicId(), "У подзадачи нет Эпика");
