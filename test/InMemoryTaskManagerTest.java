@@ -13,10 +13,9 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
 
     InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
-
-
     @Test
     void historyTests() {
+
         Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", inMemoryTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
         Task task2 = new Task("Test addNewTask 2", "Test addNewTask 2 description", inMemoryTaskManager.genId(),
@@ -50,16 +49,14 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         inMemoryTaskManager.addTask(task8);
         inMemoryTaskManager.addTask(task9);
         inMemoryTaskManager.addTask(task10);
-
         for (int i = 1; i < 13; i++) {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
             if (i == 3) {
                 assertEquals(3, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
-                System.out.println(inMemoryTaskManager.getHistory().size());
             }
-            if (i == 4) {
-                assertEquals(task4, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
+            if (i == 5) {
+                assertEquals(task5, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
             }
         }
         inMemoryTaskManager.getTaskById("9");
