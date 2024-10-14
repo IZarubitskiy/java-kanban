@@ -5,7 +5,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node tail;
     private int size = 0;
     private List<Task> history = new ArrayList<>();
-    private Map<Integer, Node> historyLinked = new HashMap<>();
+    private HashMap<Integer, Node> historyLinked = new HashMap<>();
 
     class Node {
         public Task task;
