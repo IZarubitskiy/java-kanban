@@ -7,13 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryTaskManagerTest extends TaskManagerTest {
-
+class InMemoryTaskManagerTest extends TaskManagerTest{
 
     @Test
     void historyTests() {
 
         InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        inMemoryTaskManager.setId(0);
 
         Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", inMemoryTaskManager.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
@@ -48,12 +48,12 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         inMemoryTaskManager.addTask(task8);
         inMemoryTaskManager.addTask(task9);
         inMemoryTaskManager.addTask(task10);
-
+        System.out.println(inMemoryTaskManager.getTasks());
+        System.out.println();
         for (int i = 1; i < 11; i++) {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
         }
-
         assertEquals(10, inMemoryTaskManager.getHistoryTM().size(), "Количество задач не верно.");
         assertEquals(task10, inMemoryTaskManager.getHistoryTM().getFirst(), "Последняя добавленная задача не совпадает");
 
