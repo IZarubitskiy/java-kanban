@@ -1,8 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,7 +52,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
             if (i == 3) {
-                assertEquals(3, inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
+                System.out.println(inMemoryTaskManager.getHistory().size());
+                assertEquals(3, (short) inMemoryTaskManager.getHistory().size(), "Количество задач не верно.");
             }
             if (i == 5) {
                 assertEquals(task5, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
@@ -98,7 +97,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         inMemoryTaskManager2.setId(0);
         Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")),
-                Duration.ofMinutes(60),  new ArrayList<Integer>(List.of(2,3,4)), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
+                Duration.ofMinutes(60),  new ArrayList<>(List.of(2,3,4)), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
 
         SubTask subTask1 = new SubTask("Test addNewsubTask 1", "Test addNewTask 1 description", inMemoryTaskManager2.genId(),
                 TaskStatus.NEW, LocalDateTime.parse("01.06.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20),
