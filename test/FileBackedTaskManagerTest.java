@@ -7,15 +7,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-class FileBackedTaskManagerTest extends InMemoryTaskManagerTest{
+class FileBackedTaskManagerTest {
 
     File test;
-
-
-
     {
         try {
             test = File.createTempFile("geeks", null);
@@ -23,8 +17,6 @@ class FileBackedTaskManagerTest extends InMemoryTaskManagerTest{
             throw new RuntimeException(e);
         }
     }
-
-
 
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test);
 
