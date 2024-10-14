@@ -52,9 +52,9 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
         }
-        int size = inMemoryTaskManager.getHistoryTM().size();
-        assertEquals(10, size, "Количество задач не верно.");
-           // assertEquals(task10, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
+
+       // assertEquals(10, inMemoryTaskManager.getHistoryTM().size(), "Количество задач не верно.");
+            assertEquals(task10, inMemoryTaskManager.getHistoryTM().getFirst(), "Последняя добавленная задача не совпадает");
 
         inMemoryTaskManager.getTaskById("9");
        // assertEquals(task9, inMemoryTaskManager.getHistory().getFirst(), "Не обновляет последнюю добавленную задачу");
