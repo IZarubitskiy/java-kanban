@@ -13,25 +13,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
 
     InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
-    @Test
-    void addNewTask() {
-        Task task = new Task("Test addNewTask 0", "Test addNewTask 0 description", inMemoryTaskManager.genId(),
-                TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
 
-        inMemoryTaskManager.addTask(task);
-        final int taskId = task.getId();
-
-        final Task savedTask = inMemoryTaskManager.getTaskById(Integer.toString(taskId));
-
-        assertNotNull(savedTask, "Задача не найдена.");
-        assertEquals(task, savedTask, "Задачи не совпадают.");
-
-        final ArrayList<Task> tasks = inMemoryTaskManager.getTasks();
-
-        assertNotNull(tasks, "Задачи не возвращаются.");
-        assertEquals(1, tasks.size(), "Неверное количество задач.");
-        assertEquals(task, tasks.getFirst(), "Задачи не совпадают.");
-    }
 
     @Test
     void historyTests() {
@@ -91,6 +73,27 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
 
         assertNull(inMemoryTaskManager.getTaskById("5"), "Задача не удалена");
     }
+
+    @Test
+    void addNewTask() {
+        Task task = new Task("Test addNewTask 0", "Test addNewTask 0 description", inMemoryTaskManager.genId(),
+                TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
+
+        inMemoryTaskManager.addTask(task);
+        final int taskId = task.getId();
+
+        final Task savedTask = inMemoryTaskManager.getTaskById(Integer.toString(taskId));
+
+        assertNotNull(savedTask, "Задача не найдена.");
+        assertEquals(task, savedTask, "Задачи не совпадают.");
+
+        final ArrayList<Task> tasks = inMemoryTaskManager.getTasks();
+
+        assertNotNull(tasks, "Задачи не возвращаются.");
+        assertEquals(1, tasks.size(), "Неверное количество задач.");
+        assertEquals(task, tasks.getFirst(), "Задачи не совпадают.");
+    }
+
     @Test
     void updateEpicStatus(){
         InMemoryTaskManager inMemoryTaskManager2 = new InMemoryTaskManager();
