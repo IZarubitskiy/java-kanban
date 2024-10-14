@@ -77,7 +77,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
             if (i == 4) {
                 assertEquals(task4, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
             }
-
         }
         inMemoryTaskManager.getTaskById("9");
         assertEquals(task9, inMemoryTaskManager.getHistory().getFirst(), "Не обновляет последнюю добавленную задачу");
