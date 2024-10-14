@@ -52,7 +52,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
             String id = Integer.toString(i);
             inMemoryTaskManager.getTaskById(id);
         }
-        assertEquals(10, inMemoryTaskManager.getHistoryTM().size(), "Количество задач не верно.");
+        int size = inMemoryTaskManager.getHistoryTM().size();
+        assertEquals(10, size, "Количество задач не верно.");
            // assertEquals(task10, inMemoryTaskManager.getHistory().getFirst(), "Последняя добавленная задача не совпадает");
 
         inMemoryTaskManager.getTaskById("9");
@@ -66,7 +67,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
 
         assertNull(inMemoryTaskManager.getTaskById("5"), "Задача не удалена");
     }
-/*
+
     @Test
     void addNewTask() {
         Task task = new Task("Test addNewTask 0", "Test addNewTask 0 description", inMemoryTaskManager.genId(),
@@ -129,6 +130,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         assertEquals(1, subTask1.getEpicId(), "Номер эпика указан неверно");
         assertNotNull(epic1.getSubTasks(), "У эпика нет подзадач");
         assertEquals(new ArrayList<>(List.of(2,3,4)), epic1.getSubTasks(), "Задачи у эпика не совпадают");
-    }*/
+    }
 
 }
