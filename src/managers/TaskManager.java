@@ -12,6 +12,8 @@ public interface TaskManager {
 
     void setLastEpicId(int value);
 
+    int getIdTaskManager ();
+
     ArrayList<Task> getTasks();
 
     ArrayList<Epic> getEpics();

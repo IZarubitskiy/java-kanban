@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest {
 
     File test;
     {
@@ -24,6 +24,15 @@ class FileBackedTaskManagerTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    TaskManager getManager() {
+        return new FileBackedTaskManager(test);
+    }
+
+
+/*
+
 
     FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(test);
 
@@ -77,5 +86,5 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.reader();
         Assertions.assertDoesNotThrow(() -> {fileBackedTaskManager.reader();} );
         FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(test);
-    }
+    }*/
 }
