@@ -12,7 +12,7 @@ public interface TaskManager {
 
     void setLastEpicId(int value);
 
-    int getIdTaskManager ();
+    int getIdTaskManager();
 
     ArrayList<Task> getTasks();
 
