@@ -7,6 +7,7 @@ import tasks.Task;
 import java.util.*;
 
 public interface TaskManager {
+
     void setId(int value);
 
     void setLastEpicId(int value);

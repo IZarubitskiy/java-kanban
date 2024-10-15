@@ -1,16 +1,12 @@
-import managers.TaskManager;
-import org.junit.jupiter.api.Test;
-import tasks.Task;
-import tasks.TaskStatus;
+package managers;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 abstract class TaskManagerTest<T extends TaskManager>{
     @Test
@@ -33,5 +29,20 @@ abstract class TaskManagerTest<T extends TaskManager>{
 
     @Test
     void epicToSubtaskRelation(){}
+
+    @Test
+    void getLastEpicId() {}
+
+    @Test
+    void genId() {}
+
+    @Test
+    void getTasks() {}
+
+    @Test
+    void deleteTasks() {}
+
+    @Test
+    void deleteTaskById() {}
 
 }
