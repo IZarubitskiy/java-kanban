@@ -8,7 +8,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node head;
     private Node tail;
     private int size = 0;
-    final private HashMap<Integer, Node> historyLinked = new HashMap<>();
+    private HashMap<Integer, Node> historyLinked = new HashMap<>();
 
     private class Node {
         public Task task;
