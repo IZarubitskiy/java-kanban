@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class Task {
     private String title;
     private String description;
-    private Integer id;
+    private final Integer id;
     private TaskStatus statusTask;
     private LocalDateTime startTime;
     private Duration duration;
@@ -41,9 +41,9 @@ public class Task {
         return id;
     }
 
-    public void setId(int id) {
+    /*public void setId(int id) {
         this.id = id;
-    }
+    }*/
 
     public TaskStatus getStatusTask() {
         return statusTask;
