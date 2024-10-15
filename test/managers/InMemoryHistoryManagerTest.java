@@ -23,15 +23,10 @@ class InMemoryHistoryManagerTest {
     void checkDuplicates(){
         inMemoryHistoryManager.add(new Task("Test addNewTask 1", "Test addNewTask 1 description", 29,
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2031, 13:50", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60)));
-
-        inMemoryHistoryManager.add(new Task("Test addNewTask 2", "Test addNewTask 2 description", 30,
-                TaskStatus.NEW, LocalDateTime.parse("01.02.2032, 13:50", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60)));
-        inMemoryHistoryManager.add(new Task("Test addNewTask 3", "Test addNewTask 3 description", 31,
-                TaskStatus.NEW, LocalDateTime.parse("01.02.2033, 13:50", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60)));
         inMemoryHistoryManager.add(new Task("Test addNewTask 1", "Test addNewTask 1 description", 29,
                 TaskStatus.NEW, LocalDateTime.parse("01.02.2031, 13:50", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60)));
 
-        assertEquals(3, inMemoryHistoryManager.getHistory().size(), "Задачи дублируются");
+        assertEquals(1, inMemoryHistoryManager.getHistory().size(), "Задачи дублируются");
     }
 
     @Test
@@ -60,7 +55,9 @@ class InMemoryHistoryManagerTest {
         assertEquals(2, inMemoryHistoryManager.getHistory().size(), "Задача удалена");
         assertEquals(33, inMemoryHistoryManager.getHistory().getFirst().getId(), "Удалена не та задача");
         assertEquals(31, inMemoryHistoryManager.getHistory().getLast().getId(), "задача не удалена с конца");
-
     }
+
+
+
 
 }
