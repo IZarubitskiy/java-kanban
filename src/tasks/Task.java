@@ -1,3 +1,5 @@
+package tasks;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +12,7 @@ public class Task {
     private LocalDateTime startTime;
     private Duration duration;
 
-    public Task(String title, String description, Integer id, TaskStatus statusTask,LocalDateTime startTime, Duration duration) {
+    public Task(String title, String description, Integer id, TaskStatus statusTask, LocalDateTime startTime, Duration duration) {
         this.title = title;
         this.description = description;
         this.id = id;
@@ -66,7 +68,7 @@ public class Task {
     @Override
     public String toString() {
         return "\n" +
-                "Task{" +
+                "tasks.Task{" +
                 "title='" + title + '\'' +
                 ",description='" + description + '\'' +
                 ",id='" + id + '\'' +

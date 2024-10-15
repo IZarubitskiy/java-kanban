@@ -1,3 +1,5 @@
+package tasks;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -27,7 +29,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask" +
+        return "tasks.SubTask" +
                 super.toString() +
                 ", epicId=" + epicId +
                 '}';

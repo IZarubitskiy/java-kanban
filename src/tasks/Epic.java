@@ -1,10 +1,12 @@
+package tasks;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    ArrayList<Integer> subTaskListId;
-    LocalDateTime endTime;
+    private ArrayList<Integer> subTaskListId;
+    private LocalDateTime endTime;
 
     public Epic(String title, String description, Integer id, TaskStatus statusTask, LocalDateTime startTime, Duration duration, ArrayList<Integer> idSubtasklist, LocalDateTime endTime) {
         super(title, description, id, statusTask, startTime, duration);
@@ -32,7 +34,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic" +
+        return "tasks.Epic" +
                 super.toString() +
                 ", idSubtasklist=" + subTaskListId +
                 '}';

@@ -1,3 +1,7 @@
+package managers;
+
+import tasks.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
@@ -20,7 +24,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         this. dbTaskManager = dbTaskManager;
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager fileBackedTaskManagerFromFile = new FileBackedTaskManager(file);
 
         List<String> tasksList = new ArrayList<>();
@@ -119,7 +123,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     }
 
-    void reader() {
+    public void reader() {
 
         Reader fileReader = null;
         try {

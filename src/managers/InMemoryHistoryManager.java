@@ -1,3 +1,7 @@
+package managers;
+
+import tasks.Task;
+
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -29,16 +33,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             oldHead.prev = newNode;
         size++;
         return newNode;
-    }
-
-    public List<Task> getHistory() {
-        List<Task> taskListHistory = new ArrayList<>();
-        Node t = this.head;
-        while (t != null) {
-            taskListHistory.add(t.task);
-            t = t.next;
-        }
-        return taskListHistory;
     }
 
     public void removeNode(Node node) {
@@ -87,5 +81,16 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (historyLinked.containsKey(id)) {
             removeNode(historyLinked.get(id));
         }
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        List<Task> taskListHistory = new ArrayList<>();
+        Node t = this.head;
+        while (t != null) {
+            taskListHistory.add(t.task);
+            t = t.next;
+        }
+        return taskListHistory;
     }
 }
