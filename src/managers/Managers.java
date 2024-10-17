@@ -1,3 +1,5 @@
+package managers;
+
 public  class Managers {
      static HistoryManager getDefaultHistory() {
          HistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();

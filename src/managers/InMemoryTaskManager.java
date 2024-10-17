@@ -1,6 +1,13 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+package managers;
+
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import tasks.TaskStatus;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int id = 0;
@@ -9,6 +16,16 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
     private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+    private Set<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
+        @Override
+        public int compare(Task t1, Task t2) {
+            if (t1.getStartTime().isBefore(t2.getStartTime())) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+    });
 
     @Override
     public Integer getLastEpicId() {
@@ -31,6 +48,9 @@ public class InMemoryTaskManager implements TaskManager {
         return id;
     }
 
+    public int getIdTaskManager() {
+        return id;
+    }
 
     @Override
     public ArrayList<Task> getTasks() {
@@ -110,27 +130,53 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task addTask(Task newSingleTask) {
-        singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
+        if (checkTaskDates(newSingleTask)) {
+            prioritizedTasks.add(newSingleTask);
+            singleTaskDesc.put(newSingleTask.getId(), newSingleTask);
+        } else {
+            System.out.println("Такое время уже существует");
+            id -= 1;
+        }
         return newSingleTask;
     }
 
     @Override
     public Epic addEpic(Epic newEpic) {
-        lastEpicId = id;
+        LocalDateTime firstSubTask = LocalDateTime.now();
+        LocalDateTime lastSubTask = LocalDateTime.now();
+        Duration epicDuration = Duration.between(firstSubTask,firstSubTask);
+        for (Integer subTaskId : newEpic.getSubTasks()) {
+            epicDuration = epicDuration.plus(subTaskDesc.get(subTaskId).getDuration());
+            if (firstSubTask.isAfter(subTaskDesc.get(subTaskId).getStartTime())) {
+                firstSubTask = subTaskDesc.get(subTaskId).getStartTime();
+            }
+            if (lastSubTask.isBefore(subTaskDesc.get(subTaskId).getEndTime())) {
+                lastSubTask = subTaskDesc.get(subTaskId).getEndTime();
+            }
+            newEpic.setStartTime(firstSubTask);
+            newEpic.setDuration(epicDuration);
+            newEpic.setEndTime(lastSubTask);
+        }
         epicTaskDesc.put(newEpic.getId(), newEpic);
+        setLastEpicId(newEpic.getId());
         return newEpic;
     }
 
         @Override
         public SubTask addSubTask(SubTask newSubTask) {
-        subTaskDesc.put(newSubTask.getId(), newSubTask);
-        return  newSubTask;
+            if (checkTaskDates(newSubTask)) {
+                prioritizedTasks.add(newSubTask);
+                subTaskDesc.put(newSubTask.getId(), newSubTask);
+            } else {
+                System.out.println("такое время уже существует");
+                id -= 1;
+            }
+            return  newSubTask;
     }
 
     @Override
-    public Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList) {
-        epicTaskDesc.get(lastEpicId).setIdSubtasklist(subTaskList);
-        return  epicTaskDesc.get(lastEpicId);
+    public void setLastEpicWithSubTask(ArrayList<Integer> subTaskList) {
+        epicTaskDesc.get(lastEpicId).setSubTaskListId(subTaskList);
     }
 
     @Override
@@ -191,7 +237,7 @@ public class InMemoryTaskManager implements TaskManager {
                 updatedListSubTasks.add(subTaskDesc.get(i).getId());
             }
         }
-        epicTaskDesc.get(epicId).setIdSubtasklist(updatedListSubTasks);
+        epicTaskDesc.get(epicId).setSubTaskListId(updatedListSubTasks);
         updateEpicStatus(epicId);
         return subTaskDesc;
     }
@@ -203,12 +249,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory() {
-        System.out.println(inMemoryHistoryManager.getHistory());
+    public List<Task> getHistoryTM() {
         return inMemoryHistoryManager.getHistory();
     }
 
-    private void updateEpicStatus(Integer epicId) {
+    public void updateEpicStatus(Integer epicId) {
         int epicSize = epicTaskDesc.get(epicId).getSubTasks().size();
         int counterNew = 0;
         int counterDone = 0;
@@ -227,4 +272,32 @@ public class InMemoryTaskManager implements TaskManager {
             epicTaskDesc.get(epicId).setStatusTask(TaskStatus.IN_PROGRESS);
         }
     }
+
+    @Override
+    public Set<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+        }
+
+    public boolean checkTaskDates(Task task) {
+    boolean check = true;
+        for (Integer i : singleTaskDesc.keySet()) {
+            if (task.getStartTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getStartTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
+                    task.getEndTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isBefore(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isAfter(singleTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isEqual(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isEqual(singleTaskDesc.get(i).getEndTime())) {
+                check = false;
+            }
+        }
+        for (Integer i : subTaskDesc.keySet()) {
+            if (task.getStartTime().isAfter(subTaskDesc.get(i).getStartTime()) && task.getStartTime().isBefore(subTaskDesc.get(i).getEndTime()) ||
+                    task.getEndTime().isAfter(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isBefore(subTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isBefore(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isAfter(subTaskDesc.get(i).getEndTime()) ||
+                    task.getStartTime().isEqual(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isEqual(subTaskDesc.get(i).getEndTime())) {
+                check = false;
+            }
+
+        }
+    return check;
+    }
+
 }

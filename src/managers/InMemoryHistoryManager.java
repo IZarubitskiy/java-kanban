@@ -1,13 +1,16 @@
+package managers;
+
+import tasks.Task;
+
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private Node head;
     private Node tail;
     private int size = 0;
-    private List<Task> history = new ArrayList<>();
-    private Map<Integer, Node> historyLinked = new HashMap<>();
+    private HashMap<Integer, Node> historyLinked = new HashMap<>();
 
-    class Node {
+    private class Node {
         public Task task;
         public Node next;
         public Node prev;
@@ -19,7 +22,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    public Node linkLast(Task task) {
+    private Node linkLast(Task task) {
         final Node oldHead = head;
         final Node newNode = new Node(null, task, oldHead);
         head = newNode;
@@ -31,17 +34,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return newNode;
     }
 
-    public List<Task> getTasks() {
-        List<Task> taskListHystory = new ArrayList<>();
-        Node t = this.head;
-        while (t != null) {
-            taskListHystory.add(t.task);
-            t = t.next;
-        }
-        return taskListHystory;
-    }
-
-    public void removeNode(Node node) {
+    private void removeNode(Node node) {
         if (head == null)
             return;
         if (head == tail) {
@@ -69,11 +62,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    public int size() {
-        return this.size;
-    }
-
-
     @Override
     public void add(Task task) {
         if (historyLinked.containsKey(task.getId())) {
@@ -91,7 +79,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        history = getTasks();
-        return history;
+        List<Task> taskListHistory = new ArrayList<>();
+        Node t = this.head;
+        while (t != null) {
+            taskListHistory.add(t.task);
+            t = t.next;
+        }
+        return taskListHistory;
     }
 }

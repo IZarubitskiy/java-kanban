@@ -1,11 +1,18 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+package managers;
+
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+
+import java.util.*;
 
 public interface TaskManager {
+
     void setId(int value);
 
     void setLastEpicId(int value);
+
+    int getIdTaskManager();
 
     ArrayList<Task> getTasks();
 
@@ -31,7 +38,7 @@ public interface TaskManager {
 
     SubTask addSubTask(SubTask newSubTask);
 
-    Epic setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
+    void setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
 
     Task updateTask(String id, Integer status);
 
@@ -45,10 +52,11 @@ public interface TaskManager {
 
     ArrayList<Integer> getSubTasksListByEpicId(String id);
 
-    List<Task> getHistory();
+    List<Task> getHistoryTM();
 
     Integer genId();
 
     Integer getLastEpicId();
 
+    Set<Task> getPrioritizedTasks();
 }

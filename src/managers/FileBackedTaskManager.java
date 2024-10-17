@@ -1,3 +1,7 @@
+package managers;
+
+import tasks.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
@@ -8,6 +12,9 @@ import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 
 public class FileBackedTaskManager extends InMemoryTaskManager  {
 
@@ -17,7 +24,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         this. dbTaskManager = dbTaskManager;
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager fileBackedTaskManagerFromFile = new FileBackedTaskManager(file);
 
         List<String> tasksList = new ArrayList<>();
@@ -47,12 +54,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                 lastEpicIdFromFile = Integer.parseInt(split[0]);
             }
             if (split[1].equals("TASK")) {
-                fileBackedTaskManagerFromFile.addTask( new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3])));
+                fileBackedTaskManagerFromFile.addTask(fileBackedTaskManagerFromFile.fromString(str));
             }
 
             if (split[1].equals("SUBTASK")) {
-                fileBackedTaskManagerFromFile.addSubTask( new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        Integer.parseInt(split[5])));
+                fileBackedTaskManagerFromFile.addSubTask((SubTask) fileBackedTaskManagerFromFile.fromString(str));
             }
         }
 
@@ -67,8 +73,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
                         idSubtasklistFromFile.add(subTask.getId());
                     }
                 }
-                fileBackedTaskManagerFromFile.addEpic(new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        idSubtasklistFromFile));
+                Epic epic = (Epic)fileBackedTaskManagerFromFile.fromString(str);
+                epic.setSubTaskListId(idSubtasklistFromFile);
+                fileBackedTaskManagerFromFile.addEpic(epic);
             }
         }
 
@@ -116,7 +123,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     }
 
-    void reader() {
+    public void reader() {
 
         Reader fileReader = null;
         try {
@@ -144,7 +151,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
 
     private String toString(Task task) {
         String strTask = task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
-                + task.getDescription() + "," + task.getEpicId() + "\n";
+                + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() + "," + task.getDuration() + ","
+                + task.getEndTime() + "\n";
         return strTask;
     }
 
@@ -153,14 +161,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
         Task taskFromString;
         switch (TaskTypes.valueOf(split[1])) {
             case TASK:
-                return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]));
+                return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                        LocalDateTime.parse(split[6]), Duration.parse(split[7]));
 
             case EPIC:
                 return taskFromString = new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
-                        new ArrayList<Integer>());
+                        LocalDateTime.parse(split[6]), Duration.parse(split[7]),
+                        new ArrayList<Integer>(), LocalDateTime.parse(split[8]));
 
             case SUBTASK:
                 return taskFromString = new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                        LocalDateTime.parse(split[6]), Duration.parse(split[7]),
                         Integer.parseInt(split[5]));
         }
         return null;
