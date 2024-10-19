@@ -22,10 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskHttpHandlerTest {
-
-    // создаём экземпляр InMemoryTaskManager
     InMemoryTaskManager manager = new InMemoryTaskManager();
-    // передаём его в качестве аргумента в конструктор http.handler.HttpTaskServer
     HttpTaskServer taskServer = new HttpTaskServer(manager);
     Gson gson = CustomGson.getGson();
     Task taskNoId = new Task("Test 1", "Testing task 1",
@@ -58,8 +55,6 @@ public class TaskHttpHandlerTest {
     public void testAddTask() throws IOException, InterruptedException {
 
         String taskJson = gson.toJson(taskNoId);
-
-        // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks");
         HttpRequest request = HttpRequest.newBuilder()
@@ -84,7 +79,6 @@ public class TaskHttpHandlerTest {
         manager.addTask(taskWithID);
         String taskJson = gson.toJson(taskWithIDUpd);
 
-        // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks");
         HttpRequest request = HttpRequest.newBuilder()
@@ -106,9 +100,8 @@ public class TaskHttpHandlerTest {
 
     @Test
     public void testSearchTaskByID() throws IOException, InterruptedException {
-                manager.addTask(taskWithID);
+        manager.addTask(taskWithID);
 
-        // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/1");
         HttpRequest request = HttpRequest.newBuilder()
@@ -131,7 +124,6 @@ public class TaskHttpHandlerTest {
         manager.addTask(taskWithID);
         manager.addTask(taskWithID2);
 
-        // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks");
         HttpRequest request = HttpRequest.newBuilder()
@@ -160,7 +152,6 @@ public class TaskHttpHandlerTest {
         manager.addTask(taskWithID);
         manager.addTask(taskWithID2);
 
-        // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/1");
         HttpRequest request = HttpRequest.newBuilder()
@@ -184,7 +175,6 @@ public class TaskHttpHandlerTest {
         manager.addTask(taskWithID);
         String taskJson = gson.toJson(taskWithIDInterrupted);
 
-        // создаём HTTP-клиент и запрос
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks");
         HttpRequest request = HttpRequest.newBuilder()

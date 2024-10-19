@@ -142,24 +142,41 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic addEpic(Epic newEpic) {
-        LocalDateTime firstSubTask = LocalDateTime.now();
-        LocalDateTime lastSubTask = LocalDateTime.now();
-        Duration epicDuration = Duration.between(firstSubTask,firstSubTask);
-        for (Integer subTaskId : newEpic.getSubTasks()) {
-            epicDuration = epicDuration.plus(subTaskDesc.get(subTaskId).getDuration());
-            if (firstSubTask.isAfter(subTaskDesc.get(subTaskId).getStartTime())) {
-                firstSubTask = subTaskDesc.get(subTaskId).getStartTime();
-            }
-            if (lastSubTask.isBefore(subTaskDesc.get(subTaskId).getEndTime())) {
-                lastSubTask = subTaskDesc.get(subTaskId).getEndTime();
-            }
-            newEpic.setStartTime(firstSubTask);
-            newEpic.setDuration(epicDuration);
-            newEpic.setEndTime(lastSubTask);
-        }
         epicTaskDesc.put(newEpic.getId(), newEpic);
         setLastEpicId(newEpic.getId());
         return newEpic;
+    }
+
+    @Override
+    public LocalDateTime getEpicStartTime(Epic epic){
+        LocalDateTime firstSubTaskTime = subTaskDesc.get(epic.getSubTasks().get(0)).getStartTime();
+
+        for (Integer subTaskId : epic.getSubTasks()) {
+            if (firstSubTaskTime.isAfter(subTaskDesc.get(subTaskId).getStartTime())) {
+                firstSubTaskTime = subTaskDesc.get(subTaskId).getStartTime();
+            }
+        }
+        return firstSubTaskTime;
+    }
+
+    @Override
+    public LocalDateTime getEpicEndTime(Epic epic){
+            LocalDateTime lastSubTaskTime = subTaskDesc.get(epic.getSubTasks().get(0)).getEndTime();;
+            for (Integer subTaskId : epic.getSubTasks()) {
+                if (lastSubTaskTime.isBefore(subTaskDesc.get(subTaskId).getEndTime())) {
+                    lastSubTaskTime = subTaskDesc.get(subTaskId).getEndTime();
+                }
+        }
+            return  lastSubTaskTime;
+    }
+
+    @Override
+    public Duration getEpicDuratioon(Epic epic) {
+        Duration epicDuration = Duration.ofMinutes(0);
+        for (Integer subTaskId : epic.getSubTasks()) {
+            epicDuration = epicDuration.plus(subTaskDesc.get(subTaskId).getDuration());
+        }
+        return  epicDuration;
     }
 
         @Override
@@ -167,8 +184,19 @@ public class InMemoryTaskManager implements TaskManager {
             if (checkTaskDates(newSubTask)) {
                 prioritizedTasks.add(newSubTask);
                 subTaskDesc.put(newSubTask.getId(), newSubTask);
+
+                ArrayList<Integer> newSubTaskListId = epicTaskDesc.get(newSubTask.getEpicId()).getSubTasks();
+                if (epicTaskDesc.get(newSubTask.getEpicId()).getSubTasks() == null){
+                    newSubTaskListId = new ArrayList<Integer>();
+                }
+                newSubTaskListId.add(newSubTask.getId());
+                epicTaskDesc.get(newSubTask.getEpicId()).setSubTaskListId(newSubTaskListId);
+                epicTaskDesc.get(newSubTask.getEpicId()).setStartTime(getEpicStartTime( epicTaskDesc.get(newSubTask.getEpicId())));
+                epicTaskDesc.get(newSubTask.getEpicId()).setEndTime(getEpicEndTime( epicTaskDesc.get(newSubTask.getEpicId())));
+                epicTaskDesc.get(newSubTask.getEpicId()).setDuration(getEpicDuratioon( epicTaskDesc.get(newSubTask.getEpicId())));
+
             } else {
-                System.out.println("такое время уже существует");
+                System.out.println("Такое время уже существует");
                 id -= 1;
             }
             return  newSubTask;
