@@ -4,10 +4,10 @@ import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
 
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -129,7 +129,7 @@ public class Main {
                             String nextSubTaskDescription = scanner.nextLine();
                             while (!nextSubTaskName.isEmpty()) {
                                 SubTask nextSubTask = new SubTask(nextSubTaskName, nextSubTaskDescription, inMemoryTaskManager.genId(),
-                                        TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(0),inMemoryTaskManager.getLastEpicId());
+                                        TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(0), inMemoryTaskManager.getLastEpicId());
                                 inMemoryTaskManager.addSubTask(nextSubTask);
                                 newSubTaskList.add(inMemoryTaskManager.getLastEpicId());
                                 System.out.println("Введите название подзадачи:");

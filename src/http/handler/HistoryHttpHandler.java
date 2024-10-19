@@ -7,10 +7,11 @@ import managers.InMemoryTaskManager;
 
 import java.io.IOException;
 
-public class HistoryHttpHandler extends BaseHttpHandler  implements HttpHandler {
+public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
     public HistoryHttpHandler(InMemoryTaskManager manager) {
         super(manager);
     }
+
     Gson gson = CustomGson.getGson();
 
     @Override
@@ -19,15 +20,16 @@ public class HistoryHttpHandler extends BaseHttpHandler  implements HttpHandler 
 
         switch (endpoint) {
             case GET: {
-                httpHystory(e , getManager());
+                httpHystory(e, getManager());
                 break;
             }
             default:
                 sendHasInteractions(e, "Такого эндпоинта не существует");
         }
     }
-    private void httpHystory(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        if(m.getHistoryTM().isEmpty()) {
+
+    private void httpHystory(HttpExchange e, InMemoryTaskManager m) throws IOException {
+        if (m.getHistoryTM().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;
         }

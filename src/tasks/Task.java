@@ -78,13 +78,13 @@ public class Task {
     public String toString() {
         return
                 "tasks.Task{" +
-                "title='" + title + '\'' +
-                ",description='" + description + '\'' +
-                ",id='" + id + '\'' +
-                ", statusSingleTask=" + statusTask +
-                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
-                ", duration=" + duration +
-                '}';
+                        "title='" + title + '\'' +
+                        ",description='" + description + '\'' +
+                        ",id='" + id + '\'' +
+                        ", statusSingleTask=" + statusTask +
+                        ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
+                        ", duration=" + duration +
+                        '}';
     }
 
     public void setStartTime(LocalDateTime startTime) {

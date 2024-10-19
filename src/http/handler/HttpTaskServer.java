@@ -2,6 +2,7 @@ package http.handler;
 
 import com.sun.net.httpserver.HttpServer;
 import managers.InMemoryTaskManager;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -9,9 +10,11 @@ public class HttpTaskServer {
 
     private static final int PORT = 8080;
     private static InMemoryTaskManager manager = new InMemoryTaskManager();
+
     public HttpTaskServer(InMemoryTaskManager manager) throws IOException {
-        this.manager = manager;
+        HttpTaskServer.manager = manager;
     }
+
     public static HttpServer httpServer;
 
     public void stop() {

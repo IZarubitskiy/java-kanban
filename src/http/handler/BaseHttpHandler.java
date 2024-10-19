@@ -1,10 +1,11 @@
 package http.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import managers.InMemoryTaskManager;
+
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 public class BaseHttpHandler {
@@ -16,7 +17,7 @@ public class BaseHttpHandler {
         this.manager = manager;
     }
 
-// сюда можно ставить код 200 и 201
+    // сюда можно ставить код 200 и 201
     protected void sendText(HttpExchange h, String text, int code) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
@@ -41,7 +42,7 @@ public class BaseHttpHandler {
         h.close();
     }
 
-    protected void serverProblem (HttpExchange h, String text) throws IOException {
+    protected void serverProblem(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(500, resp.length);

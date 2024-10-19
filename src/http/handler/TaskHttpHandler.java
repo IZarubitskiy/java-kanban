@@ -1,16 +1,14 @@
 package http.handler;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import managers.InMemoryTaskManager;
 import tasks.Task;
-
-import java.io.IOException;
-
 import tasks.TaskStatus;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
