@@ -1,36 +1,16 @@
 package http.handler;
 
 import com.google.gson.*;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import managers.InMemoryTaskManager;
-import managers.TaskManager;
 import tasks.Task;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 import tasks.TaskStatus;
-
-
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import java.io.IOException;
 
 public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
 
@@ -53,7 +33,7 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
                 break;
             }
             case POST: {
-                httpUpdOrCreateTask(e, getManager());
+                httpUpdOrAddTask(e, getManager());
                 break;
             }
             case DELETE: {
@@ -66,8 +46,7 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void httpGetTasks(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        ArrayList<Task> tasks = m.getTasks();
-        if(tasks.isEmpty()) {
+        if(m.getTasks().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;
         }
@@ -75,7 +54,7 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         sendText(e, resp, 200);
     }
 
-    private void httpUpdOrCreateTask(HttpExchange e, InMemoryTaskManager m) throws IOException{
+    private void httpUpdOrAddTask(HttpExchange e, InMemoryTaskManager m) throws IOException{
         InputStream inputStream = e.getRequestBody();
         String request = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         Task taskFromRequest = gson.fromJson(request, Task.class);
@@ -111,12 +90,11 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void httpGetTasksById(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        Optional<Integer> taskID = httpGetId(e);
-        if(taskID.isEmpty()) {
+        if(httpGetId(e).isEmpty()) {
             sendNotFound(e, "Такого ID не существует");
             return;
         }
-        int id = taskID.get();
+        int id = httpGetId(e).get();
         Task task = m.getTaskById(Integer.toString(id));
         if(task == null) {
             sendNotFound(e, "Задача не найдена.");

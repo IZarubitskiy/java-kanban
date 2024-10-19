@@ -11,7 +11,6 @@ import tasks.TaskStatus;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler {
@@ -33,11 +32,11 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
                 break;
             }
             case GET_BY_ID: {
-                httpGetSubTasksById(e , getManager());
+                httpGetSubTaskById(e , getManager());
                 break;
             }
             case POST: {
-                httpUpdOrCreateSubTask(e, getManager());
+                httpUpdOrAddSubTask(e, getManager());
                 break;
             }
             case DELETE: {
@@ -50,8 +49,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
     }
 
     private void httpGetSubTasks(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        ArrayList<SubTask> tasks = m.getSubtasks();
-        if(tasks.isEmpty()) {
+        if(m.getSubtasks().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;
         }
@@ -59,14 +57,13 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
         sendText(e, resp, 200);
     }
 
-    private void httpGetSubTasksById(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        Optional<Integer> taskID = httpGetId(e);
-        if(taskID.isEmpty()) {
+    private void httpGetSubTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException{
+        if(httpGetId(e).isEmpty()) {
             sendNotFound(e, "Такого ID не существует");
             return;
         }
-        int id = taskID.get();
-        Task task = m.getSubTaskById(Integer.toString(id));
+        int id = httpGetId(e).get();
+        SubTask task = m.getSubTaskById(Integer.toString(id));
         if(task == null) {
             sendNotFound(e, "Задача не найдена.");
             return;
@@ -75,7 +72,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
         sendText(e, resp, 200);
     }
 
-    private void httpUpdOrCreateSubTask(HttpExchange e, InMemoryTaskManager m) throws IOException{
+    private void httpUpdOrAddSubTask(HttpExchange e, InMemoryTaskManager m) throws IOException{
         InputStream inputStream = e.getRequestBody();
         String request = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         Task taskFromRequest = gson.fromJson(request, SubTask.class);
@@ -111,12 +108,11 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
     }
 
     private void httpDeleteSubTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        Optional<Integer> taskID = httpGetId(e);
-        if(taskID.isEmpty()) {
+        if(httpGetId(e).isEmpty()) {
             sendNotFound(e, "Некорректный идентификатор задачи");
             return;
         }
-        int id = taskID.get();
+        int id = httpGetId(e).get();
 
         if(m.getSubTaskById(Integer.toString(id)) != null) {
             m.deleteSubTaskById(Integer.toString(id));
