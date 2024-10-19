@@ -2,12 +2,13 @@ package http.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import managers.InMemoryTaskManager;
 import managers.TaskManager;
 
 import java.io.IOException;
 
 public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler {
-    public SubtasksHttpHandler(TaskManager manager) {
+    public SubtasksHttpHandler(InMemoryTaskManager manager) {
         super(manager);
     }
 

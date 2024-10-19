@@ -295,7 +295,6 @@ public class InMemoryTaskManager implements TaskManager {
                     task.getStartTime().isEqual(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isEqual(subTaskDesc.get(i).getEndTime())) {
                 check = false;
             }
-
         }
     return check;
     }

@@ -6,9 +6,11 @@ import java.nio.charset.StandardCharsets;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import managers.InMemoryTaskManager;
 import managers.Managers;
 import managers.TaskManager;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
@@ -22,17 +24,17 @@ import java.util.stream.Collectors;
 public class BaseHttpHandler {
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final TaskManager manager;
+    private final InMemoryTaskManager manager;
 
-    public BaseHttpHandler(TaskManager manager) {
+    public BaseHttpHandler(InMemoryTaskManager manager) {
         this.manager = manager;
     }
 
-
-    protected void sendText(HttpExchange h, String text) throws IOException {
+// сюда можно ставить код 200 и 201
+    protected void sendText(HttpExchange h, String text, int code) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-        h.sendResponseHeaders(200, resp.length);
+        h.sendResponseHeaders(code, resp.length);
         h.getResponseBody().write(resp);
         h.close();
     }
@@ -49,6 +51,14 @@ public class BaseHttpHandler {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(406, resp.length);
+        h.getResponseBody().write(resp);
+        h.close();
+    }
+
+    protected void serverProblem (HttpExchange h, String text) throws IOException {
+        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+        h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        h.sendResponseHeaders(500, resp.length);
         h.getResponseBody().write(resp);
         h.close();
     }
@@ -76,5 +86,18 @@ public class BaseHttpHandler {
             }
         }
         return Endpoint.UNKNOWN;
+    }
+
+    protected Optional<Integer> httpGetId(HttpExchange e) {
+        String[] pathParts = e.getRequestURI().getPath().split("/");
+        try {
+            return Optional.of(Integer.parseInt(pathParts[2]));
+        } catch (NumberFormatException exception) {
+            return Optional.empty();
+        }
+    }
+
+    public InMemoryTaskManager getManager() {
+        return manager;
     }
 }

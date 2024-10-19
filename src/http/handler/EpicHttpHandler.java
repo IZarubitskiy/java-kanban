@@ -2,6 +2,7 @@ package http.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import managers.InMemoryTaskManager;
 import managers.TaskManager;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.io.IOException;
 public class EpicHttpHandler extends BaseHttpHandler  implements HttpHandler {
 
 
-    public EpicHttpHandler(TaskManager manager) {
+    public EpicHttpHandler(InMemoryTaskManager manager) {
         super(manager);
     }
 

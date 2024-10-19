@@ -3,11 +3,12 @@ package tasks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Task {
     private String title;
     private String description;
-    private final Integer id;
+    private Integer id;
     private TaskStatus statusTask;
     private LocalDateTime startTime;
     private Duration duration;
@@ -16,6 +17,14 @@ public class Task {
         this.title = title;
         this.description = description;
         this.id = id;
+        this.statusTask = statusTask;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
+    public Task(String title, String description, TaskStatus statusTask, LocalDateTime startTime, Duration duration) {
+        this.title = title;
+        this.description = description;
         this.statusTask = statusTask;
         this.startTime = startTime;
         this.duration = duration;
@@ -67,7 +76,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "\n" +
+        return
                 "tasks.Task{" +
                 "title='" + title + '\'' +
                 ",description='" + description + '\'' +
@@ -92,5 +101,19 @@ public class Task {
 
     public Duration getDuration() {
         return duration;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id; /*&& Objects.equals(nameOfTask, task.nameOfTask)
+                && Objects.equals(description, task.description) && taskStatus == task.taskStatus;*/
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, id, statusTask);
     }
 }
