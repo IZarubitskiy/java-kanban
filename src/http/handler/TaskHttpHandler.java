@@ -5,9 +5,11 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import managers.InMemoryTaskManager;
 import tasks.Task;
+
 import java.io.IOException;
 
 import tasks.TaskStatus;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -17,6 +19,7 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
     public TaskHttpHandler(InMemoryTaskManager manager) {
         super(manager);
     }
+
     Gson gson = CustomGson.getGson();
 
     @Override
@@ -25,11 +28,11 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         Endpoint endpoint = getEndpoint(e.getRequestURI().getPath(), e.getRequestMethod());
         switch (endpoint) {
             case GET: {
-                httpGetTasks(e , getManager());
+                httpGetTasks(e, getManager());
                 break;
             }
             case GET_BY_ID: {
-                httpGetTasksById(e , getManager());
+                httpGetTasksById(e, getManager());
                 break;
             }
             case POST: {
@@ -45,8 +48,8 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    private void httpGetTasks(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        if(m.getTasks().isEmpty()) {
+    private void httpGetTasks(HttpExchange e, InMemoryTaskManager m) throws IOException {
+        if (m.getTasks().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;
         }
@@ -54,20 +57,20 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         sendText(e, resp, 200);
     }
 
-    private void httpUpdOrAddTask(HttpExchange e, InMemoryTaskManager m) throws IOException{
+    private void httpUpdOrAddTask(HttpExchange e, InMemoryTaskManager m) throws IOException {
         InputStream inputStream = e.getRequestBody();
         String request = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         Task taskFromRequest = gson.fromJson(request, Task.class);
-        if (taskFromRequest.getId() != null){
+        if (taskFromRequest.getId() != null) {
             TaskStatus newStatus = taskFromRequest.getStatusTask();
             int statusIdentifier = 0;
-            if (newStatus == TaskStatus.IN_PROGRESS){
+            if (newStatus == TaskStatus.IN_PROGRESS) {
                 statusIdentifier = 1;
             }
-            if (newStatus == TaskStatus.DONE){
+            if (newStatus == TaskStatus.DONE) {
                 statusIdentifier = 2;
             }
-            if (statusIdentifier == 0){
+            if (statusIdentifier == 0) {
                 sendNotFound(e, "Невозможно обновить задачу.");
                 return;
             }
@@ -89,14 +92,14 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         sendHasInteractions(e, "Ошибка сервера - некорректный запрос");
     }
 
-    private void httpGetTasksById(HttpExchange e, InMemoryTaskManager m) throws IOException{
-        if(httpGetId(e).isEmpty()) {
+    private void httpGetTasksById(HttpExchange e, InMemoryTaskManager m) throws IOException {
+        if (httpGetId(e).isEmpty()) {
             sendNotFound(e, "Такого ID не существует");
             return;
         }
         int id = httpGetId(e).get();
         Task task = m.getTaskById(Integer.toString(id));
-        if(task == null) {
+        if (task == null) {
             sendNotFound(e, "Задача не найдена.");
             return;
         }
@@ -104,15 +107,15 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         sendText(e, resp, 200);
     }
 
-    private void httpDeleteTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException{
+    private void httpDeleteTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException {
         Optional<Integer> taskID = httpGetId(e);
-        if(taskID.isEmpty()) {
+        if (taskID.isEmpty()) {
             sendNotFound(e, "Некорректный идентификатор задачи");
             return;
         }
         int id = taskID.get();
 
-        if(m.getTaskById(Integer.toString(id)) != null) {
+        if (m.getTaskById(Integer.toString(id)) != null) {
             m.deleteTaskById(Integer.toString(id));
             sendText(e, "Задача успешно удалена", 200);
             return;

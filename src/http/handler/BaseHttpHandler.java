@@ -4,9 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import managers.InMemoryTaskManager;
-
 import java.nio.charset.Charset;
-
 import java.util.Optional;
 
 public class BaseHttpHandler {

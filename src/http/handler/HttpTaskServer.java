@@ -1,15 +1,9 @@
 package http.handler;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import managers.InMemoryTaskManager;
-
-import javax.xml.transform.Source;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class HttpTaskServer {
 
