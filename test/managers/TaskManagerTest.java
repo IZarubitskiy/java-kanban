@@ -81,11 +81,10 @@ abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void epicStatusNew() {
         TaskManager manager = getManager();
-        epic1.setSubTaskListId(new ArrayList<>(List.of(subTask1.getId(), subTask2.getId(), subTask3.getId())));
+        manager.addEpic(epic1);
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.addEpic(epic1);
         assertEquals(TaskStatus.NEW, epic1.getStatusTask(), "Статус обновлен не верно");
     }
 
@@ -93,12 +92,10 @@ abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void epicStatusNewAndDone() {
         TaskManager manager = getManager();
-        epic1.setSubTaskListId(new ArrayList<>(List.of(subTask1.getId(), subTask2.getId(), subTask3.getId())));
+        manager.addEpic(epic1);
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.addEpic(epic1);
-
         manager.updateSubTask(subTask2.getId().toString(), 2);
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
 
@@ -107,12 +104,10 @@ abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void epicStatusInProgress() {
         TaskManager manager = getManager();
-        epic1.setSubTaskListId(new ArrayList<>(List.of(subTask1.getId(), subTask2.getId(), subTask3.getId())));
+        manager.addEpic(epic1);
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.addEpic(epic1);
-
         manager.updateSubTask(subTask1.getId().toString(), 1);
         manager.updateSubTask(subTask2.getId().toString(), 1);
         manager.updateSubTask(subTask3.getId().toString(), 1);
@@ -122,11 +117,11 @@ abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void epicStatusDone() {
         TaskManager manager = getManager();
-        epic1.setSubTaskListId(new ArrayList<>(List.of(subTask1.getId(), subTask2.getId(), subTask3.getId())));
+        manager.addEpic(epic1);
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.addEpic(epic1);
+
 
         manager.updateSubTask(Integer.toString(subTask1.getId()), 2);
         manager.updateSubTask(subTask2.getId().toString(), 2);
@@ -137,11 +132,11 @@ abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void epicToSubtaskRelation(){
         TaskManager manager = getManager();
-        epic1.setSubTaskListId(new ArrayList<>(List.of(subTask1.getId(), subTask2.getId(), subTask3.getId())));
+        manager.addEpic(epic1);
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.addEpic(epic1);
+
 
         assertNotNull(subTask1.getEpicId(), "У подзадачи нет Эпика");
         assertEquals(manager.getLastEpicId(), subTask1.getEpicId(), "Номер эпика указан неверно");
@@ -152,9 +147,9 @@ abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void getLastEpicId() {
         TaskManager manager = getManager();
-        epic1.setSubTaskListId(new ArrayList<>(List.of(subTask1.getId())));
-        manager.addSubTask(subTask1);
         manager.addEpic(epic1);
+        manager.addSubTask(subTask1);
+
 
         assertEquals(manager.getLastEpicId(), epic1.getId(), "Последний номер эпика не совпадает");
     }

@@ -3,23 +3,11 @@ package http.handler;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import managers.InMemoryTaskManager;
-import managers.Managers;
-import managers.TaskManager;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.io.*;
-import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class BaseHttpHandler {
 

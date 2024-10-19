@@ -12,7 +12,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest{
     void historyTests() {
         TaskManager manager = getManager();
         manager.addTask(task1);
-        System.out.println(task1 + "" + task10);
         manager.addTask(task2);
         manager.addTask(task3);
         manager.addTask(task4);

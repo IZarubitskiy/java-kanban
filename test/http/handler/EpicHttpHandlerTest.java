@@ -116,7 +116,6 @@ class EpicHttpHandlerTest {
 
         assertEquals(200, response.statusCode());
 
-
         class TaskListTypeToken extends TypeToken<ArrayList<Epic>> {
         }
         ArrayList<Epic> tasks = gson.fromJson(response.body(), new TaskListTypeToken().getType());
@@ -174,8 +173,5 @@ class EpicHttpHandlerTest {
         assertEquals(2, responseList.size(), "Некорректное количество подзадач");
         assertEquals(2,  responseList.get(0), "Некорректная задача");
         assertEquals(3,  responseList.get(1), "Некорректная задача");
-
-
-
     }
 }

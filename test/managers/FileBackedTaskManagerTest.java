@@ -67,6 +67,5 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
 
         fileBackedTaskManager.reader();
         Assertions.assertDoesNotThrow(() -> {fileBackedTaskManager.reader();} );
-        FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(test);
     }
 }
