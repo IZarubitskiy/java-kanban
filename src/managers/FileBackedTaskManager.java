@@ -2,26 +2,20 @@ package managers;
 
 import tasks.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.io.IOException;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.io.FileReader;
-import java.io.Reader;
-import java.io.BufferedReader;
-import java.io.File;
-import java.util.List;
+import java.io.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
-public class FileBackedTaskManager extends InMemoryTaskManager  {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
     File dbTaskManager;
 
     public FileBackedTaskManager(File dbTaskManager) {
-        this. dbTaskManager = dbTaskManager;
+        this.dbTaskManager = dbTaskManager;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
@@ -68,12 +62,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager  {
             String[] split = str.split(",");
             if (split[1].equals("EPIC")) {
                 ArrayList<Integer> idSubtasklistFromFile = new ArrayList<>();
-                for (SubTask subTask: fileBackedTaskManagerFromFile.getSubtasks()) {
+                for (SubTask subTask : fileBackedTaskManagerFromFile.getSubtasks()) {
                     if (subTask.getEpicId() == Integer.parseInt(split[0])) {
                         idSubtasklistFromFile.add(subTask.getId());
                     }
                 }
-                Epic epic = (Epic)fileBackedTaskManagerFromFile.fromString(str);
+                Epic epic = (Epic) fileBackedTaskManagerFromFile.fromString(str);
                 epic.setSubTaskListId(idSubtasklistFromFile);
                 fileBackedTaskManagerFromFile.addEpic(epic);
             }

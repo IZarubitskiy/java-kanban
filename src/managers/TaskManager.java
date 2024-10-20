@@ -4,7 +4,12 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.util.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -59,4 +64,12 @@ public interface TaskManager {
     Integer getLastEpicId();
 
     Set<Task> getPrioritizedTasks();
+
+    LocalDateTime getEpicStartTime(Epic epic);
+
+    LocalDateTime getEpicEndTime(Epic epic);
+
+    Duration getEpicDuratioon(Epic epic);
+
+    boolean checkTaskDates(Task task);
 }
