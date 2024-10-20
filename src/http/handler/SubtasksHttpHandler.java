@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import managers.InMemoryTaskManager;
+import managers.TaskManager;
 import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
@@ -13,11 +14,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler {
-    public SubtasksHttpHandler(InMemoryTaskManager manager) {
+    public SubtasksHttpHandler(TaskManager manager) {
         super(manager);
     }
-
-    Gson gson = CustomGson.getGson();
 
     @Override
     public void handle(HttpExchange e) throws IOException {
@@ -27,27 +26,28 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
         switch (endpoint) {
 
             case GET: {
-                httpGetSubTasks(e, getManager());
+                httpGetSubTasks(e);
                 break;
             }
             case GET_BY_ID: {
-                httpGetSubTaskById(e, getManager());
+                httpGetSubTaskById(e);
                 break;
             }
             case POST: {
-                httpUpdOrAddSubTask(e, getManager());
+                httpUpdOrAddSubTask(e);
                 break;
             }
             case DELETE: {
-                httpDeleteSubTaskById(e, getManager());
+                httpDeleteSubTaskById(e);
                 break;
             }
             default:
-                sendHasInteractions(e, "Такого эндпоинта не существует");
+                wrongEndpoint(e);
         }
     }
 
-    private void httpGetSubTasks(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpGetSubTasks(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         if (m.getSubtasks().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;
@@ -56,7 +56,8 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
         sendText(e, resp, 200);
     }
 
-    private void httpGetSubTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpGetSubTaskById(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         if (httpGetId(e).isEmpty()) {
             sendNotFound(e, "Такого ID не существует");
             return;
@@ -71,7 +72,8 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
         sendText(e, resp, 200);
     }
 
-    private void httpUpdOrAddSubTask(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpUpdOrAddSubTask(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         InputStream inputStream = e.getRequestBody();
         String request = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         Task taskFromRequest = gson.fromJson(request, SubTask.class);
@@ -103,10 +105,11 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
             return;
         }
 
-        sendHasInteractions(e, "Ошибка сервера - некорректный запрос");
+        serverProblem(e, "Ошибка сервера - некорректный запрос");
     }
 
-    private void httpDeleteSubTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpDeleteSubTaskById(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         if (httpGetId(e).isEmpty()) {
             sendNotFound(e, "Некорректный идентификатор задачи");
             return;

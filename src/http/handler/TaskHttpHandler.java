@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import managers.InMemoryTaskManager;
+import managers.TaskManager;
 import tasks.Task;
 import tasks.TaskStatus;
 
@@ -14,11 +15,9 @@ import java.util.Optional;
 
 public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
 
-    public TaskHttpHandler(InMemoryTaskManager manager) {
+    public TaskHttpHandler(TaskManager manager) {
         super(manager);
     }
-
-    Gson gson = CustomGson.getGson();
 
     @Override
     public void handle(HttpExchange e) throws IOException {
@@ -26,27 +25,28 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         Endpoint endpoint = getEndpoint(e.getRequestURI().getPath(), e.getRequestMethod());
         switch (endpoint) {
             case GET: {
-                httpGetTasks(e, getManager());
+                httpGetTasks(e);
                 break;
             }
             case GET_BY_ID: {
-                httpGetTasksById(e, getManager());
+                httpGetTasksById(e);
                 break;
             }
             case POST: {
-                httpUpdOrAddTask(e, getManager());
+                httpUpdOrAddTask(e);
                 break;
             }
             case DELETE: {
-                httpDeleteTaskById(e, getManager());
+                httpDeleteTaskById(e);
                 break;
             }
             default:
-                sendHasInteractions(e, "Такого эндпоинта не существует");
+                wrongEndpoint(e);
         }
     }
 
-    private void httpGetTasks(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpGetTasks(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         if (m.getTasks().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;
@@ -55,7 +55,8 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         sendText(e, resp, 200);
     }
 
-    private void httpUpdOrAddTask(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpUpdOrAddTask(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         InputStream inputStream = e.getRequestBody();
         String request = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         Task taskFromRequest = gson.fromJson(request, Task.class);
@@ -87,10 +88,11 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
 
-        sendHasInteractions(e, "Ошибка сервера - некорректный запрос");
+        serverProblem(e, "Ошибка сервера - некорректный запрос");
     }
 
-    private void httpGetTasksById(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpGetTasksById(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         if (httpGetId(e).isEmpty()) {
             sendNotFound(e, "Такого ID не существует");
             return;
@@ -105,7 +107,8 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         sendText(e, resp, 200);
     }
 
-    private void httpDeleteTaskById(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpDeleteTaskById(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         Optional<Integer> taskID = httpGetId(e);
         if (taskID.isEmpty()) {
             sendNotFound(e, "Некорректный идентификатор задачи");

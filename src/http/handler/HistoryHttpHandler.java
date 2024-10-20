@@ -1,18 +1,15 @@
 package http.handler;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import managers.InMemoryTaskManager;
+import managers.TaskManager;
 
 import java.io.IOException;
 
 public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
-    public HistoryHttpHandler(InMemoryTaskManager manager) {
+    public HistoryHttpHandler(TaskManager manager) {
         super(manager);
     }
-
-    Gson gson = CustomGson.getGson();
 
     @Override
     public void handle(HttpExchange e) throws IOException {
@@ -20,15 +17,16 @@ public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
 
         switch (endpoint) {
             case GET: {
-                httpHystory(e, getManager());
+                httpHystory(e);
                 break;
             }
             default:
-                sendHasInteractions(e, "Такого эндпоинта не существует");
+                wrongEndpoint(e);
         }
     }
 
-    private void httpHystory(HttpExchange e, InMemoryTaskManager m) throws IOException {
+    private void httpHystory(HttpExchange e) throws IOException {
+        TaskManager m = getManager();
         if (m.getHistoryTM().isEmpty()) {
             sendNotFound(e, "Задач пока нет.");
             return;

@@ -1,7 +1,7 @@
 package http.handler;
 
 import com.sun.net.httpserver.HttpServer;
-import managers.InMemoryTaskManager;
+import managers.TaskManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -9,19 +9,18 @@ import java.net.InetSocketAddress;
 public class HttpTaskServer {
 
     private static final int PORT = 8080;
-    private static InMemoryTaskManager manager = new InMemoryTaskManager();
+    private final TaskManager manager;
+    private HttpServer httpServer;
 
-    public HttpTaskServer(InMemoryTaskManager manager) throws IOException {
-        HttpTaskServer.manager = manager;
+    public HttpTaskServer(TaskManager manager) {
+        this.manager = manager;
     }
-
-    public static HttpServer httpServer;
 
     public void stop() {
         httpServer.stop(0);
     }
 
-    public static void start() throws IOException {
+    public void start() throws IOException {
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/tasks", new TaskHttpHandler(manager));
         httpServer.createContext("/subtasks", new SubtasksHttpHandler(manager));
@@ -31,9 +30,7 @@ public class HttpTaskServer {
         httpServer.start();
     }
 
-    public static void main(String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
         start();
     }
-
-
 }

@@ -70,4 +70,6 @@ public interface TaskManager {
     LocalDateTime getEpicEndTime(Epic epic);
 
     Duration getEpicDuratioon(Epic epic);
+
+    boolean checkTaskDates(Task task);
 }

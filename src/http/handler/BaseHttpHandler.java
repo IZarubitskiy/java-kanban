@@ -1,7 +1,9 @@
 package http.handler;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import managers.InMemoryTaskManager;
+import managers.TaskManager;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -11,9 +13,10 @@ import java.util.Optional;
 public class BaseHttpHandler {
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final InMemoryTaskManager manager;
+    private final TaskManager manager;
+    protected final Gson gson = CustomGson.getGson();
 
-    public BaseHttpHandler(InMemoryTaskManager manager) {
+    public BaseHttpHandler(TaskManager manager) {
         this.manager = manager;
     }
 
@@ -50,6 +53,16 @@ public class BaseHttpHandler {
         h.close();
     }
 
+    protected void wrongEndpoint(HttpExchange h) throws IOException {
+        byte[] resp = ("Такого эндпоинта не существует.").getBytes(StandardCharsets.UTF_8);
+        h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        h.sendResponseHeaders(405, resp.length);
+        h.getResponseBody().write(resp);
+        h.close();
+    }
+
+
+
     protected Endpoint getEndpoint(String requestPath, String requestMethod) {
         String[] pathParts = requestPath.split("/");
 
@@ -84,7 +97,7 @@ public class BaseHttpHandler {
         }
     }
 
-    public InMemoryTaskManager getManager() {
+    public TaskManager getManager() {
         return manager;
     }
 }
