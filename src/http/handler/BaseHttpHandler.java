@@ -2,7 +2,6 @@ package http.handler;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import managers.InMemoryTaskManager;
 import managers.TaskManager;
 
 import java.io.IOException;
@@ -60,7 +59,6 @@ public class BaseHttpHandler {
         h.getResponseBody().write(resp);
         h.close();
     }
-
 
 
     protected Endpoint getEndpoint(String requestPath, String requestMethod) {
