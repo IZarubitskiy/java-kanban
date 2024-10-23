@@ -49,7 +49,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addTask(task);
         final int taskId = task.getId();
 
-        final Task savedTask = manager.getTaskById(Integer.toString(taskId));
+        final Task savedTask = manager.getTaskById(taskId);
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
@@ -79,7 +79,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.updateSubTask(subTask2.getId().toString(), 2);
+        manager.updateSubTask(subTask2.getId(), 2);
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
 
     }
@@ -91,9 +91,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addSubTask(subTask1);
         manager.addSubTask(subTask2);
         manager.addSubTask(subTask3);
-        manager.updateSubTask(subTask1.getId().toString(), 1);
-        manager.updateSubTask(subTask2.getId().toString(), 1);
-        manager.updateSubTask(subTask3.getId().toString(), 1);
+        manager.updateSubTask(subTask1.getId(), 1);
+        manager.updateSubTask(subTask2.getId(), 1);
+        manager.updateSubTask(subTask3.getId(), 1);
         assertEquals(TaskStatus.IN_PROGRESS, epic1.getStatusTask(), "Статус обновлен не верно");
     }
 
@@ -106,9 +106,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addSubTask(subTask3);
 
 
-        manager.updateSubTask(Integer.toString(subTask1.getId()), 2);
-        manager.updateSubTask(subTask2.getId().toString(), 2);
-        manager.updateSubTask(subTask3.getId().toString(), 2);
+        manager.updateSubTask(subTask1.getId(), 2);
+        manager.updateSubTask(subTask2.getId(), 2);
+        manager.updateSubTask(subTask3.getId(), 2);
         assertEquals(TaskStatus.DONE, epic1.getStatusTask(), "Статус обновлен не верно");
     }
 
@@ -170,9 +170,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addTask(task1);
         manager.addTask(task2);
         manager.addTask(task3);
-        assertEquals(task2, manager.getTaskById(task2.getId().toString()), "Задача не существует");
-        manager.deleteTaskById(task2.getId().toString());
-        assertNull(manager.getTaskById(task2.getId().toString()), "Задача все еще существует");
+        assertEquals(task2, manager.getTaskById(task2.getId()), "Задача не существует");
+        manager.deleteTaskById(task2.getId());
+        assertNull(manager.getTaskById(task2.getId()), "Задача все еще существует");
     }
 
 }

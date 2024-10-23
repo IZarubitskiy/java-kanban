@@ -5,7 +5,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest{
 
     @Override
     TaskManager getManager() {
-        return new InMemoryTaskManager();
+        return Managers.getDefault();
     }
 
     @Test
@@ -22,22 +22,21 @@ class InMemoryTaskManagerTest extends TaskManagerTest{
         manager.addTask(task9);
         manager.addTask(task10);
         for (int i = task1.getId(); i <= task10.getId(); i++) {
-            String id = Integer.toString(i);
-            manager.getTaskById(id);
+            manager.getTaskById(i);
         }
         assertEquals(10, manager.getHistoryTM().size(), "Количество задач не верно.");
         assertEquals(task10, manager.getHistoryTM().getFirst(), "Последняя добавленная задача не совпадает");
 
-        manager.getTaskById(Integer.toString(task9.getId()));
+        manager.getTaskById(task9.getId());
         assertEquals(task9, manager.getHistoryTM().getFirst(), "Не обновляет последнюю добавленную задачу");
         manager.addTask(task11);
-        manager.getTaskById("12");
+        manager.getTaskById(12);
         assertEquals(10, manager.getHistoryTM().size(), "Количество задач не верно.");
 
-        manager.deleteTaskById(Integer.toString(task5.getId()));
+        manager.deleteTaskById(task5.getId());
         assertEquals(9, manager.getHistoryTM().size(), "Количество задач не верно.");
 
-        assertNull(manager.getTaskById(Integer.toString(task5.getId())), "Задача не удалена");
+        assertNull(manager.getTaskById(task5.getId()), "Задача не удалена");
 
     }
 

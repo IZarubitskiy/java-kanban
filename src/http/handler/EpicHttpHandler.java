@@ -65,7 +65,7 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
         int id = httpGetId(e).get();
-        Epic task = m.getEpicById(Integer.toString(id));
+        Epic task = m.getEpicById(id);
         if (task == null) {
             sendNotFound(e, "Задача не найдена.");
             return;
@@ -81,7 +81,7 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
         int id = httpGetId(e).get();
-        ArrayList<Integer> subsList = m.getSubTasksListByEpicId(Integer.toString(id));
+        ArrayList<Integer> subsList = m.getSubTasksListByEpicId(id);
         if (subsList == null) {
             sendNotFound(e, "Задачи не найдена.");
             return;
@@ -118,8 +118,8 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
         }
         int id = httpGetId(e).get();
 
-        if (m.getEpicById(Integer.toString(id)) != null) {
-            m.deleteEpicById(Integer.toString(id));
+        if (m.getEpicById(id) != null) {
+            m.deleteEpicById(id);
             sendText(e, "Задача успешно удалена", 200);
             return;
         }

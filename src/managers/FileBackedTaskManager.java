@@ -34,7 +34,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             e.printStackTrace();
         }
 
-        tasksList.remove(0);
+        tasksList.removeFirst();
 
         int lastIdFromFile = 0;
         int lastEpicIdFromFile = 0;
@@ -131,10 +131,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             fileReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             try {
-                fileReader.close();
+                if (fileReader != null) {
+                    fileReader.close();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (NullPointerException exp) {
@@ -144,27 +146,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
-        String strTask = task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
+        return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
                 + task.getDescription() + "," + task.getEpicId() + "," + task.getStartTime() + "," + task.getDuration() + ","
                 + task.getEndTime() + "\n";
-        return strTask;
     }
 
     private Task fromString(String value) {
         String[] split = value.split(",");
-        Task taskFromString;
         switch (TaskTypes.valueOf(split[1])) {
             case TASK:
-                return taskFromString = new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                return new Task(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
                         LocalDateTime.parse(split[6]), Duration.parse(split[7]));
 
             case EPIC:
-                return taskFromString = new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                return new Epic(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
                         LocalDateTime.parse(split[6]), Duration.parse(split[7]),
                         new ArrayList<Integer>(), LocalDateTime.parse(split[8]));
 
             case SUBTASK:
-                return taskFromString = new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
+                return new SubTask(split[2], split[4], Integer.parseInt(split[0]), TaskStatus.valueOf(split[3]),
                         LocalDateTime.parse(split[6]), Duration.parse(split[7]),
                         Integer.parseInt(split[5]));
         }
@@ -225,27 +225,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task updateTask(String id, Integer status) {
+    public Task updateTask(int id, Integer status) {
         return super.updateTask(id, status);
     }
 
     @Override
-    public SubTask updateSubTask(String id, Integer status) {
+    public SubTask updateSubTask(int id, Integer status) {
         return super.updateSubTask(id, status);
     }
 
     @Override
-    public HashMap<Integer, Task> deleteTaskById(String id) {
+    public HashMap<Integer, Task> deleteTaskById(int id) {
         return super.deleteTaskById(id);
     }
 
     @Override
-    public HashMap<Integer, Epic> deleteEpicById(String id) {
+    public HashMap<Integer, Epic> deleteEpicById(int id) {
         return super.deleteEpicById(id);
     }
 
     @Override
-    public HashMap<Integer, SubTask> deleteSubTaskById(String id) {
+    public HashMap<Integer, SubTask> deleteSubTaskById(int id) {
         return super.deleteSubTaskById(id);
     }
 

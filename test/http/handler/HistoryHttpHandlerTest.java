@@ -53,9 +53,9 @@ class HistoryHttpHandlerTest {
         manager.addTask(task1);
         manager.addTask(task2);
         manager.addTask(task3);
-        manager.getTaskById("1");
-        manager.getTaskById("2");
-        manager.getTaskById("3");
+        manager.getTaskById(1);
+        manager.getTaskById(2);
+        manager.getTaskById(3);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/history");

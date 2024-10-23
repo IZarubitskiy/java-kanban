@@ -61,7 +61,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
             return;
         }
         int id = httpGetId(e).get();
-        SubTask task = m.getSubTaskById(Integer.toString(id));
+        SubTask task = m.getSubTaskById(id);
         if (task == null) {
             sendNotFound(e, "Задача не найдена.");
             return;
@@ -88,7 +88,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
                 sendNotFound(e, "Невозможно обновить задачу.");
                 return;
             }
-            m.updateSubTask(Integer.toString(taskFromRequest.getId()), statusIdentifier);
+            m.updateSubTask(taskFromRequest.getId(), statusIdentifier);
             sendText(e, "Задача успешно обновлена", 201);
             return;
         }
@@ -114,8 +114,8 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
         }
         int id = httpGetId(e).get();
 
-        if (m.getSubTaskById(Integer.toString(id)) != null) {
-            m.deleteSubTaskById(Integer.toString(id));
+        if (m.getSubTaskById(id) != null) {
+            m.deleteSubTaskById(id);
             sendText(e, "Задача успешно удалена", 200);
             return;
         }

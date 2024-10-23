@@ -6,8 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
-    private String title;
-    private String description;
+    private final String title;
+    private final String description;
     private Integer id;
     private TaskStatus statusTask;
     private LocalDateTime startTime;
@@ -34,25 +34,13 @@ public class Task {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Integer getId() {
         return id;
     }
-
-    /*public void setId(int id) {
-        this.id = id;
-    }*/
 
     public TaskStatus getStatusTask() {
         return statusTask;
@@ -108,7 +96,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id; /*&& Objects.equals(nameOfTask, task.nameOfTask)
+        return Objects.equals(id, task.id); /*&& Objects.equals(nameOfTask, task.nameOfTask)
                 && Objects.equals(description, task.description) && taskStatus == task.taskStatus;*/
     }
 
