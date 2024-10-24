@@ -49,7 +49,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             if (split[1].equals("EPIC") && Integer.parseInt(split[0]) >= lastEpicIdFromFile) {
                 lastEpicIdFromFile = Integer.parseInt(split[0]);
-                epicsListFormFile.add((Epic)fileBackedTaskManagerFromFile.fromString(str));
+                epicsListFormFile.add((Epic) fileBackedTaskManagerFromFile.fromString(str));
             }
             if (split[1].equals("TASK")) {
                 tasksListFormFile.add(fileBackedTaskManagerFromFile.fromString(str));
@@ -112,7 +112,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void reader(){
+    public void reader() {
 
         try (Reader fileReader = new FileReader(dbTaskManager)) {
 
@@ -124,7 +124,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        }
+    }
 
     private String toString(Task task) {
         return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatusTask().name() + ","
