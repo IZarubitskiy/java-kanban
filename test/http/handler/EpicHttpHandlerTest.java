@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static http.handler.HttpTaskServer.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static tasks.TaskStatus.*;
 
@@ -44,7 +45,7 @@ class EpicHttpHandlerTest {
     @BeforeEach
     public void setUp() throws IOException {
         manager.deleteTasks();
-        taskServer.start();
+        start();
     }
 
     @AfterEach

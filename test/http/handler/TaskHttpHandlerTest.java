@@ -1,5 +1,6 @@
 package http.handler;
 
+import static http.handler.HttpTaskServer.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static tasks.TaskStatus.*;
 
@@ -43,7 +44,7 @@ public class TaskHttpHandlerTest {
     @BeforeEach
     public void setUp() throws IOException {
         manager.deleteTasks();
-        taskServer.start();
+        start();
     }
 
     @AfterEach

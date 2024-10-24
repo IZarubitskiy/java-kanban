@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static http.handler.HttpTaskServer.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static tasks.TaskStatus.NEW;
 
@@ -40,7 +41,7 @@ class HistoryHttpHandlerTest {
     @BeforeEach
     public void setUp() throws IOException {
         manager.deleteTasks();
-        taskServer.start();
+        start();
     }
 
     @AfterEach

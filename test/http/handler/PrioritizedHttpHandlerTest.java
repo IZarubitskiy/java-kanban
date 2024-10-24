@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
+import static http.handler.HttpTaskServer.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static tasks.TaskStatus.NEW;
 
@@ -39,7 +40,7 @@ class PrioritizedHttpHandlerTest {
     @BeforeEach
     public void setUp() throws IOException {
         manager.deleteTasks();
-        taskServer.start();
+        start();
     }
 
     @AfterEach
