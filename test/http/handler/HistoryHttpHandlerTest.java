@@ -34,7 +34,7 @@ class HistoryHttpHandlerTest {
             NEW, LocalDateTime.parse("02.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5));
     Task task3 = new Task("Test 1", "Testing task 1",3,
             NEW, LocalDateTime.parse("03.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5));
-    public HistoryHttpHandlerTest() throws IOException {
+    public HistoryHttpHandlerTest() {
     }
 
     @BeforeEach

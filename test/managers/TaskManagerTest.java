@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
-    abstract TaskManager getManager();
+    abstract T getManager();
 
-    Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", 1, TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60), new ArrayList<Integer>(), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
+    Epic epic1 = new Epic("Test addNewEpic 1", "Test addNewEpic 1 description", 1, TaskStatus.NEW, LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(60), new ArrayList<>(), LocalDateTime.parse("01.02.2022, 14:10", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")));
 
-    SubTask subTask1 = new SubTask("Test addNewsubTask 1", "Test addNewTask 1 description", 2, TaskStatus.NEW, LocalDateTime.parse("01.06.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20), epic1.getId());
+    SubTask subTask1 = new SubTask("Test add NewSubTask 1", "Test addNewTask 1 description", 2, TaskStatus.NEW, LocalDateTime.parse("01.06.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20), epic1.getId());
 
-    SubTask subTask2 = new SubTask("Test addNewsubTask 2", "Test addNewTask 2 description", 3, TaskStatus.NEW, LocalDateTime.parse("02.07.2021, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(25), epic1.getId());
-    SubTask subTask3 = new SubTask("Test addNewsubTask 3", "Test addNewTask 3 description", 4, TaskStatus.NEW, LocalDateTime.parse("03.08.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(15), epic1.getId());
+    SubTask subTask2 = new SubTask("Test add NewSubTask 2", "Test addNewTask 2 description", 3, TaskStatus.NEW, LocalDateTime.parse("02.07.2021, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(25), epic1.getId());
+    SubTask subTask3 = new SubTask("Test add NewSubTask 3", "Test addNewTask 3 description", 4, TaskStatus.NEW, LocalDateTime.parse("03.08.2022, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(15), epic1.getId());
 
     Task task1 = new Task("Test addNewTask 1", "Test addNewTask 1 description", 5, TaskStatus.NEW, LocalDateTime.parse("01.02.2020, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(20));
     Task task2 = new Task("Test addNewTask 2", "Test addNewTask 2 description", 6, TaskStatus.IN_PROGRESS, LocalDateTime.parse("02.02.2021, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(25));
@@ -121,7 +121,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addSubTask(subTask3);
 
 
-        assertNotNull(subTask1.getEpicId(), "У подзадачи нет Эпика");
         assertEquals(manager.getLastEpicId(), subTask1.getEpicId(), "Номер эпика указан неверно");
         assertNotNull(epic1.getSubTasks(), "У эпика нет подзадач");
         assertEquals(new ArrayList<>(List.of(subTask1.getId(), subTask2.getId(), subTask3.getId())), epic1.getSubTasks(), "Задачи у эпика не совпадают");

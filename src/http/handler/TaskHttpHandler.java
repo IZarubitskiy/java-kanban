@@ -86,7 +86,7 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
 
-        serverProblem(e, "Ошибка сервера - некорректный запрос");
+        serverProblem(e);
     }
 
     private void httpGetTasksById(HttpExchange e) throws IOException {

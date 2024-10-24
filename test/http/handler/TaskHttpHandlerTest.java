@@ -37,7 +37,7 @@ public class TaskHttpHandlerTest {
             NEW, LocalDateTime.parse("01.02.2010, 14:02", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5));
 
 
-    public TaskHttpHandlerTest() throws IOException {
+    public TaskHttpHandlerTest() {
     }
 
     @BeforeEach
@@ -71,7 +71,7 @@ public class TaskHttpHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals("Test 1", tasksFromManager.get(0).getTitle(), "Некорректное имя задачи");
+        assertEquals("Test 1", tasksFromManager.getFirst().getTitle(), "Некорректное имя задачи");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class TaskHttpHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(IN_PROGRESS, tasksFromManager.get(0).getStatusTask(), "Некорректный статус");
+        assertEquals(IN_PROGRESS, tasksFromManager.getFirst().getStatusTask(), "Некорректный статус");
     }
 
     @Test
@@ -168,7 +168,7 @@ public class TaskHttpHandlerTest {
 
         List<Task> tasksFromManager = manager.getTasks();
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(taskWithID2,  tasks.get(0), "Некорректная задача");
+        assertEquals(taskWithID2,  tasks.getFirst(), "Некорректная задача");
     }
     @Test
     public void testAddInterruptedTask() throws IOException, InterruptedException {

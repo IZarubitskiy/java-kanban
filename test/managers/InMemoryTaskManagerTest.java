@@ -1,6 +1,7 @@
 package managers;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+@SuppressWarnings("rawtypes")
 class InMemoryTaskManagerTest extends TaskManagerTest{
 
     @Override

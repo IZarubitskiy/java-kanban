@@ -5,13 +5,11 @@ import com.sun.net.httpserver.HttpExchange;
 import managers.TaskManager;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 public class BaseHttpHandler {
 
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final TaskManager manager;
     protected final Gson gson = CustomGson.getGson();
 
@@ -44,8 +42,8 @@ public class BaseHttpHandler {
         h.close();
     }
 
-    protected void serverProblem(HttpExchange h, String text) throws IOException {
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+    protected void serverProblem(HttpExchange h) throws IOException {
+        byte[] resp = "Ошибка сервера - некорректный запрос".getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(500, resp.length);
         h.getResponseBody().write(resp);
@@ -53,7 +51,7 @@ public class BaseHttpHandler {
     }
 
     protected void wrongEndpoint(HttpExchange h) throws IOException {
-        byte[] resp = ("Такого эндпоинта не существует.").getBytes(StandardCharsets.UTF_8);
+        byte[] resp = "Такого эндпоинта не существует.".getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(405, resp.length);
         h.getResponseBody().write(resp);

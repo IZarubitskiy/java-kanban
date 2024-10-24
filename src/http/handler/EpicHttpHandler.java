@@ -102,12 +102,12 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
         if (taskFromRequest.getId() == null) {
             if (m.checkTaskDates(taskFromRequest)) {
                 m.addEpic(new Epic(taskFromRequest.getTitle(), taskFromRequest.getDescription(), m.genId(), TaskStatus.NEW,
-                        taskFromRequest.getStartTime(), taskFromRequest.getDuration(), new ArrayList<Integer>(), taskFromRequest.getEndTime()));
+                        taskFromRequest.getStartTime(), taskFromRequest.getDuration(), new ArrayList<>(), taskFromRequest.getEndTime()));
                 sendText(e, "Задача успешно добавлена", 201);
                 return;
             }
         }
-        serverProblem(e, "Ошибка сервера - некорректный запрос");
+        serverProblem(e);
     }
 
     private void httpDeleteEpicById(HttpExchange e) throws IOException {

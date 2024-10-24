@@ -33,12 +33,12 @@ class EpicHttpHandlerTest {
             NEW, LocalDateTime.now(), Duration.ofMinutes(0), null, LocalDateTime.now());
     Epic epicTest2 = new Epic("Epic Test 1", "Testing subtasks 1", 2,
             NEW, LocalDateTime.now(), Duration.ofMinutes(0), null, LocalDateTime.now());
-    SubTask subTasklWithId1  = new SubTask("Test 1", "Testing SubTask 2" ,2,
+    SubTask subTaskWithId1  = new SubTask("Test 1", "Testing SubTask 2" ,2,
             NEW, LocalDateTime.parse("03.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
-    SubTask subTasklWithId2  = new SubTask("Test 2", "Testing SubTask 2" ,3,
+    SubTask subTaskWithId2  = new SubTask("Test 2", "Testing SubTask 2" ,3,
             NEW, LocalDateTime.parse("04.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
 
-    public EpicHttpHandlerTest() throws IOException {
+    public EpicHttpHandlerTest() {
     }
 
     @BeforeEach
@@ -72,7 +72,7 @@ class EpicHttpHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals("Epic Test 1", tasksFromManager.get(0).getTitle(), "Некорректное имя задачи");
+        assertEquals("Epic Test 1", tasksFromManager.getFirst().getTitle(), "Некорректное имя задачи");
 
     }
 
@@ -144,15 +144,15 @@ class EpicHttpHandlerTest {
         List<Epic> epicFromManager = manager.getEpics();
 
         assertEquals(1, epicFromManager.size(), "Некорректное количество задач");
-        assertEquals(epicTest1,  epicFromManager.get(0), "Некорректная задача");
+        assertEquals(epicTest1,  epicFromManager.getFirst(), "Некорректная задача");
 
     }
 
     @Test
     public void testGetSubTasksByEpicID() throws IOException, InterruptedException {
         manager.addEpic(epicTest1);
-        manager.addSubTask(subTasklWithId1);
-        manager.addSubTask(subTasklWithId2);
+        manager.addSubTask(subTaskWithId1);
+        manager.addSubTask(subTaskWithId2);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/epics/1/subtasks");

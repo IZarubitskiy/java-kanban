@@ -103,7 +103,7 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
             return;
         }
 
-        serverProblem(e, "Ошибка сервера - некорректный запрос");
+        serverProblem(e);
     }
 
     private void httpDeleteSubTaskById(HttpExchange e) throws IOException {

@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpHandler;
 import managers.TaskManager;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class PrioritizedHttpHandler extends BaseHttpHandler implements HttpHandler {
     public PrioritizedHttpHandler(TaskManager manager) {
@@ -15,13 +16,10 @@ public class PrioritizedHttpHandler extends BaseHttpHandler implements HttpHandl
     public void handle(HttpExchange e) throws IOException {
         Endpoint endpoint = getEndpoint(e.getRequestURI().getPath(), e.getRequestMethod());
 
-        switch (endpoint) {
-            case GET: {
-                httpPrioritizedTask(e);
-                break;
-            }
-            default:
-                wrongEndpoint(e);
+        if (Objects.requireNonNull(endpoint) == Endpoint.GET) {
+            httpPrioritizedTask(e);
+        } else {
+            wrongEndpoint(e);
         }
     }
 

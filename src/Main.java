@@ -4,7 +4,6 @@ import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
 
-import java.net.IDN;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class Main {
         String cmd;
         String title;
         String description;
-        Integer idCmd;
+        int idCmd;
 
         while (true) {
             menu();
@@ -158,7 +157,7 @@ public class Main {
                         case "1":
                             System.out.println("Выберите ID");
                             idCmd = scanner.nextInt();
-                            if (inMemoryTaskManager.getTaskById(idCmd).equals(null)) {
+                            if (inMemoryTaskManager.getTaskById(idCmd) == null) {
                                 System.out.println("Задача не найдена.");
                                 break;
                             } else {
@@ -172,7 +171,7 @@ public class Main {
                         case "2":
                             System.out.println("Выберите ID");
                             idCmd = scanner.nextInt();
-                            if (inMemoryTaskManager.getSubTaskById(idCmd).equals(null)) {
+                            if (inMemoryTaskManager.getSubTaskById(idCmd) == null) {
                                 System.out.println("Подзадача не найдена.");
                                 break;
                             } else {
@@ -201,7 +200,7 @@ public class Main {
                         case "1":
                             System.out.println("Выберите ID");
                             idCmd = scanner.nextInt();
-                            if (inMemoryTaskManager.getTaskById(idCmd).equals(null)) {
+                            if (inMemoryTaskManager.getTaskById(idCmd) == null) {
                                 System.out.println("Задача не найдена.");
                                 break;
                             } else {
@@ -211,7 +210,7 @@ public class Main {
                         case "2":
                             System.out.println("Выберите ID");
                             idCmd = scanner.nextInt();
-                            if (inMemoryTaskManager.getSubTaskById(idCmd).equals(null)) {
+                            if (inMemoryTaskManager.getSubTaskById(idCmd) == null) {
                                 System.out.println("Подзадача не найдена.");
                                 break;
                             } else {
@@ -221,7 +220,7 @@ public class Main {
                         case "3":
                             System.out.println("Выберите ID");
                             idCmd = scanner.nextInt();
-                            if (inMemoryTaskManager.getEpicById(idCmd).equals(null)) {
+                            if (inMemoryTaskManager.getEpicById(idCmd) == null) {
                                 System.out.println("Эпик не найден.");
                                 break;
                             } else {
@@ -239,7 +238,7 @@ public class Main {
                     System.out.println("Выберите ID");
                     inMemoryTaskManager.getEpics();
                     idCmd = scanner.nextInt();
-                    if (inMemoryTaskManager.getEpicById(idCmd).equals(null)) {
+                    if (inMemoryTaskManager.getEpicById(idCmd) == null) {
                         System.out.println("Эпик не найден.");
                         break;
                     } else {

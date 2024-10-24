@@ -29,20 +29,20 @@ class SubtasksHttpHandlerTest {
     Gson gson = CustomGson.getGson();
     Epic epicTest = new Epic("Epic Test 1", "Testing subtasks 1", 1,
             NEW, LocalDateTime.now(), Duration.ofMinutes(0), null, LocalDateTime.now());
-    SubTask subTasklNoId1  = new SubTask("Test 1", "Testing SubTask 1" ,
+    SubTask subTaskNoId1  = new SubTask("Test 1", "Testing SubTask 1" ,
             NEW, LocalDateTime.parse("01.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
-    SubTask subTasklNoId2  = new SubTask("Test 2", "Testing SubTask 2" ,
+    SubTask subTaskNoId2  = new SubTask("Test 2", "Testing SubTask 2" ,
             NEW, LocalDateTime.parse("02.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
-    SubTask subTasklWithId1  = new SubTask("Test 3", "Testing SubTask 2" ,2,
+    SubTask subTaskWithId1  = new SubTask("Test 3", "Testing SubTask 2" ,2,
             NEW, LocalDateTime.parse("03.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
-    SubTask subTasklWithId2  = new SubTask("Test 4", "Testing SubTask 2" ,3,
+    SubTask subTaskWithId2  = new SubTask("Test 4", "Testing SubTask 2" ,3,
             NEW, LocalDateTime.parse("04.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
-    SubTask subTasklWithId1Upd  = new SubTask("Test 3", "Testing SubTask 2" ,2,
+    SubTask subTaskWithId1Upd  = new SubTask("Test 3", "Testing SubTask 2" ,2,
             DONE, LocalDateTime.parse("03.02.2010, 14:00", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
-    SubTask subTasklWithId1Interrupted  = new SubTask("Test 3", "Testing SubTask 2" ,
+    SubTask subTaskWithId1Interrupted  = new SubTask("Test 3", "Testing SubTask 2" ,
             NEW, LocalDateTime.parse("03.02.2010, 14:02", DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")), Duration.ofMinutes(5),1);
 
-     public SubtasksHttpHandlerTest() throws IOException {
+     public SubtasksHttpHandlerTest() {
     }
 
     @BeforeEach
@@ -61,7 +61,7 @@ class SubtasksHttpHandlerTest {
         manager.addEpic(epicTest);
         manager.genId();
 
-        String taskJson = gson.toJson(subTasklNoId1);
+        String taskJson = gson.toJson(subTaskNoId1);
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks");
         HttpRequest request = HttpRequest.newBuilder()
@@ -78,9 +78,9 @@ class SubtasksHttpHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals("Test 1", tasksFromManager.get(0).getTitle(), "Некорректное имя задачи");
+        assertEquals("Test 1", tasksFromManager.getFirst().getTitle(), "Некорректное имя задачи");
 
-        String taskJson2 = gson.toJson(subTasklNoId2);
+        String taskJson2 = gson.toJson(subTaskNoId2);
         HttpClient client2 = HttpClient.newHttpClient();
         URI url2 = URI.create("http://localhost:8080/subtasks");
         HttpRequest request2 = HttpRequest.newBuilder()
@@ -91,7 +91,7 @@ class SubtasksHttpHandlerTest {
 
         HttpResponse<String> response2 = client2.send(request2, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(201, response.statusCode());
+        assertEquals(201, response2.statusCode());
 
         List<SubTask> tasksFromManager2 = manager.getSubtasks();
 
@@ -104,10 +104,10 @@ class SubtasksHttpHandlerTest {
     @Test
     public void testUpdateSubTask() throws IOException, InterruptedException {
         manager.addEpic(epicTest);
-        manager.addSubTask(subTasklWithId1);
-        manager.addSubTask(subTasklWithId2);
+        manager.addSubTask(subTaskWithId1);
+        manager.addSubTask(subTaskWithId2);
 
-        String taskJson = gson.toJson(subTasklWithId1Upd);
+        String taskJson = gson.toJson(subTaskWithId1Upd);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks");
@@ -126,15 +126,15 @@ class SubtasksHttpHandlerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(DONE, tasksFromManager.get(0).getStatusTask(), "Некорректный статус подзадачи");
-        assertEquals(IN_PROGRESS, epicFromManager.get(0).getStatusTask(), "Некорректный статус эпика");
+        assertEquals(DONE, tasksFromManager.getFirst().getStatusTask(), "Некорректный статус подзадачи");
+        assertEquals(IN_PROGRESS, epicFromManager.getFirst().getStatusTask(), "Некорректный статус эпика");
     }
 
     @Test
     public void testSearchSubTaskByID() throws IOException, InterruptedException {
         manager.addEpic(epicTest);
-        manager.addSubTask(subTasklWithId1);
-        manager.addSubTask(subTasklWithId2);
+        manager.addSubTask(subTaskWithId1);
+        manager.addSubTask(subTaskWithId2);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks/2");
@@ -150,14 +150,14 @@ class SubtasksHttpHandlerTest {
 
         Task responseTask = gson.fromJson(response.body(), SubTask.class);
 
-        assertEquals(responseTask, subTasklWithId1, "Вернулась некорректная задача");
+        assertEquals(responseTask, subTaskWithId1, "Вернулась некорректная задача");
     }
 
     @Test
     public void testGetSubTasks() throws IOException, InterruptedException {
         manager.addEpic(epicTest);
-        manager.addSubTask(subTasklWithId1);
-        manager.addSubTask(subTasklWithId2);
+        manager.addSubTask(subTaskWithId1);
+        manager.addSubTask(subTaskWithId2);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks");
@@ -178,15 +178,15 @@ class SubtasksHttpHandlerTest {
 
         List<SubTask> tasksFromManager = manager.getSubtasks();
         assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(subTasklWithId1,  tasks.get(0), "Некорректная задача");
-        assertEquals(subTasklWithId2,  tasks.get(1), "Некорректное имя задачи");
+        assertEquals(subTaskWithId1,  tasks.get(0), "Некорректная задача");
+        assertEquals(subTaskWithId2,  tasks.get(1), "Некорректное имя задачи");
     }
 
     @Test
     public void testDeleteSubTaskByID() throws IOException, InterruptedException {
         manager.addEpic(epicTest);
-        manager.addSubTask(subTasklWithId1);
-        manager.addSubTask(subTasklWithId2);
+        manager.addSubTask(subTaskWithId1);
+        manager.addSubTask(subTaskWithId2);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks/2");
@@ -204,17 +204,17 @@ class SubtasksHttpHandlerTest {
 
         List<SubTask> tasksFromManager = manager.getSubtasks();
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals(subTasklWithId2,  tasksFromManager.get(0), "Некорректная задача");
-        assertEquals(NEW, epicFromManager.get(0).getStatusTask(), "Некорректный статус эпика");
+        assertEquals(subTaskWithId2,  tasksFromManager.getFirst(), "Некорректная задача");
+        assertEquals(NEW, epicFromManager.getFirst().getStatusTask(), "Некорректный статус эпика");
 
     }
 
     @Test
     public void testAddInterruptedTask() throws IOException, InterruptedException {
         manager.addEpic(epicTest);
-        manager.addSubTask(subTasklWithId1);
-        manager.addSubTask(subTasklWithId2);
-        String taskJson = gson.toJson(subTasklWithId1Interrupted);
+        manager.addSubTask(subTaskWithId1);
+        manager.addSubTask(subTaskWithId2);
+        String taskJson = gson.toJson(subTaskWithId1Interrupted);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks");

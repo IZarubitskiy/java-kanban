@@ -9,8 +9,8 @@ import java.net.InetSocketAddress;
 public class HttpTaskServer {
 
     private static final int PORT = 8080;
-    private final TaskManager manager;
-    private HttpServer httpServer;
+    private static TaskManager manager;
+    private static HttpServer httpServer;
 
     public HttpTaskServer(TaskManager manager) {
         this.manager = manager;
@@ -20,7 +20,7 @@ public class HttpTaskServer {
         httpServer.stop(0);
     }
 
-    public void start() throws IOException {
+    public static void start() throws IOException {
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/tasks", new TaskHttpHandler(manager));
         httpServer.createContext("/subtasks", new SubtasksHttpHandler(manager));
@@ -30,7 +30,7 @@ public class HttpTaskServer {
         httpServer.start();
     }
 
-    public void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         start();
     }
 }
