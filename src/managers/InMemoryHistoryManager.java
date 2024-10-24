@@ -2,15 +2,16 @@ package managers;
 
 import tasks.Task;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private Node head;
     private Node tail;
-    private int size = 0;
-    private HashMap<Integer, Node> historyLinked = new HashMap<>();
+    private final HashMap<Integer, Node> historyLinked = new HashMap<>();
 
-    private class Node {
+    private static class Node {
         public Task task;
         public Node next;
         public Node prev;
@@ -30,7 +31,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = newNode;
         else
             oldHead.prev = newNode;
-        size++;
         return newNode;
     }
 
@@ -40,12 +40,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (head == tail) {
             head = null;
             tail = null;
-            size = 0;
             return;
         }
         if (head == node) {
             head = head.next;
-            size--;
             return;
         }
         Node t = head;
@@ -55,7 +53,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                     tail = t;
                 }
                 t.next = t.next.next;
-                size--;
                 return;
             }
             t = t.next;

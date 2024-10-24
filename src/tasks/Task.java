@@ -3,11 +3,12 @@ package tasks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Task {
-    private String title;
-    private String description;
-    private final Integer id;
+    private final String title;
+    private final String description;
+    private Integer id;
     private TaskStatus statusTask;
     private LocalDateTime startTime;
     private Duration duration;
@@ -21,29 +22,25 @@ public class Task {
         this.duration = duration;
     }
 
-    public String getTitle() {
-        return title;
+    public Task(String title, String description, TaskStatus statusTask, LocalDateTime startTime, Duration duration) {
+        this.title = title;
+        this.description = description;
+        this.statusTask = statusTask;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Integer getId() {
         return id;
     }
-
-    /*public void setId(int id) {
-        this.id = id;
-    }*/
 
     public TaskStatus getStatusTask() {
         return statusTask;
@@ -67,15 +64,15 @@ public class Task {
 
     @Override
     public String toString() {
-        return "\n" +
+        return
                 "tasks.Task{" +
-                "title='" + title + '\'' +
-                ",description='" + description + '\'' +
-                ",id='" + id + '\'' +
-                ", statusSingleTask=" + statusTask +
-                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
-                ", duration=" + duration +
-                '}';
+                        "title='" + title + '\'' +
+                        ",description='" + description + '\'' +
+                        ",id='" + id + '\'' +
+                        ", statusSingleTask=" + statusTask +
+                        ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")) +
+                        ", duration=" + duration +
+                        '}';
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -92,5 +89,19 @@ public class Task {
 
     public Duration getDuration() {
         return duration;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id); /*&& Objects.equals(nameOfTask, task.nameOfTask)
+                && Objects.equals(description, task.description) && taskStatus == task.taskStatus;*/
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, id, statusTask);
     }
 }

@@ -8,22 +8,20 @@ import tasks.TaskStatus;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int id = 0;
     private static int lastEpicId = 0;
-    private HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
-    private HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
-    private HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
+    private final HashMap<Integer, Task> singleTaskDesc = new HashMap<>();
+    private final HashMap<Integer, Epic> epicTaskDesc = new HashMap<>();
+    private final HashMap<Integer, SubTask> subTaskDesc = new HashMap<>();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
-    private Set<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
-        @Override
-        public int compare(Task t1, Task t2) {
-            if (t1.getStartTime().isBefore(t2.getStartTime())) {
-                return -1;
-            } else {
-                return 1;
-            }
+    private final Set<Task> prioritizedTasks = new TreeSet<>((Task t1, Task t2) -> {
+        if (t1.getStartTime().isBefore(t2.getStartTime())) {
+            return -1;
+        } else {
+            return 1;
         }
     });
 
@@ -34,12 +32,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setId(int value) {
-        this.id = value;
+        id = value;
     }
 
     @Override
     public void setLastEpicId(int value) {
-        this.lastEpicId = value;
+        lastEpicId = value;
     }
 
     @Override
@@ -101,27 +99,27 @@ public class InMemoryTaskManager implements TaskManager {
         return subTaskDesc;
     }
 
-   @Override // remake
-    public Task getTaskById(String id) {
-        Task foundTask = singleTaskDesc.get(Integer.parseInt(id));
+    @Override // remake
+    public Task getTaskById(int id) {
+        Task foundTask = singleTaskDesc.get(id);
         if (foundTask != null) {
             inMemoryHistoryManager.add(foundTask);
         }
         return foundTask;
     }
 
-   @Override  // remake
-    public Epic getEpicById(String id) {
-        Epic foundEpic = epicTaskDesc.get(Integer.parseInt(id));
+    @Override  // remake
+    public Epic getEpicById(int id) {
+        Epic foundEpic = epicTaskDesc.get(id);
         if (foundEpic != null) {
             inMemoryHistoryManager.add(foundEpic);
         }
         return foundEpic;
     }
 
-   @Override // remake
-    public SubTask getSubTaskById(String id) {
-        SubTask foundSubTask = subTaskDesc.get(Integer.parseInt(id));
+    @Override // remake
+    public SubTask getSubTaskById(int id) {
+        SubTask foundSubTask = subTaskDesc.get(id);
         if (foundSubTask != null) {
             inMemoryHistoryManager.add(foundSubTask);
         }
@@ -142,36 +140,64 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic addEpic(Epic newEpic) {
-        LocalDateTime firstSubTask = LocalDateTime.now();
-        LocalDateTime lastSubTask = LocalDateTime.now();
-        Duration epicDuration = Duration.between(firstSubTask,firstSubTask);
-        for (Integer subTaskId : newEpic.getSubTasks()) {
-            epicDuration = epicDuration.plus(subTaskDesc.get(subTaskId).getDuration());
-            if (firstSubTask.isAfter(subTaskDesc.get(subTaskId).getStartTime())) {
-                firstSubTask = subTaskDesc.get(subTaskId).getStartTime();
-            }
-            if (lastSubTask.isBefore(subTaskDesc.get(subTaskId).getEndTime())) {
-                lastSubTask = subTaskDesc.get(subTaskId).getEndTime();
-            }
-            newEpic.setStartTime(firstSubTask);
-            newEpic.setDuration(epicDuration);
-            newEpic.setEndTime(lastSubTask);
-        }
         epicTaskDesc.put(newEpic.getId(), newEpic);
         setLastEpicId(newEpic.getId());
         return newEpic;
     }
 
-        @Override
-        public SubTask addSubTask(SubTask newSubTask) {
-            if (checkTaskDates(newSubTask)) {
-                prioritizedTasks.add(newSubTask);
-                subTaskDesc.put(newSubTask.getId(), newSubTask);
-            } else {
-                System.out.println("такое время уже существует");
-                id -= 1;
+    @Override
+    public LocalDateTime getEpicStartTime(Epic epic) {
+        LocalDateTime firstSubTaskTime = subTaskDesc.get(epic.getSubTasks().getFirst()).getStartTime();
+
+        for (Integer subTaskId : epic.getSubTasks()) {
+            if (firstSubTaskTime.isAfter(subTaskDesc.get(subTaskId).getStartTime())) {
+                firstSubTaskTime = subTaskDesc.get(subTaskId).getStartTime();
             }
-            return  newSubTask;
+        }
+        return firstSubTaskTime;
+    }
+
+    @Override
+    public LocalDateTime getEpicEndTime(Epic epic) {
+        LocalDateTime lastSubTaskTime = subTaskDesc.get(epic.getSubTasks().getFirst()).getEndTime();
+        for (Integer subTaskId : epic.getSubTasks()) {
+            if (lastSubTaskTime.isBefore(subTaskDesc.get(subTaskId).getEndTime())) {
+                lastSubTaskTime = subTaskDesc.get(subTaskId).getEndTime();
+            }
+        }
+        return lastSubTaskTime;
+    }
+
+    @Override
+    public Duration getEpicDuratioon(Epic epic) {
+        Duration epicDuration = Duration.ofMinutes(0);
+        for (Integer subTaskId : epic.getSubTasks()) {
+            epicDuration = epicDuration.plus(subTaskDesc.get(subTaskId).getDuration());
+        }
+        return epicDuration;
+    }
+
+    @Override
+    public SubTask addSubTask(SubTask newSubTask) {
+        if (checkTaskDates(newSubTask)) {
+            prioritizedTasks.add(newSubTask);
+            subTaskDesc.put(newSubTask.getId(), newSubTask);
+
+            ArrayList<Integer> newSubTaskListId = epicTaskDesc.get(newSubTask.getEpicId()).getSubTasks();
+            if (epicTaskDesc.get(newSubTask.getEpicId()).getSubTasks() == null) {
+                newSubTaskListId = new ArrayList<>();
+            }
+            newSubTaskListId.add(newSubTask.getId());
+            epicTaskDesc.get(newSubTask.getEpicId()).setSubTaskListId(newSubTaskListId);
+            epicTaskDesc.get(newSubTask.getEpicId()).setStartTime(getEpicStartTime(epicTaskDesc.get(newSubTask.getEpicId())));
+            epicTaskDesc.get(newSubTask.getEpicId()).setEndTime(getEpicEndTime(epicTaskDesc.get(newSubTask.getEpicId())));
+            epicTaskDesc.get(newSubTask.getEpicId()).setDuration(getEpicDuratioon(epicTaskDesc.get(newSubTask.getEpicId())));
+
+        } else {
+            System.out.println("Такое время уже существует");
+            id -= 1;
+        }
+        return newSubTask;
     }
 
     @Override
@@ -180,72 +206,64 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task updateTask(String id, Integer status) {
-        int updateId = Integer.parseInt(id);
-            if (status == 1) {
-                singleTaskDesc.get(updateId).setStatusTask(TaskStatus.IN_PROGRESS);
-            } else if (status == 2) {
-                singleTaskDesc.get(updateId).setStatusTask(TaskStatus.DONE);
-            }
-        return singleTaskDesc.get(updateId);
-    }
-
-    @Override
-    public SubTask updateSubTask(String id, Integer status) {
-        int updateId = Integer.parseInt(id);
+    public Task updateTask(int id, Integer status) {
         if (status == 1) {
-            subTaskDesc.get(updateId).setStatusTask(TaskStatus.IN_PROGRESS);
+            singleTaskDesc.get(id).setStatusTask(TaskStatus.IN_PROGRESS);
         } else if (status == 2) {
-            subTaskDesc.get(updateId).setStatusTask(TaskStatus.DONE);
+            singleTaskDesc.get(id).setStatusTask(TaskStatus.DONE);
         }
-        int epicId = subTaskDesc.get(updateId).getEpicId();
-        updateEpicStatus(epicId);
-        return subTaskDesc.get(updateId);
+        return singleTaskDesc.get(id);
     }
 
     @Override
-    public HashMap<Integer, Task> deleteTaskById(String id) {
-        int deletedId = Integer.parseInt(id);
-        singleTaskDesc.remove(deletedId);
-        inMemoryHistoryManager.remove(deletedId);
+    public SubTask updateSubTask(int id, Integer status) {
+        if (status == 1) {
+            subTaskDesc.get(id).setStatusTask(TaskStatus.IN_PROGRESS);
+        } else if (status == 2) {
+            subTaskDesc.get(id).setStatusTask(TaskStatus.DONE);
+        }
+        int epicId = subTaskDesc.get(id).getEpicId();
+        updateEpicStatus(epicId);
+        return subTaskDesc.get(id);
+    }
+
+    @Override
+    public HashMap<Integer, Task> deleteTaskById(int id) {
+        singleTaskDesc.remove(id);
+        inMemoryHistoryManager.remove(id);
         return singleTaskDesc;
     }
 
     @Override
-    public HashMap<Integer, Epic> deleteEpicById(String id) {
-        int deletedId = Integer.parseInt(id);
-        epicTaskDesc.remove(deletedId);
-        inMemoryHistoryManager.remove(deletedId);
-        for (Integer i : subTaskDesc.keySet()) {
-            if (subTaskDesc.get(i).getEpicId() == deletedId) {
-                subTaskDesc.remove(i);
-                inMemoryHistoryManager.remove(i);
-            }
-        }
+    public HashMap<Integer, Epic> deleteEpicById(int id) {
+        epicTaskDesc.remove(id);
+        inMemoryHistoryManager.remove(id);
+        subTaskDesc.keySet().stream()
+                .filter(i -> subTaskDesc.get(i).getEpicId() == id)
+                .forEach(i -> {
+                    subTaskDesc.remove(i);
+                    inMemoryHistoryManager.remove(i);
+                });
         return epicTaskDesc;
     }
 
     @Override
-    public HashMap<Integer, SubTask> deleteSubTaskById(String id) {
-        int deletedId = Integer.parseInt(id);
-        int epicId = subTaskDesc.get(deletedId).getEpicId();
-        subTaskDesc.remove(deletedId);
-        inMemoryHistoryManager.remove(deletedId);
-        ArrayList<Integer> updatedListSubTasks = new ArrayList<>();
-        for (Integer i : subTaskDesc.keySet()) {
-            if (subTaskDesc.get(i).getEpicId() == epicId) {
-                updatedListSubTasks.add(subTaskDesc.get(i).getId());
-            }
-        }
+    public HashMap<Integer, SubTask> deleteSubTaskById(int id) {
+        int epicId = subTaskDesc.get(id).getEpicId();
+        subTaskDesc.remove(id);
+        inMemoryHistoryManager.remove(id);
+        ArrayList<Integer> updatedListSubTasks = subTaskDesc.keySet().stream()
+                .filter(i -> subTaskDesc.get(i).getEpicId() == epicId)
+                .map(i -> subTaskDesc.get(i).getId())
+                .collect(Collectors.toCollection(ArrayList::new));
         epicTaskDesc.get(epicId).setSubTaskListId(updatedListSubTasks);
         updateEpicStatus(epicId);
         return subTaskDesc;
     }
 
     @Override
-    public ArrayList<Integer> getSubTasksListByEpicId(String id) {
-        int epicId = Integer.parseInt(id);
-        return epicTaskDesc.get(epicId).getSubTasks();
+    public ArrayList<Integer> getSubTasksListByEpicId(int id) {
+        return epicTaskDesc.get(id).getSubTasks();
     }
 
     @Override
@@ -253,7 +271,7 @@ public class InMemoryTaskManager implements TaskManager {
         return inMemoryHistoryManager.getHistory();
     }
 
-    public void updateEpicStatus(Integer epicId) {
+    public void updateEpicStatus(int epicId) {
         int epicSize = epicTaskDesc.get(epicId).getSubTasks().size();
         int counterNew = 0;
         int counterDone = 0;
@@ -276,10 +294,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;
-        }
+    }
 
+    @Override
     public boolean checkTaskDates(Task task) {
-    boolean check = true;
+        boolean check = true;
         for (Integer i : singleTaskDesc.keySet()) {
             if (task.getStartTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getStartTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
                     task.getEndTime().isAfter(singleTaskDesc.get(i).getStartTime()) && task.getEndTime().isBefore(singleTaskDesc.get(i).getEndTime()) ||
@@ -295,9 +314,8 @@ public class InMemoryTaskManager implements TaskManager {
                     task.getStartTime().isEqual(subTaskDesc.get(i).getStartTime()) && task.getEndTime().isEqual(subTaskDesc.get(i).getEndTime())) {
                 check = false;
             }
-
         }
-    return check;
+        return check;
     }
 
 }

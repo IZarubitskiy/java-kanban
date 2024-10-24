@@ -4,10 +4,10 @@ import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
 
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,6 +16,7 @@ public class Main {
         String cmd;
         String title;
         String description;
+        int idCmd;
 
         while (true) {
             menu();
@@ -79,18 +80,18 @@ public class Main {
                     switch (cmd) {
                         case "1":
                             System.out.println("Выберите ID");
-                            cmd = scanner.nextLine();
-                            inMemoryTaskManager.getTaskById(cmd);
+                            idCmd = scanner.nextInt();
+                            inMemoryTaskManager.getTaskById(idCmd);
                             break;
                         case "2":
                             System.out.println("Выберите ID");
-                            cmd = scanner.nextLine();
-                            inMemoryTaskManager.getEpicById(cmd);
+                            idCmd = scanner.nextInt();
+                            inMemoryTaskManager.getEpicById(idCmd);
                             break;
                         case "3":
                             System.out.println("Выберите ID");
-                            cmd = scanner.nextLine();
-                            inMemoryTaskManager.getSubTaskById(cmd);
+                            idCmd = scanner.nextInt();
+                            inMemoryTaskManager.getSubTaskById(idCmd);
                             break;
                         case "4":
                             break;
@@ -129,7 +130,7 @@ public class Main {
                             String nextSubTaskDescription = scanner.nextLine();
                             while (!nextSubTaskName.isEmpty()) {
                                 SubTask nextSubTask = new SubTask(nextSubTaskName, nextSubTaskDescription, inMemoryTaskManager.genId(),
-                                        TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(0),inMemoryTaskManager.getLastEpicId());
+                                        TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(0), inMemoryTaskManager.getLastEpicId());
                                 inMemoryTaskManager.addSubTask(nextSubTask);
                                 newSubTaskList.add(inMemoryTaskManager.getLastEpicId());
                                 System.out.println("Введите название подзадачи:");
@@ -155,8 +156,8 @@ public class Main {
                     switch (cmd) {
                         case "1":
                             System.out.println("Выберите ID");
-                            cmd = scanner.nextLine();
-                            if (inMemoryTaskManager.getTaskById(cmd).equals(null)) {
+                            idCmd = scanner.nextInt();
+                            if (inMemoryTaskManager.getTaskById(idCmd) == null) {
                                 System.out.println("Задача не найдена.");
                                 break;
                             } else {
@@ -164,13 +165,13 @@ public class Main {
                                 System.out.println("1. Взята в работу");
                                 System.out.println("2. Выполнена");
                                 int newStatus = scanner.nextInt();
-                                inMemoryTaskManager.updateTask(cmd, newStatus);
+                                inMemoryTaskManager.updateTask(idCmd, newStatus);
                             }
                             break;
                         case "2":
                             System.out.println("Выберите ID");
-                            cmd = scanner.nextLine();
-                            if (inMemoryTaskManager.getSubTaskById(cmd).equals(null)) {
+                            idCmd = scanner.nextInt();
+                            if (inMemoryTaskManager.getSubTaskById(idCmd) == null) {
                                 System.out.println("Подзадача не найдена.");
                                 break;
                             } else {
@@ -178,7 +179,7 @@ public class Main {
                                 System.out.println("1. Взята в работу");
                                 System.out.println("2. Выполнена");
                                 int newStatus = scanner.nextInt();
-                                inMemoryTaskManager.updateSubTask(cmd, newStatus);
+                                inMemoryTaskManager.updateSubTask(idCmd, newStatus);
                             }
                             break;
                         case "3":
@@ -197,36 +198,33 @@ public class Main {
                     cmd = scanner.nextLine();
                     switch (cmd) {
                         case "1":
-                            inMemoryTaskManager.getTasks();
                             System.out.println("Выберите ID");
-                            cmd = scanner.nextLine();
-                            if (inMemoryTaskManager.getTaskById(cmd).equals(null)) {
+                            idCmd = scanner.nextInt();
+                            if (inMemoryTaskManager.getTaskById(idCmd) == null) {
                                 System.out.println("Задача не найдена.");
                                 break;
                             } else {
-                                inMemoryTaskManager.deleteTaskById(cmd);
+                                inMemoryTaskManager.deleteTaskById(idCmd);
                             }
                             break;
                         case "2":
                             System.out.println("Выберите ID");
-                            inMemoryTaskManager.getSubtasks();
-                            cmd = scanner.nextLine();
-                            if (inMemoryTaskManager.getSubTaskById(cmd).equals(null)) {
+                            idCmd = scanner.nextInt();
+                            if (inMemoryTaskManager.getSubTaskById(idCmd) == null) {
                                 System.out.println("Подзадача не найдена.");
                                 break;
                             } else {
-                                inMemoryTaskManager.deleteSubTaskById(cmd);
+                                inMemoryTaskManager.deleteSubTaskById(idCmd);
                             }
                             break;
                         case "3":
                             System.out.println("Выберите ID");
-                            inMemoryTaskManager.getEpics();
-                            cmd = scanner.nextLine();
-                            if (inMemoryTaskManager.getEpicById(cmd).equals(null)) {
+                            idCmd = scanner.nextInt();
+                            if (inMemoryTaskManager.getEpicById(idCmd) == null) {
                                 System.out.println("Эпик не найден.");
                                 break;
                             } else {
-                                inMemoryTaskManager.deleteEpicById(cmd);
+                                inMemoryTaskManager.deleteEpicById(idCmd);
                             }
                             break;
                         case "4":
@@ -239,12 +237,12 @@ public class Main {
                 case "7":
                     System.out.println("Выберите ID");
                     inMemoryTaskManager.getEpics();
-                    cmd = scanner.nextLine();
-                    if (inMemoryTaskManager.getEpicById(cmd).equals(null)) {
+                    idCmd = scanner.nextInt();
+                    if (inMemoryTaskManager.getEpicById(idCmd) == null) {
                         System.out.println("Эпик не найден.");
                         break;
                     } else {
-                        inMemoryTaskManager.getSubTasksListByEpicId(cmd);
+                        inMemoryTaskManager.getSubTasksListByEpicId(idCmd);
                     }
                     break;
                 case "8":

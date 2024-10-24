@@ -4,7 +4,12 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.util.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -26,11 +31,11 @@ public interface TaskManager {
 
     HashMap<Integer, SubTask> deleteSubTasks();
 
-    Task getTaskById(String id);
+    Task getTaskById(int id);
 
-    Epic getEpicById(String id);
+    Epic getEpicById(int id);
 
-    SubTask getSubTaskById(String id);
+    SubTask getSubTaskById(int id);
 
     Task addTask(Task newSingleTask);
 
@@ -40,17 +45,17 @@ public interface TaskManager {
 
     void setLastEpicWithSubTask(ArrayList<Integer> subTaskList);
 
-    Task updateTask(String id, Integer status);
+    Task updateTask(int id, Integer status);
 
-    SubTask updateSubTask(String id, Integer status);
+    SubTask updateSubTask(int id, Integer status);
 
-    HashMap<Integer, Task> deleteTaskById(String id);
+    HashMap<Integer, Task> deleteTaskById(int id);
 
-    HashMap<Integer, Epic> deleteEpicById(String id);
+    HashMap<Integer, Epic> deleteEpicById(int id);
 
-    HashMap<Integer, SubTask> deleteSubTaskById(String id);
+    HashMap<Integer, SubTask> deleteSubTaskById(int id);
 
-    ArrayList<Integer> getSubTasksListByEpicId(String id);
+    ArrayList<Integer> getSubTasksListByEpicId(int id);
 
     List<Task> getHistoryTM();
 
@@ -59,4 +64,12 @@ public interface TaskManager {
     Integer getLastEpicId();
 
     Set<Task> getPrioritizedTasks();
+
+    LocalDateTime getEpicStartTime(Epic epic);
+
+    LocalDateTime getEpicEndTime(Epic epic);
+
+    Duration getEpicDuratioon(Epic epic);
+
+    boolean checkTaskDates(Task task);
 }

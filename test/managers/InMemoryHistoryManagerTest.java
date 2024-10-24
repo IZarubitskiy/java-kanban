@@ -1,18 +1,15 @@
 package managers;
-
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 import tasks.TaskStatus;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-    InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+    HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
     @Test
     void checkEmptyHistory(){
