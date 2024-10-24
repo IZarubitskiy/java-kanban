@@ -8,6 +8,7 @@ import tasks.TaskStatus;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int id = 0;
@@ -237,12 +238,12 @@ public class InMemoryTaskManager implements TaskManager {
     public HashMap<Integer, Epic> deleteEpicById(int id) {
         epicTaskDesc.remove(id);
         inMemoryHistoryManager.remove(id);
-        for (Integer i : subTaskDesc.keySet()) {
-            if (subTaskDesc.get(i).getEpicId() == id) {
-                subTaskDesc.remove(i);
-                inMemoryHistoryManager.remove(i);
-            }
-        }
+        subTaskDesc.keySet().stream()
+                .filter(i -> subTaskDesc.get(i).getEpicId() == id)
+                .forEach(i -> {
+                    subTaskDesc.remove(i);
+                    inMemoryHistoryManager.remove(i);
+                });
         return epicTaskDesc;
     }
 
@@ -251,12 +252,10 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subTaskDesc.get(id).getEpicId();
         subTaskDesc.remove(id);
         inMemoryHistoryManager.remove(id);
-        ArrayList<Integer> updatedListSubTasks = new ArrayList<>();
-        for (Integer i : subTaskDesc.keySet()) {
-            if (subTaskDesc.get(i).getEpicId() == epicId) {
-                updatedListSubTasks.add(subTaskDesc.get(i).getId());
-            }
-        }
+        ArrayList<Integer> updatedListSubTasks = subTaskDesc.keySet().stream()
+                .filter(i -> subTaskDesc.get(i).getEpicId() == epicId)
+                .map(i -> subTaskDesc.get(i).getId())
+                .collect(Collectors.toCollection(ArrayList::new));
         epicTaskDesc.get(epicId).setSubTaskListId(updatedListSubTasks);
         updateEpicStatus(epicId);
         return subTaskDesc;
